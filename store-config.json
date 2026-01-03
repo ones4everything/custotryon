@@ -1,0 +1,125 @@
+{
+  "environments": {
+    "development": {
+      "domain": "your-dev-store.myshopify.com",
+      "debug_enabled": true,
+      "analytics_enabled": false,
+      "status": "active"
+    },
+    "production": {
+      "domain": "jfg9tu-fb.myshopify.com",
+      "public_domain": "www.ones4.com", 
+      "debug_enabled": false,
+      "analytics_enabled": true,
+      "status": "ready_to_deploy"
+    }
+  },
+  "store": {
+    "connection": {
+      "type": "shopify_section",
+      "version": "1.0.0",
+      "compatible_themes": ["all"],
+      "required_permissions": [
+        "read_products",
+        "read_collections", 
+        "write_cart"
+      ]
+    },
+    "metafields": {
+      "product": {
+        "customization_enabled": {
+          "namespace": "custom",
+          "key": "customization_enabled",
+          "type": "boolean",
+          "description": "Enable/disable customization for this product"
+        },
+        "designs": {
+          "namespace": "custom", 
+          "key": "designs",
+          "type": "multi_line_text_field",
+          "description": "JSON array or comma-separated list of design options"
+        },
+        "allowed_methods": {
+          "namespace": "custom",
+          "key": "allowed_methods", 
+          "type": "multi_line_text_field",
+          "description": "Allowed customization methods (Sublimation, Vinyl, etc.)"
+        },
+        "specs": {
+          "namespace": "custom",
+          "key": "specs",
+          "type": "multi_line_text_field", 
+          "description": "Product specifications for specs tab"
+        }
+      }
+    },
+    "metaobjects": {
+      "fonts": {
+        "type": "custom_font_def",
+        "fields": {
+          "display_name": "single_line_text_field",
+          "css_family_name": "single_line_text_field", 
+          "font_file_source": "file_reference",
+          "vertical_offset": "number_integer"
+        }
+      },
+      "glow_effects": {
+        "type": "glow_effect_def",
+        "fields": {
+          "effect_name": "single_line_text_field",
+          "hex_primaryColor": "single_line_text_field",
+          "hex_secondaryColor": "single_line_text_field", 
+          "blur_intensity": "number_integer"
+        }
+      }
+    },
+    "tags": {
+      "customizable": "Enables customization features",
+      "neon": "Enables neon text customizer",
+      "neon-custom": "Alternative neon tag",
+      "neon-customizer": "Alternative neon tag", 
+      "text-only": "Text-only customization",
+      "no-sublimation": "Excludes sublimation method",
+      "vinyl-only": "Only vinyl customization method"
+    },
+    "navigation": {
+      "header_menu": "Main navigation menu for header",
+      "collection_menu": "Collection-based navigation"
+    }
+  },
+  "features": {
+    "product_customization": {
+      "enabled": true,
+      "methods": ["Sublimation", "Vinyl"],
+      "max_text_length": 12
+    },
+    "neon_customizer": {
+      "enabled": true, 
+      "requires_metaobjects": true,
+      "canvas_rendering": true
+    },
+    "variant_switching": {
+      "enabled": true,
+      "image_switching": true,
+      "price_updating": true
+    },
+    "teleporter_effects": {
+      "enabled": true,
+      "particle_system": true,
+      "reduced_motion_support": true
+    }
+  },
+  "integration": {
+    "cart": {
+      "add_to_cart": true,
+      "line_item_properties": true,
+      "preview_images": true
+    },
+    "reviews": {
+      "shopify_product_reviews": true,
+      "judgeme": true, 
+      "loox": true,
+      "spr": true
+    }
+  }
+}

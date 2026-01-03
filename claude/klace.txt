@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700">
+
+  <defs>
+    <!-- Metallic Gold -->
+    <linearGradient id="goldMetal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff1a8"/>
+      <stop offset="25%" stop-color="#e0b74f"/>
+      <stop offset="50%" stop-color="#b8861b"/>
+      <stop offset="75%" stop-color="#e6c76a"/>
+      <stop offset="100%" stop-color="#8a5a00"/>
+    </linearGradient>
+
+    <!-- Body shading -->
+    <radialGradient id="bodyShade" cx="40%" cy="20%" r="80%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="60%" stop-color="#111"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </radialGradient>
+
+    <!-- Flame -->
+    <radialGradient id="flameBlue" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#9fffff"/>
+      <stop offset="50%" stop-color="#2a7cff"/>
+      <stop offset="100%" stop-color="#1b0cff"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LEFT DEVICE -->
+  <g id="left-device" transform="translate(200,80)">
+
+    <!-- Flame -->
+    <path d="M150 -10
+             C120 50, 140 90, 160 120
+             C185 155, 220 160, 220 200
+             C220 245, 185 280, 150 295
+             C115 280, 80 245, 80 205
+             C80 155, 120 120, 130 80
+             C140 45, 145 20, 150 -10 Z"
+          fill="url(#flameBlue)"/>
+
+    <!-- Body -->
+    <path d="M150 110
+             C90 110, 45 180, 45 280
+             C45 420, 110 520, 150 580
+             C190 520, 255 420, 255 280
+             C255 180, 210 110, 150 110 Z"
+          fill="url(#bodyShade)"/>
+
+    <!-- Gold ON/OFF -->
+    <rect x="95" y="260" width="110" height="70" rx="14"
+          fill="url(#goldMetal)"/>
+    <text x="150" y="305" text-anchor="middle"
+          font-family="Times New Roman"
+          font-size="28" font-weight="700"
+          fill="#3a2400">ON/OFF</text>
+
+  </g>
+
+  <!-- RIGHT DEVICE -->
+  <g id="right-device" transform="translate(650,100)">
+
+    <!-- Body -->
+    <path d="M150 110
+             C95 110, 55 190, 55 290
+             C55 430, 120 540, 150 590
+             C180 540, 245 430, 245 290
+             C245 190, 205 110, 150 110 Z"
+          fill="url(#bodyShade)"/>
+
+    <!-- Gold Badge -->
+    <rect x="70" y="290" width="80" height="80" rx="14"
+          fill="url(#goldMetal)"/>
+    <text x="110" y="345" text-anchor="middle"
+          font-family="Times New Roman"
+          font-size="46" font-weight="800"
+          fill="#3a2400">K</text>
+
+    <!-- KEYLACE -->
+    <text x="165" y="345"
+          font-family="Times New Roman"
+          font-size="42" font-weight="700"
+          fill="#c9c9c9">KEYLACE</text>
+
+  </g>
+
+</svg>

@@ -1,0 +1,220 @@
+{% comment %}
+API Bridge - Handles communication between Print Designer App and Shopify
+Include this in your theme.liquid layout
+{% endcomment %}
+
+<script>
+window.CustomizationAPI = {
+  // Configuration
+  config: {
+    shopDomain: '{{ shop.domain }}',
+    currency: '{{ shop.currency }}',
+    customerLoggedIn: {{ customer ? 'true' : 'false' }},
+    {% if customer %}
+    customerId: {{ customer.id }},
+    customerEmail: '{{ customer.email | escape }}',
+    {% endif %}
+  },
+
+  // Get product data for the customization app
+  getProductData: function(productId) {
+    const productScript = document.getElementById(`product-data-${productId}`);
+    if (productScript) {
+      return JSON.parse(productScript.textContent);
+    }
+    return null;
+  },
+
+  // Add customized product to cart
+  addToCart: function(variantId, quantity = 1, customProperties = {}) {
+    return fetch('/cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: variantId,
+        quantity: quantity,
+        properties: {
+          ...customProperties,
+          '_customized': 'true',
+          '_customization_timestamp': new Date().toISOString()
+        }
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Trigger cart update events
+      this.triggerCartUpdate();
+      return data;
+    });
+  },
+
+  // Update cart drawer/icon
+  triggerCartUpdate: function() {
+    // Trigger Shopify's cart update events
+    document.dispatchEvent(new CustomEvent('cart:updated'));
+    
+    // Update cart count
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        // Update cart count in UI
+        const cartCountElements = document.querySelectorAll('[data-cart-count]');
+        cartCountElements.forEach(el => {
+          el.textContent = cart.item_count;
+        });
+      });
+  },
+
+  // Save customization for later
+  saveCustomization: function(productId, customizationData) {
+    const saved = localStorage.getItem('savedCustomizations') || '{}';
+    const savedCustomizations = JSON.parse(saved);
+    
+    savedCustomizations[productId] = {
+      data: customizationData,
+      timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('savedCustomizations', JSON.stringify(savedCustomizations));
+  },
+
+  // Load saved customization
+  loadCustomization: function(productId) {
+    const saved = localStorage.getItem('savedCustomizations') || '{}';
+    const savedCustomizations = JSON.parse(saved);
+    return savedCustomizations[productId] || null;
+  },
+
+  // Handle messages from customization app
+  handleMessage: function(event) {
+    const { type, data } = event.data;
+    
+    switch(type) {
+      case 'GET_PRODUCT_DATA':
+        const productData = this.getProductData(data.productId);
+        event.source.postMessage({
+          type: 'PRODUCT_DATA_RESPONSE',
+          data: productData
+        }, event.origin);
+        break;
+        
+      case 'ADD_TO_CART':
+        this.addToCart(data.variantId, data.quantity, data.properties)
+          .then(result => {
+            event.source.postMessage({
+              type: 'ADD_TO_CART_RESPONSE',
+              data: { success: true, result }
+            }, event.origin);
+          })
+          .catch(error => {
+            event.source.postMessage({
+              type: 'ADD_TO_CART_RESPONSE',
+              data: { success: false, error: error.message }
+            }, event.origin);
+          });
+        break;
+        
+      case 'SAVE_CUSTOMIZATION':
+        this.saveCustomization(data.productId, data.customizationData);
+        event.source.postMessage({
+          type: 'SAVE_CUSTOMIZATION_RESPONSE',
+          data: { success: true }
+        }, event.origin);
+        break;
+        
+      case 'LOAD_CUSTOMIZATION':
+        const customization = this.loadCustomization(data.productId);
+        event.source.postMessage({
+          type: 'LOAD_CUSTOMIZATION_RESPONSE',
+          data: customization
+        }, event.origin);
+        break;
+        
+      case 'CLOSE_OVERLAY':
+        if (window.closeCustomization) {
+          window.closeCustomization();
+        }
+        break;
+        
+      case 'REDIRECT':
+        window.location.href = data.url;
+        break;
+    }
+  }
+};
+
+// Listen for messages from the customization app
+window.addEventListener('message', function(event) {
+  // Security check - only allow messages from your app domains
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://your-print-designer-app.com', // Replace with your actual domain
+    'https://your-vto-app.com' // Replace with your actual VTO domain
+  ];
+  
+  if (!allowedOrigins.includes(event.origin)) {
+    console.warn('Blocked message from unauthorized origin:', event.origin);
+    return;
+  }
+  
+  CustomizationAPI.handleMessage(event);
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Customization API initialized');
+});
+</script>
+
+<!-- Enhanced Cart Notification -->
+<div id="customization-notification" class="customization-notification">
+  <div class="notification-content">
+    <span class="notification-icon">✅</span>
+    <span class="notification-text">Customized item added to cart!</span>
+    <button onclick="this.parentElement.parentElement.style.display='none'">×</button>
+  </div>
+</div>
+
+<style>
+.customization-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+  z-index: 10000;
+  display: none;
+  animation: slideIn 0.3s ease;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-content button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+</style>

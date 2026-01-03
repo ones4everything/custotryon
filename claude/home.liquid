@@ -1,0 +1,1351 @@
+{% comment %}
+O4 Orbit Hero — STABLE VERSION (desktop + mobile)
+- No pause state (no hover/touch pause) to avoid stuck orbits on some browsers
+- No content-visibility on orbit wrapper / prism container (fixes Safari / Samsung freezes)
+- Time-based RAF orbit loop + heartbeat restart
+- Title sanitizer + dual-color neon title & background mark
+- Marquee + orbit cards + portal core + optional slit-scan FX
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Orbitron:wght@600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --o4-orbit-speed: 35s;
+  --neon:#3ee5ff;
+  --stroke: {{ section.settings.txt_stroke | default: '#3ee5ff' }};
+  --strokeW: {{ section.settings.txt_stroke_w | default: 6 }}px;
+  --mint-rgb: 62,229,255; /* teal rim to match hero art */
+  --ember-rgb: 255,138,76; /* warm rim accent from hero art */
+}
+
+/* ===== Wrapper / bg ===== */
+#o4-hero-wrapper-{{ section.id }}{
+  font-family:'Space Grotesk',sans-serif;
+  overflow:hidden;
+  min-height:100vh;
+  width:100%;
+  position:relative;
+  isolation:isolate;
+  touch-action: pan-y;
+  background:
+    radial-gradient(120% 80% at 50% 92%, rgba(var(--ember-rgb),.16), transparent 55%),
+    radial-gradient(95% 70% at 16% 34%, rgba(var(--mint-rgb),.16), transparent 60%),
+    radial-gradient(90% 70% at 84% 26%, rgba(166,77,255,.12), transparent 60%),
+    linear-gradient(180deg,#081524 0%, #060f1c 100%);
+  box-shadow: inset 0 0 160px rgba(0,0,0,.32), inset 0 0 320px rgba(0,0,0,.18); /* soft vignette for readability */
+  contain:layout paint style;
+}
+
+.o4-hero-bg{position:absolute; inset:0; z-index:0; pointer-events:none; display:block; contain:paint}
+.o4-hero-bg img{width:100%; height:100%; object-fit:cover; object-position:center 40%; filter:brightness(.95) saturate(1)}
+
+.o4-bg-mark{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:1; pointer-events:none; opacity:.24; mix-blend-mode:screen}
+.o4-bg-mark .mark{
+  font-family:'Audiowide','Orbitron',system-ui,sans-serif; font-weight:800; letter-spacing:.06em; line-height:1;
+  font-size:clamp(120px, 26vw, 520px);
+  -webkit-text-fill-color: transparent;
+  background-clip:text; -webkit-background-clip:text;
+  -webkit-text-stroke: 6px rgba(255,255,255,.95);
+  text-shadow: 0 0 8px rgba(255,255,255,.95), 0 0 18px rgba(255,255,255,.85);
+}
+.o4-bg-mark .mark-word{
+  -webkit-text-fill-color: transparent; background-clip:text; -webkit-background-clip:text;
+  background-image:
+    radial-gradient(45% 60% at 50% 55%, #ffffff 0 28%, rgba(255,255,255,.8) 44%, transparent 48%),
+    linear-gradient(180deg, #FFB9FF 0%, #FF2FB9 48%, #C100FF 100%);
+  text-shadow:
+    0 0 12px  #fff,
+    0 0 34px  rgba(255,47,185,.95),
+    0 0 90px  rgba(255,47,185,.80),
+    0 0 170px rgba(193,0,255,.65),
+    0 0 280px rgba(193,0,255,.55);
+}
+.o4-bg-mark .mark-digit{
+  -webkit-text-fill-color: transparent; background-clip:text; -webkit-background-clip:text;
+  background-image:
+    radial-gradient(45% 60% at 50% 55%, #ffffff 0 28%, rgba(255,255,255,.8) 44%, transparent 48%),
+    linear-gradient(180deg, #CFFFFF 0%, #04D9FF 48%, #00B6D4 100%);
+  text-shadow:
+    0 0 12px  #fff,
+    0 0 34px  rgba(4,217,255,.98),
+    0 0 90px  rgba(4,217,255,.85),
+    0 0 170px rgba(0,182,212,.70),
+    0 0 280px rgba(0,182,212,.55);
+}
+@media (max-width:767px){
+  .o4-bg-mark{ opacity:.20; }
+  .o4-bg-mark .mark{ -webkit-text-stroke-width:4px; }
+}
+
+.o4-motion{position:absolute; inset:0; z-index:0; pointer-events:none; contain:paint}
+.o4-motion .m-layer{position:absolute; inset:0}
+.o4-motion .base{background-image:var(--bg); background-size:cover; background-position:center; filter:saturate(1.02) contrast(1.04)}
+.o4-motion .parallax{background-image:var(--bg); background-size:102% 102%; background-position:center; opacity:.58; transform:scale(1.02); mix-blend-mode:screen; animation:o4-pan var(--spd,24s) ease-in-out infinite alternate}
+.o4-motion .streaks{--mint:4,217,255; opacity:calc(.28*var(--int,.3)); mix-blend-mode:screen; background:
+  repeating-linear-gradient(62deg, rgba(var(--mint),.06) 0 2px, transparent 2px 120px),
+  repeating-linear-gradient(-28deg, rgba(var(--mint),.04) 0 1px, transparent 1px 140px);
+  background-size:200% 200%,180% 180%;
+  animation:o4-drift-a calc(var(--spd,24s)*1.2) linear infinite, o4-drift-b calc(var(--spd,24s)*1.6) linear infinite}
+.o4-motion .veil{opacity:calc(.24*var(--int,.3)); background:
+  radial-gradient(60% 60% at 55% 50%, rgba(4,217,255,.10), transparent 60%),
+  radial-gradient(40% 40% at 35% 60%, rgba(4,217,255,.07), transparent 70%);
+  animation:o4-breathe calc(var(--spd,24s)*1.4) ease-in-out infinite}
+
+@keyframes o4-pan{from{transform:translate3d(-1.2%, -0.6%, 0) scale(1.04)} to{transform:translate3d(1.2%, 0.6%, 0) scale(1.06)}}
+@keyframes o4-drift-a{from{background-position:0% 0%} to{background-position:100% 100%}}
+@keyframes o4-drift-b{from{background-position:100% 0%} to{background-position:0% 100%}}
+@keyframes o4-breathe{0%,100%{filter:blur(.4px)} 50%{filter:blur(1.1px)}}
+
+.o4-orb, .o4-orbfx{position:absolute; inset:0; width:100%; height:100%; display:block; pointer-events:none; contain:paint}
+.o4-orb{ z-index:1 }
+.o4-orbfx{ z-index:2 }
+
+.mint-orbits{position:absolute; inset:0; z-index:3; pointer-events:none; contain:paint}
+.mint-orbits .ring{
+  position:absolute; top:58%; left:50%; transform-style:preserve-3d;
+  transform:translate(-50%,-50%) rotateX(62deg);
+  border-radius:50%; box-shadow:0 0 18px rgba(4,217,255,.35) inset, 0 0 18px rgba(4,217,255,.35);
+  border:2px solid rgba(4,217,255,.6); filter:drop-shadow(0 4px 10px rgba(4,217,255,.25))
+}
+.mint-orbits .r1{width:56vmin;height:56vmin;animation:ring-spin 48s linear infinite}
+.mint-orbits .r2{width:72vmin;height:72vmin;animation:ring-spin 72s linear infinite reverse}
+.mint-orbits .r3{width:88vmin;height:88vmin;animation:ring-spin 96s linear infinite}
+@keyframes ring-spin{from{transform:translate(-50%,-50%) rotateX(62deg) rotateZ(0)} to{transform:translate(-50%,-50%) rotateX(62deg) rotateZ(360deg)}}
+
+.o4-header{position:relative; z-index:6; text-align:center; margin-bottom:1.25rem}
+.o4-hero__badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 14px; border-radius:999px;
+  border:1px solid rgba(67,231,255,.4);
+  background:rgba(8,14,26,.7);
+  text-transform:uppercase; letter-spacing:.24em;
+  font-size:.68rem; color:#43e7ff;
+  font-family:'Orbitron',sans-serif;
+  margin-bottom:.65rem;
+}
+.o4-hero__actions{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+  margin-top:.75rem;
+}
+.o4-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:12px 22px; border-radius:999px;
+  text-decoration:none; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; font-size:.78rem;
+  border:1px solid transparent;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.o4-btn--primary{
+  background:linear-gradient(90deg, rgba(67,231,255,1), rgba(255,91,214,1));
+  color:#041018;
+  box-shadow:0 10px 26px rgba(67,231,255,.32);
+}
+.o4-btn--ghost{
+  background:rgba(8,14,26,.7);
+  color:#e8fbff;
+  border-color:rgba(255,255,255,.2);
+}
+.o4-install-cta{ display:none; }
+.o4-btn:hover{ transform:translateY(-1px); box-shadow:0 12px 30px rgba(67,231,255,.35); }
+.neon-title{
+  font-family:'Audiowide','Orbitron',system-ui,sans-serif; font-weight:800; letter-spacing:.02em; line-height:1;
+  font-size:clamp(48px,9vw,140px); margin:0; display:inline-block; filter:saturate(1.1);
+}
+.neon-word,.neon-digit{
+  display:inline-block; -webkit-text-fill-color:transparent; background-clip:text; -webkit-background-clip:text;
+  -webkit-text-stroke: 3px rgba(255,255,255,.85);
+  text-shadow: 0 0 2px #fff, 0 0 10px rgba(255,255,255,.9), 0 0 18px rgba(255,255,255,.75);
+}
+.neon-word{
+  background-image:
+    radial-gradient(40% 55% at 50% 55%, rgba(255,255,255,1) 0 20%, rgba(255,255,255,.6) 35%, transparent 40%),
+    linear-gradient(180deg, #ffb9ff 0%, #ff4bd1 45%, #c100ff 100%);
+  text-shadow:0 0 2px #fff, 0 0 10px rgba(255,144,255,.95), 0 0 22px rgba(255,64,208,.85), 0 0 42px rgba(193,0,255,.55)
+}
+.neon-digit{
+  margin-left:.08em;
+  background-image:
+    radial-gradient(40% 55% at 50% 55%, rgba(255,255,255,1) 0 20%, rgba(255,255,255,.6) 35%, transparent 40%),
+    linear-gradient(180deg, #cfffff 0%, #04d9ff 45%, #00b6d4 100%);
+  -webkit-text-stroke: 3px rgba(200,255,255,.95);
+  text-shadow:0 0 2px #fff, 0 0 10px rgba(160,255,255,1), 0 0 22px rgba(4,217,255,.95), 0 0 42px rgba(0,182,212,.6)
+}
+.neon-sub{
+  display:inline-block; margin-top:.25rem; font-size:clamp(14px, 2.5vw, 20px); line-height:1.25; color:#e5f8ff;
+  background-color:rgba(8,14,26,.45); padding:.45rem .9rem; border:1px solid rgba(255,255,255,.18); border-radius:999px;
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); text-shadow:0 0 6px rgba(255,255,255,.65), 0 0 16px rgba(4,217,255,.45)
+}
+.o4-header .neon-title{ display:block; }
+.o4-header.title-sm .neon-title{ font-size:clamp(36px, 7vw, 108px) }
+.o4-header.title-sm .neon-word{ -webkit-text-stroke: 2px rgba(255,255,255,.85) }
+.o4-header.title-sm .neon-digit{ -webkit-text-stroke: 2px rgba(200,255,255,.95) }
+.o4-header.sub-sm .neon-sub{ font-size:clamp(12px, 2vw, 16px); padding:.35rem .7rem }
+
+.o4-marquee{
+  position:relative; z-index:7; overflow:hidden;
+  margin:.75rem auto 1rem; max-width:min(1100px,92vw);
+  border:1px solid rgba(255,255,255,.14); border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(8,12,22,.45));
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.o4-marquee-track{
+  display:flex; gap:.9rem; align-items:center; white-space:nowrap;
+  padding:.55rem 1rem; font-family:'Orbitron',sans-serif; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; font-size:12px; color:#e8fbff; opacity:.95;
+  animation:o4-marquee 18s linear infinite;
+}
+.o4-marquee-track i{ opacity:.6; font-style:normal }
+@keyframes o4-marquee { from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+@media (max-width:767px){
+  .o4-hero__actions{ flex-direction:column; align-items:center; }
+  .o4-hero__actions .o4-btn{ width:min(260px, 90%); }
+  .o4-install-cta{ display:inline-flex; }
+  .o4-marquee-track{ font-size:11px; animation-duration:22s }
+}
+
+.prism-container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  width:100%;
+  min-height:450px;
+  perspective:1800px;
+  z-index:6;
+  contain:layout paint style;
+}
+@media (min-width:768px){.prism-container{min-height:600px}}
+.prism-core{position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; backface-visibility:hidden; z-index:6}
+.category-card{
+  --glow-rgb: var(--mint-rgb);
+  --glow-color: rgb(var(--glow-rgb));
+  --glow-intensity: 1.0;
+  position:absolute; top:50%; left:50%;
+  --planet: {{ section.settings.planet_size | default: 200 }}px; width:var(--planet); height:var(--planet);
+  margin-left:calc(var(--planet)/-2); margin-top:calc(var(--planet)/-2);
+  transform-style:preserve-3d; transition:filter .25s ease, box-shadow .28s ease;
+  color:#fff; text-decoration:none; border-radius:50%;
+  background:radial-gradient(120% 120% at 30% 30%, rgba(255,255,255,.16) 0%, rgba(25,33,61,.85) 55%, rgba(12,17,34,.9) 100%);
+  border:1px solid rgba(255,255,255,.15); box-shadow:inset -12px -18px 32px rgba(0,0,0,.30); z-index:6; will-change:transform, opacity;
+  overflow: visible; touch-action: manipulation;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-content{position:relative;width:100%;height:100%;padding:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;border-radius:50%}
+.category-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;border:1px solid rgba(255,255,255,.08);filter:saturate(1.05) contrast(1.03)}
+.category-card .title{
+  position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.08em;
+  background:rgba(5,12,20,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  padding:.35rem .6rem;border-radius:999px;border:1px solid rgba(255,255,255,.18);
+  text-transform:uppercase;text-shadow:0 1px 1px rgba(0,0,0,.35)
+}
+.category-card::before{
+  content:""; position:absolute; inset:0; border-radius:50%; pointer-events:none; mix-blend-mode:screen;
+  background: radial-gradient(closest-side, rgba(255,255,255,.26) 58%, rgba(var(--glow-rgb), .32) 74%, rgba(var(--glow-rgb), 0) 85%);
+  filter: blur(calc(1.6px * (var(--glow-intensity,1) * var(--glow-boost,1)))) saturate(1.05);
+  opacity: clamp(.58, 1, calc(.9 * (var(--glow-intensity,1) * var(--glow-boost,1))));
+}
+.glow-base{
+  position:absolute; inset: calc(-1 * var(--halo-extent, 22px)); border-radius:50%; pointer-events:none; mix-blend-mode:screen; will-change: transform, opacity, filter;
+  opacity: clamp(.42, 1, calc(.82 * (var(--glow-intensity,1) * var(--glow-boost,1))));
+  background:
+    radial-gradient(closest-side, rgba(var(--glow-rgb),0) 58%, rgba(var(--glow-rgb),.22) calc(100% - var(--halo-extent, 22px)), rgba(var(--glow-rgb),.68) 100%),
+    conic-gradient(from 0deg, rgba(var(--glow-rgb),0) 0%, rgba(var(--glow-rgb),.24) 10%, rgba(var(--glow-rgb),0) 18%, rgba(var(--glow-rgb),.20) 26%, rgba(var(--glow-rgb),0) 34%, rgba(var(--glow-rgb),.26) 42%, rgba(var(--glow-rgb),0) 50%, rgba(var(--glow-rgb),.20) 58%, rgba(var(--glow-rgb),0) 66%, rgba(var(--glow-rgb),.26) 74%, rgba(var(--glow-rgb),0) 82%, rgba(var(--glow-rgb),.20) 90%, rgba(var(--glow-rgb),0) 100%);
+  -webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--halo-extent, 22px)), #000 calc(100% - var(--halo-extent, 22px) + 1px));
+          mask: radial-gradient(closest-side, transparent calc(100% - var(--halo-extent, 22px)), #000 calc(100% - var(--halo-extent, 22px) + 1px));
+  filter: blur(calc(var(--glow-blur,18px) * (var(--glow-intensity,1) * var(--glow-boost,1)))) saturate(calc(1.08 * (var(--glow-intensity,1) * var(--glow-boost,1))));
+  box-shadow: 0 0 28px rgba(var(--glow-rgb), .35), 0 0 72px rgba(var(--glow-rgb), .28), inset 0 0 26px rgba(var(--glow-rgb), .22);
+  animation: o4-glow-rotate var(--glow-rotate-s, 22s) linear infinite, o4-glow-breathe var(--glow-breathe-s, 5.5s) ease-in-out infinite;
+}
+.category-card:hover{ box-shadow:inset -12px -18px 32px rgba(0,0,0,.3), 0 14px 46px rgba(4,217,255,.3) }
+.category-card:hover .glow-base{ opacity: 1 }
+
+#o4-hero-wrapper-{{ section.id }}.perf .glow-base{ mix-blend-mode: lighten }
+#o4-hero-wrapper-{{ section.id }}.ultra .glow-base{
+  animation:none; mix-blend-mode:normal; opacity:.55;
+  filter: blur(var(--glow-blur,10px)) saturate(1.0);
+  background: radial-gradient(closest-side, rgba(var(--glow-rgb), .18) 78%, rgba(var(--glow-rgb), 0) 100%);
+  box-shadow: 0 0 20px rgba(var(--glow-rgb), .3)
+}
+#o4-hero-wrapper-{{ section.id }}.ultra .category-card::before{ display:none }
+
+@media (max-width:767px){
+  #o4-hero-wrapper-{{ section.id }}.perf .glow-base{ filter: blur(10px) }
+  .mint-orbits .ring{ box-shadow:0 0 10px rgba(4,217,255,.25) inset, 0 0 10px rgba(4,217,255,.25) }
+}
+
+@media (hover: none) {
+  .category-card:hover { box-shadow: inset -12px -18px 32px rgba(0,0,0,.3); }
+  .category-card:hover .glow-base { opacity: .88; }
+}
+
+.particle{will-change:transform,opacity}
+@keyframes rise{
+  0%{opacity:0; transform:translateY(0) scale(1)}
+  10%{opacity:.95}
+  100%{opacity:0; transform:translateY(-120px) scale(.6)}
+}
+
+@keyframes o4-glow-rotate { to { transform: rotate(360deg) } }
+@keyframes o4-glow-breathe { 0%,100% { filter: blur(14px); opacity:.70 } 50% { filter: blur(20px); opacity:1 } }
+
+.o4-meteors{position:absolute; inset:0; z-index:7; pointer-events:none; contain:paint}
+.meteor{
+  position:absolute; top:0; left:0; width:3px; height:200px; transform-origin:top left;
+  transform:translateZ(0) rotate(45deg); animation:streak 5.5s linear infinite;
+  mix-blend-mode:screen; pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,.9) 12%, rgba(4,217,255,.8) 55%, rgba(4,217,255,0) 100%);
+  box-shadow:0 0 12px rgba(255,255,255,.85), 0 0 28px rgba(4,217,255,.7)
+}
+.meteor::before{
+  content:"";position:absolute;top:-10px;left:-10px;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle, #ffffff 0%, rgba(255,255,255,.95) 40%, rgba(4,217,255,.55) 70%, transparent 75%);
+  filter:blur(.2px);animation:flash .9s ease-out infinite
+}
+@keyframes streak{
+  0%{transform:translateX(110vw) translateY(-60vh) rotate(45deg)}
+  100%{transform:translateX(-60vw) translateY(110vh) rotate(45deg)}
+}
+@keyframes flash{
+  0%{opacity:0;transform:scale(.8)}
+  15%{opacity:1;transform:scale(1.15)}
+  100%{opacity:0;transform:scale(1)}
+}
+
+#o4-hero-wrapper-{{ section.id }}.fx-low .o4-motion{ display:none }
+#o4-hero-wrapper-{{ section.id }}.fx-low .o4-meteors{ display:none }
+#o4-hero-wrapper-{{ section.id }}.fx-low .mint-orbits .ring{ animation:none }
+#o4-hero-wrapper-{{ section.id }}.fx-low .glow-base{
+  animation:none;
+  filter: blur(calc(var(--glow-blur,18px) * 0.7)) saturate(1);
+}
+#o4-hero-wrapper-{{ section.id }}.fx-low .o4-marquee{
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  background:rgba(8,12,22,.6);
+}
+#o4-hero-wrapper-{{ section.id }}.fx-low .o4-marquee-track{
+  animation:none;
+  white-space:normal;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:.6rem 1rem;
+}
+#o4-hero-wrapper-{{ section.id }}.fx-low .neon-sub{
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+  box-shadow:none;
+}
+#o4-hero-wrapper-{{ section.id }}.fx-low .category-card{
+  transition:none;
+  box-shadow: inset -10px -14px 20px rgba(0,0,0,.28);
+}
+#o4-hero-wrapper-{{ section.id }}.fx-low .category-card:hover{
+  box-shadow: inset -10px -14px 20px rgba(0,0,0,.28);
+}
+
+.o4-pwa-prompt{
+  position:fixed;
+  left:calc(16px + env(safe-area-inset-left));
+  right:calc(16px + env(safe-area-inset-right));
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  z-index:9999;
+  display:none;
+  gap:14px;
+  align-items:center;
+  padding:14px 16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(180deg, rgba(8,18,32,.92), rgba(6,12,22,.94));
+  box-shadow:0 12px 40px rgba(0,0,0,.45), inset 0 0 20px rgba(62,229,255,.18);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.o4-pwa-prompt.is-visible{ display:flex }
+.o4-pwa-body{ display:flex; flex-direction:column; gap:4px; color:#e8fbff }
+.o4-pwa-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:13px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.o4-pwa-text{ font-size:12px; opacity:.85 }
+.o4-pwa-actions{ display:flex; gap:8px; align-items:center; margin-left:auto }
+.o4-pwa-btn{
+  flex:0 0 auto;
+  background:rgba(4,217,255,.16);
+  color:#e8fbff;
+  border:1px solid rgba(4,217,255,.5);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.o4-pwa-btn--primary{
+  background:rgba(67,231,255,.22);
+  border-color:rgba(67,231,255,.7);
+  box-shadow:0 0 18px rgba(67,231,255,.35);
+}
+.o4-pwa-btn--ghost{
+  background:rgba(255,255,255,.06);
+  border-color:rgba(255,255,255,.18);
+}
+@media (min-width:768px){
+  .o4-pwa-prompt{ right:24px; left:auto; max-width:420px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .o4-motion .parallax,
+  .o4-motion .streaks,
+  .o4-motion .veil{animation:none}
+  .glow-base{ animation: none }
+}
+
+#o4-hero-wrapper-{{ section.id }} { --o4-orbit-speed: 35s; } /* Faster on desktop */
+@media (max-width:767px){ #o4-hero-wrapper-{{ section.id }} { --o4-orbit-speed: 25s; } } /* Slower on mobile for performance */
+</style>
+
+{% assign primary_link = section.settings.primary_link | default: routes.all_products_collection_url %}
+{% assign has_primary = section.settings.primary_label != blank %}
+{% assign install_label = section.settings.install_label | default: 'Install app' %}
+<div
+  id="o4-hero-wrapper-{{ section.id }}"
+  class="text-white"
+  style="
+    padding-top: {{ section.settings.pt }}px;
+    padding-bottom: {{ section.settings.pb }}px;
+    --glow-boost: {{ section.settings.glow_boost | default: 1.3 | round: 1 }};
+  "
+  data-show-particles="{{ section.settings.show_particles }}"
+  data-pack-cards="{{ section.settings.pack_cards }}"
+  data-back-opacity="{{ section.settings.back_op }}"
+  data-move-x="{{ section.settings.orbit_move_x }}"
+  data-move-y="{{ section.settings.orbit_move_y }}"
+  data-perf="{{ section.settings.performance_mode }}"
+>
+  {% if section.settings.bg_img != blank %}
+    <picture class="o4-hero-bg" aria-hidden="true">
+      <source type="image/avif" srcset="{{ section.settings.bg_img | image_url: width: 3840, format: 'avif' }} 3840w, {{ section.settings.bg_img | image_url: width: 2560, format: 'avif' }} 2560w, {{ section.settings.bg_img | image_url: width: 1920, format: 'avif' }} 1920w">
+      <source type="image/webp" srcset="{{ section.settings.bg_img | image_url: width: 3840, format: 'webp' }} 3840w, {{ section.settings.bg_img | image_url: width: 2560, format: 'webp' }} 2560w, {{ section.settings.bg_img | image_url: width: 1920, format: 'webp' }} 1920w">
+      <img src="{{ section.settings.bg_img | image_url: width: 1920 }}" alt="" width="1920" height="1080" loading="eager" decoding="async" fetchpriority="high" sizes="100vw">
+    </picture>
+  {% endif %}
+
+  {% if section.settings.bg_name_on %}
+    <div class="o4-bg-mark" aria-hidden="true"><div class="mark">{{ section.settings.bg_name | default: 'ONES4' }}</div></div>
+  {% endif %}
+
+  {% if section.settings.motion_on %}
+    <div class="o4-motion" style="--bg:url({% if section.settings.bg_img != blank %}{{ section.settings.bg_img | image_url: width: 3840 }}{% else %}''{% endif %}); --spd: {{ section.settings.speed }}s; --int: {{ section.settings.intensity | divided_by: 100.0 }};" aria-hidden="true">
+      <div class="m-layer base"></div>
+      <div class="m-layer parallax"></div>
+      {% if section.settings.streaks_on %}<div class="m-layer streaks"></div>{% endif %}
+      {% if section.settings.glow_on %}<div class="m-layer veil"></div>{% endif %}
+    </div>
+  {% endif %}
+
+  {% if section.settings.portal_on %}
+    <canvas id="o4-orb-{{ section.id }}" class="o4-orb"></canvas>
+    {% if section.settings.slitscan_on %}<canvas id="o4-orbfx-{{ section.id }}" class="o4-orbfx"></canvas>{% endif %}
+  {% endif %}
+
+  {% if section.settings.rings_on %}
+    <div class="mint-orbits" aria-hidden="true"><span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span></div>
+  {% endif %}
+
+  {% if section.settings.glass_arcs %}<div class="o4-arc arc1"></div><div class="o4-arc arc2"></div>{% endif %}
+
+  <div class="container mx-auto px-4">
+    <header class="o4-header {% if section.settings.title_small %}title-sm{% endif %} {% if section.settings.sub_small %}sub-sm{% endif %}">
+      {% if section.settings.hero_badge != blank %}
+        <span class="o4-hero__badge">{{ section.settings.hero_badge }}</span>
+      {% endif %}
+      <h1 class="neon-title" id="o4-title-{{ section.id }}" data-raw="{{ section.settings.title | default: 'ONES4' | escape }}"></h1>
+      <p class="neon-sub">{{ section.settings.sub }}</p>
+      {% if has_primary or install_label != blank %}
+        <div class="o4-hero__actions">
+          {% if has_primary %}
+            <a class="o4-btn o4-btn--primary" href="{{ primary_link }}">{{ section.settings.primary_label }}</a>
+          {% endif %}
+          {% if install_label != blank %}
+            <button type="button" class="o4-btn o4-btn--ghost o4-install-cta" data-o4-install-btn>{{ install_label }}</button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </header>
+  </div>
+
+  <div class="o4-marquee" aria-label="highlights">
+    <div class="o4-marquee-track">
+      <span>FAST SHIPPING</span><i>•</i>
+      <span>LIMITED DROPS</span><i>•</i>
+      <span>PRISM-GLOW EDITIONS</span><i>•</i>
+      <span>ONES4 LAB EXCLUSIVES</span><i>•</i>
+    </div>
+  </div>
+
+  <div class="prism-container"><div class="prism-core"></div></div>
+
+  <div class="o4-meteors">
+    {% if section.settings.meteors_on %}
+      <div class="meteor" style="animation-delay:0s"></div>
+      <div class="meteor" style="animation-delay:2.5s; transform: translateX(120vw) translateY(-50vh) rotate(45deg) scale(.8);"></div>
+      <div class="meteor" style="animation-delay:5s; transform: translateX(120vw) translateY(-50vh) rotate(45deg) scale(1.2);"></div>
+    {% endif %}
+  </div>
+
+  <div id="o4-pwa-prompt-{{ section.id }}" class="o4-pwa-prompt" role="dialog" aria-hidden="true" aria-label="Add to Home Screen">
+    <div class="o4-pwa-body">
+      <div class="o4-pwa-title">Install ONES4 on your Home Screen</div>
+      <div class="o4-pwa-text">Safari: tap Share (square with arrow) -> Add to Home Screen.</div>
+    </div>
+    <div class="o4-pwa-actions">
+      <button type="button" class="o4-pwa-btn o4-pwa-btn--primary" data-action="install" aria-label="Install app">Install</button>
+      <button type="button" class="o4-pwa-btn o4-pwa-btn--ghost" data-action="dismiss" aria-label="Dismiss">Not now</button>
+    </div>
+  </div>
+</div>
+
+{%- assign coll = collections[section.settings.coll] -%}
+<script id="o4-orbit-data-{{ section.id }}" type="application/json">
+{
+  "products": [
+    {%- assign nav = section.settings.orbit_menu -%}
+    {%- if nav and nav.links and nav.links.size > 0 -%}
+      {%- for link in nav.links limit: section.settings.limit -%}
+        {%- assign coll_obj = nil -%}
+        {%- if link.type contains 'collection' and link.object -%}{%- assign coll_obj = link.object -%}{%- endif -%}
+        { "title": {{ link.title | json }}, "url": {{ link.url | json }}, "image": {%- if coll_obj and coll_obj.image -%}{{ coll_obj.image | image_url: width: 480 | json }}{%- else -%}{{ 'https://placehold.co/480x480/080f25/ffffff?text=Collection' | json }}{%- endif -%}, "color": null }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    {%- elsif coll and coll.products_count > 0 -%}
+      {%- for product in coll.products limit: section.settings.limit -%}
+        { "title": {{ product.title | json }}, "url": {{ product.url | json }}, "image": {{ product.featured_image | image_url: width: 480 | json }}, "color": null }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    {%- else -%}
+      { "title": "Swimwear", "image": "https://placehold.co/480x480/080f25/ffffff?text=Swim", "url": null, "color": "mint" },
+      { "title": "Keylace", "image": "https://placehold.co/480x480/080f25/ffffff?text=Keys", "url": null, "color": "pink" },
+      { "title": "LuveDelicious", "image": "https://placehold.co/480x480/080f25/ffffff?text=Luve", "url": null, "color": "amber" },
+      { "title": "Tops", "image": "https://placehold.co/480x480/080f25/ffffff?text=Tops", "url": null, "color": "purple" }
+    {%- endif -%}
+  ]
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var wrapper = document.getElementById('o4-hero-wrapper-{{ section.id }}');
+  if (!wrapper) return;
+
+  function isMobileView(){ return window.matchMedia && window.matchMedia('(max-width: 767px)').matches; }
+
+  function ensureHeadTag(tagName, attrs){
+    if (!document.head) return null;
+    var selector = tagName;
+    if (tagName === 'meta' && attrs.name) selector += '[name="' + attrs.name + '"]';
+    if (tagName === 'link' && attrs.rel) selector += '[rel="' + attrs.rel + '"]';
+    if (tagName === 'link' && attrs.rel && attrs.sizes) selector += '[rel="' + attrs.rel + '"][sizes="' + attrs.sizes + '"]';
+    var existing = document.head.querySelector(selector);
+    var el = existing || document.createElement(tagName);
+    Object.keys(attrs).forEach(function(key){ el.setAttribute(key, attrs[key]); });
+    if (!existing) document.head.appendChild(el);
+    return el;
+  }
+
+  function initPwaHead(){
+    if (window.__o4PwaHead) return;
+    window.__o4PwaHead = true;
+
+    var appName = {{ shop.name | default: 'ONES4' | json }};
+    var manifestHref = "/manifest.json";
+    var icon180 = '';
+    var icon192 = "https://cdn.shopify.com/s/files/1/0944/7142/2262/files/icon--192.png";
+    var icon512 = "https://cdn.shopify.com/s/files/1/0944/7142/2262/files/icon-512.png";
+    var fallbackIcon = '';
+    var iconLink = document.querySelector('link[rel~="icon"]');
+    if (iconLink && iconLink.href) fallbackIcon = iconLink.href;
+
+    ensureHeadTag('link', { rel: 'manifest', href: manifestHref });
+    ensureHeadTag('meta', { name: 'theme-color', content: '#081524' });
+    ensureHeadTag('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
+    ensureHeadTag('meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' });
+    ensureHeadTag('meta', { name: 'apple-mobile-web-app-title', content: appName || 'ONES4' });
+    ensureHeadTag('meta', { name: 'mobile-web-app-capable', content: 'yes' });
+    ensureHeadTag('meta', { name: 'application-name', content: appName || 'ONES4' });
+
+    var appleIcon = icon180 || icon192 || icon512 || fallbackIcon;
+    if (appleIcon) {
+      ensureHeadTag('link', { rel: 'apple-touch-icon', href: appleIcon, sizes: '180x180' });
+    }
+  }
+
+  initPwaHead();
+
+  /* Split watermark */
+  (function splitWM(){
+    var mark = wrapper.querySelector('.o4-bg-mark .mark');
+    if (!mark || mark.getAttribute('data-split') === '1') return;
+    var raw = (mark.textContent || '{{ section.settings.bg_name | default: "ONES4" | escape }}').trim();
+    var word = raw.slice(0, -1) || raw;
+    var last = raw.slice(-1) || '';
+    mark.innerHTML = '<span class="mark-word">' + word + '</span><span class="mark-digit">' + last + '</span>';
+    mark.setAttribute('data-split', '1');
+  })();
+
+  /* Perf detection */
+  var perfToggle = wrapper.getAttribute('data-perf') === 'true';
+  var inEditor   = !!(window.Shopify && window.Shopify.designMode);
+  var isMobile   = isMobileView();
+  var reducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var ua = navigator.userAgent || '';
+  var isIPhone = /iphone|ipod/i.test(ua);
+  var isIPad = /ipad/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isIOS = isIPhone || isIPad;
+  var isSafari = /safari/i.test(ua) && !/crios|fxios|edgios|opios|samsungbrowser/i.test(ua);
+  var isStandalone = !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  var saveData   = !!(navigator.connection && navigator.connection.saveData);
+  var lowRAM     = (navigator.deviceMemory && navigator.deviceMemory <= 4);
+  var lowCPU     = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+  var lowPerf    = perfToggle || inEditor || isMobile || saveData || lowRAM || lowCPU;
+  var lowFX      = perfToggle || saveData || lowRAM || lowCPU || reducedMotion || isMobile;
+  var ultraLow   = isMobile || (isIOS && isStandalone);
+
+  if (lowPerf)  wrapper.classList.add('perf');   else wrapper.classList.remove('perf');
+  if (ultraLow) wrapper.classList.add('ultra'); else wrapper.classList.remove('ultra');
+  if (lowFX)    wrapper.classList.add('fx-low'); else wrapper.classList.remove('fx-low');
+
+  if (ultraLow){
+    var meteors = wrapper.querySelector('.o4-meteors');
+    if (meteors) meteors.style.display = 'none';
+  }
+
+  if (lowFX){
+    var motion = wrapper.querySelector('.o4-motion');
+    if (motion) motion.style.display = 'none';
+  }
+
+  /* Unified install flow (Android/desktop prompt + iOS helper) */
+  (function initInstallFlow(){
+    var prompt = document.getElementById('o4-pwa-prompt-{{ section.id }}');
+    if (!prompt) return;
+
+    var installBtn = prompt.querySelector('[data-action="install"]');
+    var dismissBtn = prompt.querySelector('[data-action="dismiss"]');
+    var titleEl = prompt.querySelector('.o4-pwa-title');
+    var textEl = prompt.querySelector('.o4-pwa-text');
+    var installCtas = wrapper.querySelectorAll('[data-o4-install-btn]');
+    var allowInstall = isMobile || isIOS;
+
+    if (!allowInstall) {
+      prompt.style.display = 'none';
+      return;
+    }
+
+    var state = window.__o4PwaState || (window.__o4PwaState = {
+      deferred: null,
+      bound: false,
+      prompts: []
+    });
+
+    function canShowPrompt(){
+      var now = Date.now();
+      var dismissUntil = 0;
+      try {
+        dismissUntil = parseInt(localStorage.getItem('o4-pwa-dismiss-until') || '0', 10);
+      } catch (e) {}
+      if (dismissUntil && now < dismissUntil) return false;
+      return true;
+    }
+
+    function setPromptCopy(){
+      if (!titleEl || !textEl) return;
+      if (isIOS && isSafari && !isStandalone) {
+        titleEl.textContent = 'Install ONES4 on your Home Screen';
+        textEl.textContent = 'Safari: tap Share (square with arrow) -> Add to Home Screen.';
+      } else if (state.deferred) {
+        titleEl.textContent = 'Install ONES4';
+        textEl.textContent = 'Tap Install to add ONES4 to your home screen.';
+      } else {
+        titleEl.textContent = 'Install ONES4';
+        textEl.textContent = 'Install from your browser menu if available.';
+      }
+    }
+
+    function displayPrompt(){
+      if (!canShowPrompt()) return;
+      if (isStandalone) return;
+      setPromptCopy();
+      prompt.classList.add('is-visible');
+      prompt.setAttribute('aria-hidden', 'false');
+    }
+
+    function hidePrompt(){
+      prompt.classList.remove('is-visible');
+      prompt.setAttribute('aria-hidden', 'true');
+    }
+
+    state.prompts.push({ show: displayPrompt, hide: hidePrompt });
+
+    if (!state.bound){
+      state.bound = true;
+      window.addEventListener('beforeinstallprompt', function(e){
+        e.preventDefault();
+        state.deferred = e;
+        setPromptCopy();
+        state.prompts.forEach(function(item){ item.show(); });
+      });
+
+      window.addEventListener('appinstalled', function(){
+        state.deferred = null;
+        state.prompts.forEach(function(item){ item.hide(); });
+      });
+    }
+
+    function triggerInstall(){
+      if (state.deferred){
+        state.deferred.prompt();
+        state.deferred.userChoice.then(function(choice){
+          if (choice && choice.outcome === 'accepted') {
+            state.deferred = null;
+            hidePrompt();
+          }
+        }).catch(function(){});
+        return;
+      }
+
+      if (isIOS && isSafari && !isStandalone) {
+        displayPrompt();
+        return;
+      }
+
+      displayPrompt();
+    }
+
+    if (installBtn){
+      installBtn.addEventListener('click', triggerInstall);
+    }
+
+    if (installCtas && installCtas.length){
+      installCtas.forEach(function(btn){
+        btn.addEventListener('click', triggerInstall);
+      });
+    }
+
+    if (dismissBtn){
+      dismissBtn.addEventListener('click', function(){
+        hidePrompt();
+        try {
+          var weekMs = 7 * 24 * 60 * 60 * 1000;
+          localStorage.setItem('o4-pwa-dismiss-until', String(Date.now() + weekMs));
+        } catch (e) {}
+      });
+    }
+
+    if (isIOS && isSafari && !isStandalone) {
+      setTimeout(displayPrompt, 1200);
+    }
+  })();
+
+  /* Title */
+  var titleEl = document.getElementById('o4-title-{{ section.id }}');
+  function sanitizeTitleText(raw){
+    var s = String(raw || 'ONES4')
+      .replace(/\s*[-–—]\s*\d+\s*$/,'')
+      .replace(/\s*\(\s*\d+\s*\)\s*$/,'')
+      .trim();
+    if (!/[A-Za-z]/.test(s)) s = 'ONES4';
+    return s;
+  }
+  function applyTitle(){
+    var rawData = titleEl && titleEl.dataset ? titleEl.dataset.raw : null;
+    var raw = rawData || '{{ section.settings.title | default: "ONES4" | escape }}';
+    var base = sanitizeTitleText(raw);
+    var word = base.slice(0, -1) || base;
+    var last = base.slice(-1) || '';
+    if (titleEl) {
+      titleEl.innerHTML = '<span class="neon-word">' + word + '</span><span class="neon-digit">' + last + '</span>';
+    }
+  }
+  applyTitle();
+
+  document.addEventListener('shopify:section:load', applyTitle);
+  document.addEventListener('shopify:section:select', applyTitle);
+
+  /* Build cards */
+  var core = wrapper.querySelector('.prism-core');
+  var showParticles = wrapper.getAttribute('data-show-particles') === 'true';
+  var packCards = wrapper.getAttribute('data-pack-cards') === 'true';
+  var dataEl = document.getElementById('o4-orbit-data-{{ section.id }}');
+  var products = [];
+
+  try {
+    if (dataEl) {
+      var text = dataEl.textContent || dataEl.innerText || '';
+      var parsed = JSON.parse(text || '{"products":[]}');
+      products = parsed.products || [];
+    }
+  } catch(e){
+    console.error(e);
+    products = [];
+  }
+
+  var maxMobileCards = 8;
+  if (isMobile && products.length > maxMobileCards){
+    products = products.slice(0, maxMobileCards);
+  }
+
+  var colorMap = {
+    mint: '4,217,255',
+    pink: '255,64,208',
+    amber: '255,191,0',
+    yellow: '255,220,130',
+    purple: '166,77,255',
+    teal: '45,212,191',
+    blue: '64,156,255',
+    rose: '255,102,153',
+    lime: '132,204,22',
+    green: '152,251,203',
+    "default": '4,217,255'
+  };
+  var cycle = ['mint', 'pink', 'amber', 'purple', 'teal', 'blue', 'rose', 'lime'];
+  var cards = [];
+
+  function hexToRgb(hex){
+    var m = String(hex).trim().replace('#', '').match(/^([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (!m) return null;
+    var h = m[1];
+    if (h.length === 3){
+      h = h.split('').map(function(c){return c + c;}).join('');
+    }
+    var n = parseInt(h, 16);
+    return [(n>>16)&255, (n>>8)&255, n&255].join(',');
+  }
+
+  function parseRgbString(s){
+    var m = String(s).match(/^\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*$/);
+    return m ? [m[1], m[2], m[3]].join(',') : null;
+  }
+
+  function resolveRGB(input, fallback){
+    if (!fallback) fallback = 'default';
+    if (!input) input = fallback;
+    var key = String(input).toLowerCase().trim();
+    if (colorMap[key]) return colorMap[key];
+    var hex = hexToRgb(key);
+    if (hex) return hex;
+    var rgb = parseRgbString(key);
+    if (rgb) return rgb;
+    return colorMap[fallback] || colorMap["default"];
+  }
+
+  var particlesPer = ultraLow ? 0 : (lowPerf ? 2 : 5);
+
+  products.forEach(function(p, i){
+    var el = document.createElement(p.url ? 'a' : 'div');
+    el.className = 'category-card';
+    if (p.url) el.href = p.url;
+
+    var named = (p.color || cycle[i % cycle.length]);
+    var rgb = resolveRGB(named);
+    el.style.setProperty('--glow-rgb', rgb);
+    el.style.setProperty('--glow-color', 'rgb(' + rgb + ')');
+
+    el.innerHTML =
+      '<div class="card-content">' +
+        (p.image ? '<img src="' + p.image + '" alt="' + p.title + '" loading="lazy" decoding="async">' : '') +
+        '<span class="title">' + p.title + '</span>' +
+      '</div>' +
+      '<div class="glow-base"></div>' +
+      (showParticles ? '<div class="particle-container"></div>' : '');
+
+    var halo = ultraLow
+      ? (window.innerWidth < 768 ? 10 : 12)
+      : lowPerf
+        ? (window.innerWidth < 768 ? 14 : 16)
+        : (window.innerWidth < 768 ? 18 : 24);
+
+    var glowBlur = ultraLow
+      ? 9
+      : lowPerf
+        ? 12
+        : (window.innerWidth < 768 ? 16 : 20);
+
+    el.style.setProperty('--halo-extent', halo + 'px');
+    el.style.setProperty('--glow-blur', glowBlur + 'px');
+
+    var spin = (lowPerf ? 26 : 18) + Math.random() * 8;
+    var breathe = (lowPerf ? 7.0 : 5.2) + Math.random() * 2.6;
+    var jitter = 0.9 + Math.random() * 0.3;
+    el.style.setProperty('--glow-rotate-s', spin.toFixed(2) + 's');
+    el.style.setProperty('--glow-breathe-s', breathe.toFixed(2) + 's');
+    var baseIntensity = lowPerf ? 1.05 : 1.25;
+    el.style.setProperty('--glow-intensity', (baseIntensity * jitter).toFixed(2));
+
+    if (core) core.appendChild(el);
+
+    if (showParticles){
+      var pc = el.querySelector('.particle-container');
+      if (pc){
+        for (var j = 0; j < particlesPer; j++){
+          var d = document.createElement('div');
+          d.className = 'particle';
+          var s = Math.random() * 3 + 1;
+          d.style.cssText =
+            'position:absolute;' +
+            'bottom:-30px;' +
+            'background-color:var(--glow-color);' +
+            'border-radius:50%;' +
+            'opacity:0;' +
+            'box-shadow:0 0 6px var(--glow-color),0 0 14px var(--glow-color);' +
+            'width:' + s + 'px;' +
+            'height:' + s + 'px;' +
+            'left:' + (Math.random()*100) + '%;' +
+            'animation:rise ' + (2.4+Math.random()*1.2) + 's ease-out ' + (Math.random()*2.2) + 's infinite;';
+          pc.appendChild(d);
+        }
+      }
+    }
+
+    cards.push(el);
+  });
+
+  /* Orbit positioning */
+  function position(angle){
+    var mobile = isMobileView();
+    var pack = packCards ? 0.78 : 1.0;
+    var baseR = mobile ? 170 : 360; /* tighter mobile radius so rings stay visible */
+    var R = Math.max(120, Math.round(baseR * pack));
+    var Yamp = mobile ? 8 : 20;
+    var tilt = 6;
+    var baseScale = 0.9;
+    var N = cards.length || 1;
+
+    var backOpacity = parseFloat(wrapper.getAttribute('data-back-opacity')) || 0.6;
+    var moveX = wrapper.getAttribute('data-move-x') === 'true';
+    var moveY = wrapper.getAttribute('data-move-y') === 'true';
+
+    for (var i = 0; i < N; i++){
+      var a = angle + (i / N) * Math.PI * 2;
+      var x = (moveX ? R * Math.cos(a) : 0);
+      var z = R * Math.sin(a);
+      var y = (moveY ? Math.sin(a * 1.6) * Yamp : 0);
+      var depth = z / R;
+      var front = (depth + 1) / 2;
+      var side  = moveX ? (x / R) : 0;
+
+      var rotY = (-Math.atan2(z, (x || 0.0001)) * 180 / Math.PI + 90) + (tilt * side);
+      var sc = baseScale + 0.06 * front;
+      var op = backOpacity + (1 - backOpacity) * front;
+
+      var el = cards[i];
+      el.style.transform = 'translate3d(' + x + 'px,' + y + 'px,' + z + 'px) rotateY(' + rotY + 'deg) scale(' + sc + ')';
+      el.style.opacity = op;
+      el.style.zIndex = 1000 + Math.round(z);
+    }
+  }
+
+  if (cards.length) position(0);
+
+  /* ===== Orbit RAF: time-based, no slow motion ===== */
+  var inView = true;
+  var io = null;
+  var rafId = null;
+  var running = false;
+  var orbitStart = performance.now();
+  var currentAngle = 0;
+  var anglePerMs = 0;
+
+  function recomputeAnglePerMs(){
+    var css = getComputedStyle(wrapper).getPropertyValue('--o4-orbit-speed');
+    if (!css){
+      var rootStyle = getComputedStyle(document.documentElement);
+      css = rootStyle.getPropertyValue('--o4-orbit-speed');
+    }
+    css = css ? css.trim() : '';
+    var sec = parseFloat(css);
+    if (!sec || isNaN(sec)) sec = 35;
+    var newAnglePerMs = (2 * Math.PI / sec) / 1000;
+
+    if (newAnglePerMs > 0){
+      var now = performance.now();
+      orbitStart = now - (currentAngle / newAnglePerMs);
+      anglePerMs = newAnglePerMs;
+    }
+  }
+
+  function startRAF(){
+    if (running || !cards.length) return;
+    running = true;
+    if (!anglePerMs) recomputeAnglePerMs();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function stopRAF(){
+    running = false;
+    if (rafId){
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  if ('IntersectionObserver' in window){
+    io = new IntersectionObserver(function(entries){
+      var entry = entries && entries[0];
+      inView = !!(entry && entry.isIntersecting);
+      if (inView && document.visibilityState !== 'hidden'){
+        startRAF();
+      } else {
+        stopRAF();
+      }
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
+    io.observe(wrapper);
+  }
+
+  setInterval(function () {
+    if (!running && inView && document.visibilityState === 'visible') {
+      startRAF();
+    }
+  }, 2000);
+
+  function loop(now){
+    if (!running) return;
+    currentAngle = (now - orbitStart) * anglePerMs;
+    position(currentAngle);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  if (document.visibilityState !== 'hidden') {
+    startRAF();
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      stopRAF();
+    } else if (inView) {
+      startRAF();
+    }
+  }, { passive: true });
+
+  var _resizeKick;
+  window.addEventListener('resize', function () {
+    clearTimeout(_resizeKick);
+    _resizeKick = setTimeout(function(){
+      recomputeAnglePerMs();
+      position(currentAngle);
+      if (inView && !running && document.visibilityState === 'visible') {
+        startRAF();
+      }
+    }, 120);
+  }, { passive: true });
+
+  window.addEventListener('pageshow', function () {
+    if (inView && !running && document.visibilityState === 'visible') {
+      startRAF();
+    }
+  }, { passive: true });
+
+  window.addEventListener('pagehide', function () {
+    stopRAF();
+  }, { passive: true });
+
+  /* Portal Core + FX - disabled on desktop to prevent throttling */
+  var portalOnSetting = {{ section.settings.portal_on | default: true | json }};
+  var slitSetting     = {{ section.settings.slitscan_on | default: true | json }};
+  var portalOn = portalOnSetting && isMobile && !lowFX;
+  var slitOn   = slitSetting && isMobile && !lowFX;
+
+  if (portalOn){
+    var orb = document.getElementById('o4-orb-{{ section.id }}');
+    var ofx = document.getElementById('o4-orbfx-{{ section.id }}');
+    var DPR = Math.min(window.devicePixelRatio || 1, (lowPerf ? 1 : 1.5));
+
+    function fit(c){
+      if (!c) return;
+      var w = c.clientWidth | 0;
+      var h = c.clientHeight | 0;
+      c.width = Math.floor(w * DPR);
+      c.height = Math.floor(h * DPR);
+    }
+
+    fit(orb);
+    fit(ofx);
+    window.addEventListener('resize', function(){
+      fit(orb);
+      fit(ofx);
+    }, { passive: true });
+
+    var ctx = orb ? orb.getContext('2d', { alpha: true }) : null;
+    var t = 0, mx = 0, my = 0;
+
+    wrapper.addEventListener('pointermove', function(e){
+      var r = wrapper.getBoundingClientRect();
+      mx = ((e.clientX - (r.left + r.width/2)) / r.width);
+      my = ((e.clientY - (r.top + r.height/2)) / r.height);
+    }, { passive: true });
+
+    function draw(){
+      requestAnimationFrame(draw);
+      if (!orb || !ctx) return;
+
+      t += 1;
+      var w = orb.width;
+      var h = orb.height;
+      var cx = w * 0.55;
+      var cy = h * 0.48;
+      ctx.clearRect(0, 0, w, h);
+
+      var R = Math.min(w, h) * 0.22 * (1 + 0.01 * Math.sin(t * 0.02));
+
+      var rim = ctx.createRadialGradient(cx, cy, R*0.85, cx, cy, R*1.25);
+      rim.addColorStop(0, 'rgba(152,251,203,0)');
+      rim.addColorStop(0.6, 'rgba(4,217,255,0.10)');
+      rim.addColorStop(1, 'rgba(4,217,255,0.02)');
+      ctx.globalCompositeOperation = 'screen';
+      ctx.fillStyle = rim;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R*1.25, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, R*0.88, 0, Math.PI*2);
+      ctx.clip();
+
+      var g = ctx.createRadialGradient(
+        cx + mx * R * 0.20,
+        cy + my * R * 0.18,
+        R * 0.05,
+        cx, cy, R * 0.95
+      );
+      g.addColorStop(0, 'rgba(152,251,203,0.09)');
+      g.addColorStop(0.45, 'rgba(4,217,255,0.07)');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(cx-R, cy-R, R*2, R*2);
+
+      ctx.lineWidth = 1;
+      ctx.globalCompositeOperation = 'screen';
+
+      var longs = lowPerf ? 12 : 16;
+      var lats  = lowPerf ? 8  : 10;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(t*0.005);
+
+      for(var i=0; i<longs; i++){
+        var a = i/longs * Math.PI*2;
+        ctx.save();
+        ctx.rotate(a);
+        ctx.beginPath();
+        for(var th=-Math.PI/2; th<=Math.PI/2; th+=Math.PI/80){
+          var x = R * Math.cos(th);
+          var y = R * Math.sin(th);
+          if (th===-Math.PI/2) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.globalAlpha = 0.5;
+        ctx.strokeStyle = 'rgba(152,251,203,0.42)';
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      for(var j=1; j<lats; j++){
+        var th2 = -Math.PI/2 + (j/lats)*Math.PI;
+        var r2  = R * Math.cos(th2);
+        var y2  = R * Math.sin(th2);
+        ctx.beginPath();
+        ctx.ellipse(0, y2, r2, r2*0.75, 0, 0, Math.PI*2);
+        ctx.globalAlpha = 0.42 * (1 - Math.abs(Math.sin(th2))*0.15);
+        ctx.strokeStyle = 'rgba(152,251,203,0.42)';
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    requestAnimationFrame(draw);
+
+    if (slitOn && ofx){
+      var fctx = ofx.getContext('2d');
+      var src  = document.createElement('canvas');
+      var sctx = src.getContext('2d');
+      var tmp  = document.createElement('canvas');
+      var tctx = tmp.getContext('2d');
+
+      function sync(){
+        if (!orb) return;
+        src.width = tmp.width = orb.width;
+        src.height = tmp.height = orb.height;
+      }
+      sync();
+      window.addEventListener('resize', sync, { passive: true });
+
+      var INTERVAL_MS = 2800;
+      var DURATION_MS = 900;
+      var SLICE_DEG   = 14;
+      var SPIN_SPEED  = 0.016;
+      var BASE_OPACITY= 0.20;
+      var FEATHER_PX  = 10 * Math.min(window.devicePixelRatio||1, 2);
+
+      var active = false;
+      var startedAt = 0;
+      var startAngle = 0;
+      var timer = setTimeout(trigger, INTERVAL_MS);
+
+      function trigger(){
+        if (!orb || !running){
+          clearTimeout(timer);
+          timer = setTimeout(trigger, INTERVAL_MS);
+          return;
+        }
+        sctx.clearRect(0, 0, src.width, src.height);
+        sctx.drawImage(orb, 0, 0);
+        startAngle = Math.random()*Math.PI*2;
+        startedAt = performance.now();
+        active = true;
+
+        clearTimeout(timer);
+        timer = setTimeout(
+          trigger,
+          INTERVAL_MS + Math.random()*400 - 200
+        );
+      }
+
+      (function loopFX(){
+        requestAnimationFrame(loopFX);
+        if (!active || !ofx || !fctx || !tmp){
+          if (fctx && ofx) fctx.clearRect(0, 0, ofx.width, ofx.height);
+          return;
+        }
+
+        var now = performance.now();
+        var tt  = now - startedAt;
+        if (tt > DURATION_MS){
+          active = false;
+          fctx.clearRect(0, 0, ofx.width, ofx.height);
+          return;
+        }
+
+        fctx.clearRect(0, 0, ofx.width, ofx.height);
+        tctx.clearRect(0, 0, tmp.width, tmp.height);
+
+        tctx.globalCompositeOperation = 'source-over';
+        tctx.drawImage(src, 0, 0);
+
+        var cx2 = orb.width*0.55;
+        var cy2 = orb.height*0.48;
+        var R2  = Math.min(orb.width, orb.height)*0.22;
+        var slice = (SLICE_DEG*Math.PI)/180;
+        var ang = startAngle + (tt/16.7)*SPIN_SPEED;
+
+        tctx.save();
+        tctx.globalCompositeOperation = 'destination-in';
+        tctx.translate(cx2, cy2);
+        tctx.rotate(ang);
+        tctx.shadowColor = 'rgba(0,0,0,1)';
+        tctx.shadowBlur  = FEATHER_PX;
+        tctx.beginPath();
+        tctx.moveTo(0, 0);
+        tctx.arc(0, 0, R2*1.25, -slice/2, slice/2, false);
+        tctx.closePath();
+        tctx.fillStyle = '#fff';
+        tctx.fill();
+        tctx.restore();
+
+        for(var k=0; k<=2; k++){
+          var a2 = ang + (k-1)*(slice/3);
+          fctx.save();
+          fctx.globalAlpha = BASE_OPACITY*(1 - k/3);
+          fctx.globalCompositeOperation = 'screen';
+          fctx.translate(cx2, cy2);
+          fctx.rotate(a2);
+          fctx.drawImage(tmp, -cx2, -cy2);
+          fctx.restore();
+        }
+      })();
+    }
+  }
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "O4 Orbit Hero",
+  "enabled_on": {
+    "templates": ["*"]
+  },
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "ONES4" },
+    { "type": "text", "id": "sub", "label": "Sub", "default": "Beyond Standard. Uniquely Yours" },
+    { "type": "text", "id": "hero_badge", "label": "Hero badge", "default": "Fast ship + custom ready" },
+    { "type": "text", "id": "primary_label", "label": "Primary button label", "default": "Shop the drop" },
+    { "type": "text", "id": "install_label", "label": "Install button label", "default": "Install app" },
+    { "type": "url", "id": "primary_link", "label": "Primary button link" },
+    
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "bg_img", "label": "Hero BG" },
+    { "type": "checkbox", "id": "meteors_on", "label": "Meteors", "default": true },
+    
+    { "type": "header", "content": "Background Name" },
+    { "type": "checkbox", "id": "bg_name_on", "label": "Show background name", "default": true },
+    { "type": "text", "id": "bg_name", "label": "Background name text", "default": "ONES4" },
+    
+    { "type": "header", "content": "Motion" },
+    { "type": "checkbox", "id": "motion_on", "label": "Illusory motion", "default": true },
+    { "type": "range", "id": "speed", "label": "Motion speed (s)", "min": 10, "max": 50, "step": 1, "default": 24 },
+    { "type": "range", "id": "intensity", "label": "Effect intensity", "min": 0, "max": 100, "step": 5, "default": 30 },
+    { "type": "checkbox", "id": "streaks_on", "label": "Mint streaks", "default": true },
+    { "type": "checkbox", "id": "glow_on", "label": "Glow veil", "default": true },
+    
+    { "type": "header", "content": "Text Glow (legacy)" },
+    { "type": "color", "id": "txt_stroke", "label": "Text stroke", "default": "#04d9ff" },
+    { "type": "range", "id": "txt_stroke_w", "label": "Stroke px", "min": 0, "max": 8, "step": 1, "default": 6 },
+    
+    { "type": "header", "content": "Mint Rings" },
+    { "type": "checkbox", "id": "rings_on", "label": "Show mint rings", "default": true },
+    
+    { "type": "header", "content": "Orbit Data" },
+    { "type": "link_list", "id": "orbit_menu", "label": "Collections menu" },
+    { "type": "collection", "id": "coll", "label": "Fallback collection" },
+    { "type": "range", "id": "limit", "label": "Items", "min": 3, "max": 16, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "pack_cards", "label": "Pack cards", "default": true },
+    { "type": "range", "id": "back_op", "label": "Back opacity", "min": 0, "max": 1, "step": 0.1, "default": 0.8 },
+    { "type": "checkbox", "id": "show_particles", "label": "Card particles", "default": true },
+    
+    { "type": "header", "content": "Planet" },
+    { "type": "range", "id": "planet_size", "label": "Planet size", "min": 140, "max": 280, "step": 4, "default": 200 },
+    
+    { "type": "header", "content": "Orb + FX" },
+    { "type": "checkbox", "id": "portal_on", "label": "Portal core on", "default": true },
+    { "type": "checkbox", "id": "slitscan_on", "label": "Slit-scan spin", "default": true },
+    { "type": "checkbox", "id": "glass_arcs", "label": "Glass arcs", "default": true },
+    
+    { "type": "header", "content": "Orbit Motion" },
+    { "type": "checkbox", "id": "orbit_move_x", "label": "Rotate on X (horizontal path)", "default": true },
+    { "type": "checkbox", "id": "orbit_move_y", "label": "Wave on Y (vertical depth)", "default": true },
+    
+    { "type": "header", "content": "Heading size" },
+    { "type": "checkbox", "id": "title_small", "label": "Reduce title size", "default": false },
+    { "type": "checkbox", "id": "sub_small", "label": "Reduce subtitle size", "default": false },
+    
+    { "type": "header", "content": "Performance" },
+    { "type": "checkbox", "id": "performance_mode", "label": "Performance mode (throttle animations, lighten effects)", "default": false },
+    
+    { "type": "header", "content": "Glow Control" },
+    { "type": "range", "id": "glow_boost", "label": "Glow intensity (boost)", "min": 0.6, "max": 2.0, "step": 0.1, "default": 1.3 },
+    
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "pt", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Top pad", "default": 48 },
+    { "type": "range", "id": "pb", "min": 0, "max": 200, "step": 4, "unit": "px", "label": "Bottom pad", "default": 48 }
+  ],
+  "presets": [
+    { "name": "O4 Orbit Hero" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Designer - ONES4 Integration Demo</title>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #03040a;
+            color: #f5fbff;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 1px solid;
+        }
+        
+        .status.success {
+            background: rgba(91, 255, 181, 0.1);
+            border-color: rgba(91, 255, 181, 0.3);
+            color: #5bffb5;
+        }
+        
+        .status.error {
+            background: rgba(255, 77, 140, 0.1);
+            border-color: rgba(255, 77, 140, 0.3);
+            color: #ff4d8c;
+        }
+        
+        .status.info {
+            background: rgba(110, 233, 255, 0.1);
+            border-color: rgba(110, 233, 255, 0.3);
+            color: #6ee9ff;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .product-card {
+            background: rgba(6, 10, 22, 0.7);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(110, 233, 255, 0.2);
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #6ee9ff;
+        }
+        
+        .product-type {
+            font-size: 0.9rem;
+            color: #9fb6d8;
+            margin-bottom: 15px;
+        }
+        
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .tag {
+            background: rgba(110, 233, 255, 0.2);
+            color: #6ee9ff;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .tag.neon {
+            background: rgba(255, 0, 200, 0.2);
+            color: #ff00c8;
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, #0bf3ff 0%, #04c7ff 100%);
+            color: #012028;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .log-panel {
+            background: rgba(6, 10, 22, 0.9);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(126, 234, 255, 0.1);
+        }
+        
+        .log-timestamp {
+            color: #9fb6d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Print Designer - ONES4 Integration</h1>
+            <p>Connecting your Print Designer app to www.ones4.com</p>
+        </div>
+
+        <div id="connection-status" class="status info">
+            <strong>⏳ Initializing connection to ONES4 store...</strong>
+        </div>
+
+        <div id="store-info" style="display: none;">
+            <h2>📊 Store Information</h2>
+            <p><strong>Store:</strong> <span id="store-name"></span></p>
+            <p><strong>Domain:</strong> <span id="store-domain"></span></p>
+            <p><strong>Environment:</strong> <span id="store-env"></span></p>
+            <p><strong>Customizable Products:</strong> <span id="product-count"></span></p>
+        </div>
+
+        <div id="products-section" style="display: none;">
+            <h2>🛍️ Customizable Products</h2>
+            <div id="product-grid" class="product-grid"></div>
+        </div>
+
+        <div class="log-panel">
+            <h3>📝 Integration Log</h3>
+            <div id="log-container"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Mock configuration for demonstration
+        const config = {
+            store: {
+                name: "ONES4",
+                domain: "jfg9tu-fb.myshopify.com",
+                publicDomain: "www.ones4.com",
+                environment: "production"
+            },
+            customization: {
+                enabledFor: {
+                    tags: ["customizable", "personalized", "custom", "neon"],
+                    productTypes: ["T-Shirts", "Hoodies", "Tank Tops", "Neon Signs"]
+                }
+            }
+        };
+
+        // Mock products data (in real app, this would come from Shopify API)
+        const mockProducts = [
+            {
+                id: 123456789,
+                title: "H-Town Tank Top",
+                product_type: "T-Shirts",
+                tags: "customizable, houston, tank",
+                vendor: "ONES4"
+            },
+            {
+                id: 987654321,
+                title: "Neon LED Sign Custom",
+                product_type: "Neon Signs", 
+                tags: "neon, customizable, led, sign",
+                vendor: "ONES4"
+            },
+            {
+                id: 456789123,
+                title: "Custom Hoodie Design",
+                product_type: "Hoodies",
+                tags: "customizable, personalized, hoodie",
+                vendor: "ONES4"
+            }
+        ];
+
+        // Logging function
+        function log(message, type = 'info') {
+            const logContainer = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            let icon = '📝';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            logEntry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span> 
+                ${icon} ${message}
+            `;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Simulate store connection
+        async function initializeConnection() {
+            log('🔗 Attempting to connect to ONES4 store...');
+            
+            try {
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Update status
+                const statusEl = document.getElementById('connection-status');
+                statusEl.className = 'status success';
+                statusEl.innerHTML = '<strong>✅ Successfully connected to ONES4 store!</strong>';
+                
+                // Show store info
+                document.getElementById('store-info').style.display = 'block';
+                document.getElementById('store-name').textContent = config.store.name;
+                document.getElementById('store-domain').textContent = config.store.domain;
+                document.getElementById('store-env').textContent = config.store.environment;
+                document.getElementById('product-count').textContent = mockProducts.length;
+                
+                log(`✅ Connected to ${config.store.name} (${config.store.domain})`, 'success');
+                log(`📊 Found ${mockProducts.length} customizable products`, 'info');
+                
+                // Load products
+                loadProducts();
+                
+            } catch (error) {
+                const statusEl = document.getElementById('connection-status');
+                statusEl.className = 'status error';
+                statusEl.innerHTML = '<strong>❌ Connection failed! Check your API credentials.</strong>';
+                
+                log(`❌ Connection failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Load and display products
+        function loadProducts() {
+            const productGrid = document.getElementById('product-grid');
+            const productsSection = document.getElementById('products-section');
+            
+            productsSection.style.display = 'block';
+            
+            mockProducts.forEach(product => {
+                const isNeon = product.tags.includes('neon');
+                const tags = product.tags.split(', ');
+                
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-title">${product.title}</div>
+                    <div class="product-type">${product.product_type}</div>
+                    <div class="product-tags">
+                        ${tags.map(tag => `<span class="tag ${tag === 'neon' ? 'neon' : ''}">${tag}</span>`).join('')}
+                    </div>
+                    <button class="btn" onclick="openDesigner(${product.id}, '${product.title}', ${isNeon})">
+                        ${isNeon ? '⚡ Open Neon Designer' : '🎨 Open Designer'}
+                    </button>
+                `;
+                
+                productGrid.appendChild(productCard);
+            });
+            
+            log('🎨 Product customization interface ready', 'success');
+        }
+
+        // Open designer for a product
+        window.openDesigner = function(productId, productTitle, isNeon) {
+            log(`🚀 Opening ${isNeon ? 'Neon' : 'Print'} Designer for: ${productTitle}`, 'info');
+            
+            // This is where you'd integrate with your actual Print Designer app
+            // For demo purposes, we'll just show an alert
+            if (isNeon) {
+                alert(`🌟 Opening Neon Designer for "${productTitle}"!\n\nThis would launch your Print Designer app at:\nC:\\Users\\Noe\\customization\\print-designer\n\nWith neon-specific tools:\n• Custom fonts\n• Glow effects\n• LED simulation\n• Real-time preview`);
+            } else {
+                alert(`🎨 Opening Print Designer for "${productTitle}"!\n\nThis would launch your Print Designer app at:\nC:\\Users\\Noe\\customization\\print-designer\n\nWith standard tools:\n• Text customization\n• Design templates\n• Color selection\n• Print preview`);
+            }
+            
+            log(`✨ Designer opened for product ID: ${productId}`, 'success');
+        };
+
+        // Initialize the connection when page loads
+        log('🚀 Starting Print Designer integration...', 'info');
+        log(`📍 App location: C:\\Users\\Noe\\customization\\print-designer`, 'info');
+        initializeConnection();
+    </script>
+</body>
+</html>

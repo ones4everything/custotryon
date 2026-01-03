@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONES4 Print Designer Integration</title>
+    <style>
+        body {
+            font-family: 'Space Grotesk', Arial, sans-serif;
+            background: linear-gradient(135deg, #03040a, #0a0f1c);
+            color: #f5fbff;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #6ee9ff;
+            text-shadow: 0 0 20px rgba(110, 233, 255, 0.5);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .status-card {
+            background: rgba(6, 10, 22, 0.7);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-card.connected {
+            border-color: rgba(91, 255, 181, 0.5);
+            background: rgba(91, 255, 181, 0.05);
+        }
+        
+        .status-card.error {
+            border-color: rgba(255, 77, 140, 0.5);
+            background: rgba(255, 77, 140, 0.05);
+        }
+        
+        .design-workspace {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-area {
+            background: rgba(6, 10, 22, 0.7);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .canvas-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        #design-canvas {
+            border: 2px solid rgba(126, 234, 255, 0.3);
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .controls-panel {
+            background: rgba(6, 10, 22, 0.7);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #9fb6d8;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(6, 10, 22, 0.8);
+            color: #f5fbff;
+            font-size: 1rem;
+        }
+        
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #6ee9ff;
+            box-shadow: 0 0 10px rgba(110, 233, 255, 0.3);
+        }
+        
+        .method-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .method-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .method-option input[type="radio"] {
+            display: none;
+        }
+        
+        .method-option label {
+            display: block;
+            padding: 10px;
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(6, 10, 22, 0.8);
+        }
+        
+        .method-option input[type="radio"]:checked + label {
+            border-color: #6ee9ff;
+            background: rgba(110, 233, 255, 0.1);
+            color: #6ee9ff;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(126, 234, 255, 0.3);
+            border-radius: 8px;
+            background: linear-gradient(90deg, #0bf3ff 0%, #04c7ff 100%);
+            color: #012028;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(11, 243, 255, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: rgba(6, 10, 22, 0.8);
+            color: #f5fbff;
+            border-color: rgba(126, 234, 255, 0.3);
+        }
+        
+        .product-info {
+            background: rgba(6, 10, 22, 0.7);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .product-info h3 {
+            color: #6ee9ff;
+            margin-top: 0;
+        }
+        
+        #neon-controls {
+            display: none;
+        }
+        
+        .neon-controls-active #neon-controls {
+            display: block;
+        }
+        
+        .log-panel {
+            background: rgba(6, 10, 22, 0.9);
+            border: 1px solid rgba(126, 234, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 30px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .log-entry {
+            margin: 3px 0;
+            padding: 2px 0;
+            border-bottom: 1px solid rgba(126, 234, 255, 0.1);
+        }
+        
+        .log-timestamp {
+            color: #9fb6d8;
+            margin-right: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .design-workspace {
+                grid-template-columns: 1fr;
+            }
+            
+            .method-options {
+                flex-direction: column;
+            }
+            
+            .method-option {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 ONES4 Print Designer</h1>
+            <p>Integrated with www.ones4.com</p>
+        </div>
+
+        <div id="connection-status" class="status-card">
+            <strong>🔄 Connecting to ONES4 store...</strong>
+        </div>
+
+        <div class="design-workspace">
+            <div class="canvas-area">
+                <div class="canvas-container">
+                    <canvas id="design-canvas" width="800" height="600"></canvas>
+                </div>
+            </div>
+
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label for="custom-text-input">Custom Text</label>
+                    <input type="text" id="custom-text-input" placeholder="Enter your text" maxlength="12">
+                </div>
+
+                <div class="control-group">
+                    <label>Print Method</label>
+                    <div class="method-options">
+                        <div class="method-option">
+                            <input type="radio" id="method-sublimation" name="method" value="Sublimation" checked>
+                            <label for="method-sublimation">Sublimation</label>
+                        </div>
+                        <div class="method-option">
+                            <input type="radio" id="method-vinyl" name="method" value="Vinyl">
+                            <label for="method-vinyl">Vinyl</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="neon-controls" class="control-group">
+                    <label for="neon-glow">Neon Glow Effect</label>
+                    <select id="neon-glow">
+                        <option value="blue">Electric Blue</option>
+                        <option value="green">Neon Green</option>
+                        <option value="pink">Hot Pink</option>
+                        <option value="yellow">Cyber Yellow</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="image-upload">Background Image</label>
+                    <input type="file" id="image-upload" accept="image/*">
+                </div>
+
+                <button id="save-design-btn" class="btn btn-secondary">💾 Save Design</button>
+                <button id="add-to-cart-btn" class="btn">🛒 Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="product-info" id="product-info" style="display: none;">
+            <h3 id="product-title">Product Title</h3>
+            <p><strong>Type:</strong> <span id="product-type">-</span></p>
+            <p><strong>Store:</strong> ONES4 (www.ones4.com)</p>
+        </div>
+
+        <div class="log-panel">
+            <h4>🔧 Integration Log</h4>
+            <div id="log-container"></div>
+        </div>
+    </div>
+
+    <!-- Load the integration files -->
+    <script type="module" src="./canvas-safety-wrapper.js"></script>
+    <script type="module" src="./ones4-integration.js"></script>
+    <script type="module" src="./main-app-integration-example.js"></script>
+    
+    <script>
+        // Simple logging system
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            let icon = '📝';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            logEntry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                ${icon} ${message}
+            `;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Override console methods to show in log panel
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                if (args[0].includes('✅')) addLog(args[0], 'success');
+                else if (args[0].includes('🚀') || args[0].includes('🔗')) addLog(args[0], 'info');
+                else addLog(args.join(' '), 'info');
+            }
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                addLog(args.join(' '), 'error');
+            }
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            if (args[0] && typeof args[0] === 'string') {
+                addLog(args.join(' '), 'warning');
+            }
+        };
+
+        // Initialize logging
+        addLog('Print Designer interface loaded', 'info');
+        addLog('Connecting to ONES4 store integration...', 'info');
+    </script>
+</body>
+</html>

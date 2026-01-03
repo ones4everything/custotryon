@@ -1,0 +1,3974 @@
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet"> 
+
+<style>
+:root {
+  --glow: #6ee9ff;
+  --glow-2: #b7f7ff;
+  --accent: #00e6ff;
+  --accent-2: #7ef0c5;
+  --accent-3: #ff62e5;
+  --accent-4: #7c90ff;
+  --surface: #05070d;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.12);
+  --ink-strong: #f5fbff;
+  --ink-soft: #9fb6d8;
+  --danger: #ff4d8c;
+  --safe: #5bffb5;
+  --panel: rgba(7, 11, 22, 0.78);
+  --line: rgba(130, 200, 255, 0.2);
+  --line-strong: rgba(126, 234, 255, 0.48);
+  --neon: #57f6ff;
+  --neon-green: #72ff9a;
+  --neo-teal: #23f0ff;
+  --neo-teal-strong: #11c8ff;
+  --neo-teal-soft: rgba(35, 240, 255, 0.3);
+  --neo-teal-shadow: 0 0 26px rgba(35, 240, 255, 0.55), 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(255, 255, 255, 0.18);
+}
+
+.o4-hide-theme-header #shopify-section-header,
+.o4-hide-theme-header #shopify-section-announcement-bar,
+.o4-hide-theme-header .shopify-section--header,
+.o4-hide-theme-header .site-header,
+.o4-hide-theme-header .header-wrapper,
+.o4-hide-theme-header .announcement-bar,
+.o4-hide-theme-header [data-section-type="header"],
+.o4-hide-theme-header [id^="FuturisticHeader-"] {
+  display: none !important;
+}
+
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: #03040a;
+}
+
+#teleporter-hub * { box-sizing: border-box; }
+
+#teleporter-hub {
+  position: relative;
+  font-family: 'Space Grotesk', 'Orbitron', system-ui, sans-serif;
+  background: #03040a;
+  color: var(--ink-strong);
+  min-height: 100vh;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 12px var(--tele-bottom-offset, 160px);
+  --glow-blue: #00aeff;
+  --glow-cyan: #00e5ff;
+  --glow-green: #00ff8a;
+  --glow-yellow: #ffc400;
+  --glow-magenta: #ff00c8;
+  --glow: var(--glow-blue);
+  --accent-live: var(--glow);
+  --accent-live-soft: rgba(0, 174, 255, 0.25);
+  --accent-live-strong: rgba(0, 174, 255, 0.6);
+  --accent-live-bright: var(--glow-cyan);
+}
+
+#teleporter-hub::before {
+  content: none;
+  display: none;
+}
+
+#teleporter-hub::after {
+  content: none;
+  display: none;
+}
+
+.neo-shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding-top: var(--tele-header-offset, 90px);
+}
+
+/* Header */
+.neo-header {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1240px, calc(100% - 24px));
+  z-index: 2000;
+  background: linear-gradient(90deg, rgba(8, 14, 28, 0.95), rgba(6, 10, 20, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  padding: 12px 14px;
+  margin: 0;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+  overflow: visible;
+}
+
+.neo-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 1px solid rgba(126, 234, 255, 0.12);
+  pointer-events: none;
+}
+
+.neo-header::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(126, 234, 255, 0.6), transparent);
+  opacity: 0.9;
+}
+
+.neo-header-row {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr) auto;
+  grid-template-areas: "topbar search subbar";
+  align-items: center;
+  gap: 12px;
+}
+
+.neo-topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.neo-subbar {
+  grid-area: subbar;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.neo-shop-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.neo-menu-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  padding: 0 12px;
+}
+
+.neo-menu-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.neo-brand {
+  display: inline-flex;
+  justify-self: center;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.82rem;
+  color: var(--accent-live-bright);
+  text-shadow: 0 0 12px var(--accent-live-soft);
+}
+
+.neo-search {
+  grid-area: search;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(6, 10, 22, 0.7);
+  min-width: 300px;
+  box-shadow: inset 0 0 18px rgba(0, 255, 255, 0.14);
+}
+
+.neo-search input {
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  outline: none;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.neo-search input::placeholder {
+  color: rgba(159, 182, 216, 0.7);
+}
+
+.neo-search-mic {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.24);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: inset 0 0 14px rgba(0, 255, 255, 0.12);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.neo-search-mic:hover {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+  transform: translateY(-1px);
+}
+
+.neo-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+}
+
+.neo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(5, 10, 20, 0.7);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.neo-breadcrumb a {
+  color: var(--ink-strong);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.neo-breadcrumb a:last-child {
+  color: var(--glow);
+}
+
+.neo-breadcrumb .sep {
+  opacity: 0.7;
+}
+
+.neo-min-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(126, 234, 255, 0.18);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.neo-min-toggle:hover {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+}
+
+.neo-min-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.4);
+  background: rgba(6, 10, 22, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 255, 255, 0.18);
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.neo-min-toggle[aria-pressed="true"] .neo-min-dot {
+  background: var(--accent-live);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 10px var(--accent-live-strong);
+}
+
+.neo-min-label {
+  line-height: 1;
+}
+
+.is-minimal {
+  background: #000000;
+  color: #ffffff;
+}
+
+.is-minimal::before,
+.is-minimal::after {
+  opacity: 0.04;
+}
+
+.is-minimal .neo-header,
+.is-minimal .neo-search,
+.is-minimal .neo-breadcrumb,
+.is-minimal .gallery-card,
+.is-minimal .hero-frame,
+.is-minimal .hero-shell,
+.is-minimal .tab-list,
+.is-minimal .tab-panels,
+.is-minimal .feature-card,
+.is-minimal .cta-panel,
+.is-minimal .customize-banner,
+.is-minimal .customize-panel,
+.is-minimal .color-chip,
+.is-minimal .pill,
+.is-minimal .info-tabs {
+  background: #0d0d0d;
+  box-shadow: none !important;
+  border-color: #2a2a2a;
+}
+
+.is-minimal .neo-search input,
+.is-minimal .neo-breadcrumb,
+.is-minimal .option-title,
+.is-minimal .price-tag .sub,
+.is-minimal .details-list span:first-child,
+.is-minimal .tab-panel,
+.is-minimal .feature-card .label {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.is-minimal .product-title span,
+.is-minimal .price-tag .amount,
+.is-minimal .cta-price,
+.is-minimal .tab-btn,
+.is-minimal .tab-copy,
+.is-minimal .details-list,
+.is-minimal .feature-card .value,
+.is-minimal .color-name,
+.is-minimal .pill,
+.is-minimal .neo-bottom-link,
+.is-minimal .neo-bottom-cta {
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+.is-minimal .tab-btn {
+  background: #0d0d0d;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.is-minimal .tab-btn.active {
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow: none;
+}
+
+.is-minimal .tele-overlay,
+.is-minimal .teleporter-base {
+  display: none !important;
+}
+
+.is-minimal .hero-media {
+  transform: none !important;
+}
+
+.is-minimal .hero-media::after,
+.is-minimal .hero-media::before {
+  opacity: 0.12;
+}
+
+.is-minimal .hero-media img {
+  filter: none;
+}
+
+.is-minimal .neo-bottom-nav {
+  background: #0d0d0d;
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.15);
+}
+
+.is-minimal .neo-bottom-link svg {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.is-minimal .neo-bottom-cta {
+  background: #ffffff;
+  color: #000000;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.is-minimal .neo-bottom-cta::after,
+.is-minimal .neo-bottom-cta::before {
+  display: none;
+}
+
+.is-minimal .customize-input {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.16);
+  color: #0b0f15;
+}
+
+.is-minimal .customize-input::placeholder {
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.is-minimal .customize-banner {
+  background: #ffffff;
+  color: #0b0f15;
+  border-color: #0b0f15;
+  box-shadow: none;
+}
+
+.is-minimal {
+  font-size: 1.05rem;
+}
+
+.is-minimal .btn,
+.is-minimal .btn-primary,
+.is-minimal .btn-secondary,
+.is-minimal .neo-bottom-cta {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.is-minimal .btn-primary {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  box-shadow: none;
+}
+
+.is-minimal .btn-secondary {
+  background: #0d0d0d;
+  color: #ffffff;
+  border-color: #2a2a2a;
+  box-shadow: none;
+}
+
+.is-minimal .product-title span {
+  letter-spacing: 0.14em;
+}
+
+.is-minimal .option-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+}
+
+.is-minimal .tab-copy,
+.is-minimal .details-list {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.neo-menu-panel {
+  position: fixed;
+  top: var(--neo-menu-top, 96px);
+  left: var(--neo-menu-left, 50%);
+  width: var(--neo-menu-width, min(560px, calc(100% - 24px)));
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(6, 10, 22, 0.95);
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--neo-menu-shift, -50%), -8px, 0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  max-height: calc(100vh - var(--neo-menu-top, 96px) - 20px);
+  overflow-y: auto;
+  z-index: 2001;
+}
+
+.neo-header.is-menu-open .neo-menu-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(var(--neo-menu-shift, -50%), 0, 0);
+}
+
+.neo-menu-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: 12px;
+  position: relative;
+  min-height: 220px;
+}
+
+.neo-menu-left {
+  padding: 4px 4px 4px 2px;
+  border-right: 1px solid rgba(126, 234, 255, 0.12);
+}
+
+.neo-menu-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.neo-menu-item-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  border: 1px solid rgba(126, 234, 255, 0.12);
+  background: rgba(7, 12, 22, 0.7);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.neo-menu-item-link:hover,
+.neo-menu-item-link:focus-visible {
+  color: var(--ink-strong);
+  border-color: rgba(0, 255, 255, 0.35);
+  box-shadow: 0 0 16px rgba(0, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.neo-menu-item-link.active {
+  color: var(--ink-strong);
+  border-color: rgba(0, 255, 255, 0.35);
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.18);
+}
+
+.neo-menu-item-link svg {
+  opacity: 0.6;
+}
+
+.neo-submenu-panels {
+  position: relative;
+  padding: 4px 4px 4px 12px;
+}
+
+.neo-submenu-panel {
+  display: none;
+}
+
+.neo-submenu-panel.is-active {
+  display: block;
+}
+
+.neo-submenu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: rgba(210, 245, 255, 0.65);
+}
+
+.neo-submenu-back {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.neo-submenu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.neo-submenu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(7, 12, 22, 0.65);
+  color: #c7d4ee;
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.neo-submenu-item:hover,
+.neo-submenu-item:focus-visible {
+  color: #fff;
+  border-color: rgba(0, 255, 255, 0.28);
+  transform: translateX(2px);
+}
+
+.neo-submenu-item svg {
+  opacity: 0.6;
+}
+
+.neo-icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(126, 234, 255, 0.22);
+  background: rgba(6, 10, 22, 0.7);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-strong);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  box-shadow: inset 0 0 16px rgba(0, 255, 255, 0.08);
+}
+
+.neo-icon-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 22px var(--accent-live-soft);
+}
+
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-3);
+  color: #050510;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 2px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 12px rgba(255, 98, 229, 0.6);
+}
+
+/* Main layout */
+.neo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .neo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.options-panel {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.option-block {
+  display: grid;
+  gap: 10px;
+}
+
+.option-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 10px;
+}
+
+.color-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0.92), rgba(4, 8, 16, 0.96));
+  color: var(--ink-strong);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 
+    0 0 12px rgba(0, 0, 0, 0.35), 
+    0 0 20px var(--swatch-color, var(--accent-live));
+}
+
+.color-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.color-chip::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.color-chip::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: -8px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--swatch-color, var(--accent-live));
+  box-shadow: 0 0 16px var(--swatch-color, var(--accent-live));
+  opacity: 0.8;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.color-chip:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: var(--swatch-color, var(--accent-live));
+  box-shadow: 
+    0 0 25px var(--swatch-color, var(--accent-live)),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.color-chip:hover::after {
+  opacity: 1;
+  height: 4px;
+  bottom: -10px;
+}
+
+.color-chip.active {
+  border-color: var(--glow);
+  box-shadow:
+    0 0 30px var(--glow),
+    0 0 40px var(--accent-live-soft),
+    0 8px 25px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.color-chip.active::after {
+  opacity: 1;
+  height: 4px;
+  bottom: -10px;
+  box-shadow: 0 0 20px var(--swatch-color, var(--accent-live));
+}
+
+.color-dot {
+  display: none;
+}
+
+.color-name {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 12px var(--swatch-color, var(--accent-live));
+}
+
+.size-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+  gap: 6px;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 6px;
+  border-radius: 9px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 20, 0.7);
+  color: var(--ink-strong);
+  font-weight: 600;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+}
+
+.pill.active {
+  border-color: var(--glow);
+  box-shadow: 0 0 22px var(--glow);
+  background: rgba(6, 10, 22, 0.78);
+}
+
+.info-tabs {
+  margin-top: 6px;
+  display: grid;
+  gap: 10px;
+  position: sticky;
+  top: calc(var(--tele-header-offset, 90px) + 6px);
+  z-index: 40;
+}
+
+.info-tabs.is-collapsed .tab-panels {
+  display: none;
+}
+
+.tab-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  padding: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+}
+
+.tab-btn {
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.6);
+  color: var(--ink-soft);
+  padding: 10px;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.tab-btn.active {
+  color: var(--ink-strong);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 18px var(--accent-live-soft);
+  background: rgba(6, 10, 22, 0.75);
+}
+
+.tab-panels {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.75);
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08);
+  display: flow-root;
+}
+
+.tab-panel {
+  display: none;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.tab-panel.active {
+  display: flow-root;
+}
+
+.tab-panel.active::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.details-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--ink-strong);
+}
+
+.details-list span:first-child {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.65rem;
+}
+
+.details-list {
+  margin-bottom: 14px;
+}
+
+.tab-copy {
+  color: #e6f0ff;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.tab-copy p {
+  margin: 0 0 0.85em;
+}
+
+.tab-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.tab-copy ul,
+.tab-copy ol {
+  margin: 0.4em 0 0.85em 1.1em;
+  padding: 0;
+}
+
+.tab-copy li {
+  margin: 0.35em 0;
+}
+
+.tab-copy a {
+  color: var(--glow);
+}
+
+.tab-panel #shopify-product-reviews,
+.tab-panel .spr-container,
+.tab-panel .jdgm-widget,
+.tab-panel .loox-reviews {
+  color: var(--ink-strong);
+}
+
+.tab-panel .spr-container,
+.tab-panel .jdgm-widget,
+.tab-panel .loox-reviews {
+  background: transparent;
+}
+
+.tab-panel .spr-summary-actions a,
+.tab-panel .jdgm-write-rev-link,
+.tab-panel .loox-write-review {
+  color: var(--glow);
+}
+
+.spec-empty {
+  color: var(--ink-soft);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.gallery-card {
+  position: relative;
+  background: linear-gradient(160deg, rgba(10, 16, 30, 0.85), rgba(6, 9, 18, 0.95));
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 16px 16px 18px;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+  overflow: visible;
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  row-gap: 12px;
+}
+
+.gallery-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  background:
+    linear-gradient(120deg, rgba(0, 255, 255, 0.12), transparent 45%),
+    linear-gradient(300deg, rgba(255, 98, 229, 0.12), transparent 40%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.gallery-card::after {
+  content: "";
+  position: absolute;
+  left: -12%;
+  bottom: -18%;
+  width: 60%;
+  height: 40%;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.35);
+  box-shadow: 0 0 28px rgba(126, 234, 255, 0.4);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.gallery-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-main {
+  display: grid;
+  gap: 10px;
+}
+
+.gallery-media,
+.gallery-buy {
+  display: grid;
+  gap: 10px;
+}
+
+.product-title {
+  text-align: center;
+  margin: 6px 0 18px;
+}
+
+.product-title span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.45);
+  background: linear-gradient(90deg, rgba(20, 32, 58, 0.9), rgba(7, 12, 24, 0.95));
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(126, 234, 255, 0.55);
+  box-shadow: 0 0 26px rgba(124, 144, 255, 0.35), inset 0 0 18px rgba(0, 255, 255, 0.2);
+  position: relative;
+}
+
+.product-title span::before,
+.product-title span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(255, 98, 229, 0.6);
+  transform: translateY(-50%) rotate(45deg);
+  opacity: 0.8;
+}
+
+.product-title span::before {
+  left: -10px;
+}
+
+.product-title span::after {
+  right: -10px;
+}
+
+.hero-frame {
+  position: relative;
+  border-radius: 20px;
+  padding: 14px;
+  background: linear-gradient(160deg, rgba(12, 20, 35, 0.88), rgba(6, 10, 20, 0.95));
+  box-shadow: 
+    inset 0 0 30px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(126, 234, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glow);
+  overflow: visible;
+  z-index: 2;
+  perspective: 1000px;
+}
+
+.hero-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-shell {
+  position: relative;
+  padding: 10px;
+  border-radius: 24px;
+  background: transparent;
+  box-shadow: none;
+  --halo-x: 50%;
+  --halo-y: 56%;
+  --tilt-x: -2deg;
+  --tilt-y: 2deg;
+}
+
+.hero-shell::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 18px;
+  border: 1px solid rgba(126, 234, 255, 0.35);
+  box-shadow: 
+    inset 0 0 22px rgba(126, 234, 255, 0.2),
+    0 0 16px rgba(126, 234, 255, 0.1);
+  pointer-events: none;
+}
+
+.hero-shell::after,
+.hero-media::after {
+  content: none;
+  display: none;
+}
+
+.tele-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.hero-media {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #03060f;
+  z-index: 1;
+  aspect-ratio: 4 / 3;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.18s ease;
+  will-change: transform;
+  box-shadow: 
+    0 0 25px rgba(126, 234, 255, 0.2),
+    0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.4);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: inset 0 0 20px rgba(126, 234, 255, 0.15);
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  display: block;
+  background: #000;
+  filter: none;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.hero-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  display: block;
+}
+
+/* Teleport materialize */
+.teleporter-base {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%) perspective(300px) rotateX(75deg);
+  width: 350px;
+  max-width: 90%;
+  height: 175px;
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 18px var(--glow));
+}
+
+.teleporter-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--glow);
+  box-shadow: 0 0 12px var(--glow), inset 0 0 12px var(--glow);
+  --ring-scale: 1;
+  z-index: 1;
+  animation: spin-teleporter 8s linear infinite;
+}
+
+.teleporter-ring:nth-child(2) {
+  --ring-scale: 0.7;
+  animation-delay: -2.7s;
+  animation-duration: 6s;
+}
+
+.teleporter-ring:nth-child(3) {
+  --ring-scale: 0.4;
+  animation-delay: -1.3s;
+  animation-duration: 4s;
+}
+
+.teleporter-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.teleporter-particle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  height: 15px;
+  background: var(--glow);
+  border-radius: 50%;
+  opacity: 0;
+  animation: rise-display 1.5s ease-out forwards;
+}
+
+.hero-frame.is-materializing {
+  animation: glow-pulse 1s ease-out;
+}
+
+@keyframes spin-teleporter {
+  from { transform: rotate(0) scale(var(--ring-scale, 1)); }
+  to { transform: rotate(360deg) scale(var(--ring-scale, 1)); }
+}
+
+@keyframes rise-display {
+  0% { transform: translateY(0) scale(1.5); opacity: 0.8; }
+  100% { transform: translateY(-450px) scale(0.5); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  from { box-shadow: 0 0 20px -5px var(--glow); }
+  50% { box-shadow: 0 0 50px 10px var(--glow); }
+  to { box-shadow: 0 0 25px 0 var(--glow); }
+}
+
+#teleporter-hub .btn-primary {
+  animation: glowPulse 2.8s ease-in-out infinite;
+}
+
+#teleporter-hub .btn-secondary {
+  animation: glowPulseSoft 3.4s ease-in-out infinite;
+}
+
+#teleporter-hub .banner {
+  animation: bannerPulse 3.4s ease-in-out infinite;
+}
+
+#teleporter-hub .feature-card {
+  animation: cardPulse 4.6s ease-in-out infinite;
+}
+
+#teleporter-hub .feature-icon {
+  animation: iconPulse 3.2s ease-in-out infinite;
+}
+
+#teleporter-hub .cta-panel {
+  animation: cardPulse 5.2s ease-in-out infinite;
+}
+
+#teleporter-hub .gallery-dots {
+  animation: glowPulseSoft 3.2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 var(--accent-live-soft); }
+  50% { box-shadow: 0 0 24px var(--accent-live-strong); }
+}
+
+@keyframes glowPulseSoft {
+  0%, 100% { box-shadow: inset 0 0 10px var(--accent-live-soft); }
+  50% { box-shadow: inset 0 0 18px var(--accent-live-strong); }
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 8px 22px var(--accent-live-soft); }
+  50% { box-shadow: 0 12px 30px var(--accent-live-strong); }
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: inset 0 0 18px var(--accent-live-soft); }
+  50% { box-shadow: inset 0 0 26px var(--accent-live-strong); }
+}
+
+@keyframes iconPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(114, 255, 154, 0.25); }
+  50% { box-shadow: 0 0 18px rgba(114, 255, 154, 0.6); }
+}
+
+#teleporter-hub .btn-primary,
+#teleporter-hub .btn-secondary,
+#teleporter-hub .banner,
+#teleporter-hub .feature-card,
+#teleporter-hub .feature-icon,
+#teleporter-hub .cta-panel,
+#teleporter-hub .gallery-dots,
+#teleporter-hub .neo-bottom-cta,
+#teleporter-hub .neo-bottom-cta::after,
+#teleporter-hub .neo-cta-zap {
+  animation: none !important;
+}
+
+#teleporter-hub .hero-media {
+  transform: none;
+  transition: none;
+}
+
+.gallery-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 8;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(6, 12, 24, 0.7);
+  border: 1px solid rgba(126, 234, 255, 0.55);
+  box-shadow: inset 0 0 18px rgba(0, 255, 255, 0.22), 0 0 18px rgba(0, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.4);
+  background: rgba(0, 255, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.dot.active {
+  background: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-strong);
+  transform: scale(1.2);
+}
+
+.price-tag {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.price-tag .amount {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: var(--accent-live);
+  text-shadow: 0 0 18px var(--accent-live-soft);
+}
+
+.price-tag .sub {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.stock-shipping {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+}
+
+.stock-shipping .status {
+  font-weight: 700;
+}
+
+.stock-shipping .status.is-in {
+  color: var(--safe);
+}
+
+.stock-shipping .status.is-out {
+  color: var(--danger);
+}
+
+.stock-shipping .divider {
+  margin: 0 6px;
+  color: var(--ink-soft);
+}
+
+.banner {
+  margin: 12px 0 8px;
+  padding: 12px 16px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--accent-live-soft), rgba(6, 10, 22, 0.32), var(--accent-live-soft));
+  border: 1px solid var(--accent-live-strong);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px var(--accent-live-strong);
+  box-shadow: 0 10px 26px var(--accent-live-soft);
+  clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+  position: relative;
+  cursor: pointer;
+  appearance: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customize-banner {
+  background: linear-gradient(90deg, rgba(40, 243, 255, 0.92), rgba(11, 216, 255, 0.96));
+  color: #02202b;
+  border: 1px solid rgba(40, 243, 255, 0.9);
+  box-shadow:
+    0 12px 32px rgba(10, 214, 255, 0.45),
+    0 0 22px rgba(10, 214, 255, 0.55),
+    inset 0 0 12px rgba(255, 255, 255, 0.15);
+  text-shadow: 0 0 12px rgba(10, 214, 255, 0.8);
+  filter: drop-shadow(0 0 14px rgba(10, 214, 255, 0.45));
+}
+
+.customize-banner:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 36px rgba(10, 214, 255, 0.6),
+    0 0 26px rgba(10, 214, 255, 0.65),
+    inset 0 0 14px rgba(255, 255, 255, 0.2);
+}
+
+.customize-banner:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.customize-panel {
+  margin: 0 0 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.75);
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08);
+  display: none;
+  gap: 12px;
+}
+
+.customize-panel.is-open {
+  display: grid;
+}
+
+.customize-field {
+  display: grid;
+  gap: 8px;
+}
+
+.customize-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.customize-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 10px 0 8px;
+  clear: both;
+}
+
+.feature-card {
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(6, 10, 22, 0.6);
+  border: 1px solid rgba(126, 234, 255, 0.18);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--neon-green);
+  background: rgba(114, 255, 154, 0.12);
+  border: 1px solid rgba(114, 255, 154, 0.4);
+  box-shadow: 0 0 12px rgba(114, 255, 154, 0.3);
+}
+
+.feature-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.feature-card .label {
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.feature-card .value {
+  font-weight: 700;
+  color: var(--ink-strong);
+  grid-column: 2 / 3;
+  font-size: 0.9rem;
+}
+
+.accordions {
+  margin: 18px 0;
+  border-top: 1px solid rgba(126, 234, 255, 0.18);
+}
+
+.accordion-item {
+  border-bottom: 1px solid rgba(126, 234, 255, 0.18);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 6px;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.accordion-header span:last-child {
+  transition: transform 0.2s ease;
+}
+
+.accordion-body {
+  display: none;
+  padding: 0 6px 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.accordion-item.open .accordion-header span:last-child {
+  transform: rotate(45deg);
+}
+
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+.cta-panel {
+  margin: 8px 0 0;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(6, 10, 22, 0.7);
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  display: grid;
+  gap: 12px;
+  box-shadow: inset 0 0 24px rgba(0, 255, 255, 0.08);
+}
+
+.cta-price {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-live);
+  text-shadow: 0 0 14px var(--accent-live-soft);
+  letter-spacing: 0.08em;
+}
+
+.qty-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(6, 10, 22, 0.6);
+  border-radius: 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  cursor: pointer;
+}
+
+.qty-input {
+  width: 48px;
+  text-align: center;
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  font-weight: 700;
+}
+
+.cta-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.22);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #0bf3ff 0%, #04c7ff 100%);
+  color: #012028;
+  border-color: rgba(11, 243, 255, 0.9);
+  box-shadow:
+    0 14px 32px rgba(11, 243, 255, 0.45),
+    0 0 18px rgba(4, 199, 255, 0.55),
+    inset 0 0 16px rgba(255, 255, 255, 0.16);
+  text-shadow: 0 0 10px rgba(0, 64, 92, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-primary:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+    0 0 36px rgba(11, 243, 255, 0.7),
+    0 14px 38px rgba(0, 0, 0, 0.5),
+    inset 0 0 18px rgba(255, 255, 255, 0.22);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.neo-bottom-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: min(760px, calc(100% - 20px));
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.neo-bottom-bar::before,
+.neo-bottom-bar::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 46px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.8), transparent);
+  opacity: 0.35;
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease;
+}
+
+.neo-bottom-bar::before { left: -24px; }
+.neo-bottom-bar::after { right: -24px; }
+
+.neo-bottom-glow {
+  position: absolute;
+  inset: -18% -6%;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.2), transparent 70%);
+  filter: blur(1px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.neo-bottom-nav {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(3, 6, 12, 0.96), rgba(6, 10, 20, 0.9));
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.55),
+    0 0 55px -12px rgba(6, 182, 212, 0.35);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.neo-bottom-nav::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: inset 0 0 18px rgba(34, 211, 238, 0.12);
+  pointer-events: none;
+}
+
+.neo-bottom-nav:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 70px -5px rgba(6, 182, 212, 0.5);
+}
+
+.neo-bottom-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(232, 255, 255, 0.9);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease;
+  position: relative;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+}
+
+.neo-bottom-link:hover {
+  color: rgba(230, 255, 255, 0.95);
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.neo-bottom-link svg {
+  width: 22px;
+  height: 22px;
+  color: rgba(34, 211, 238, 0.8);
+  transition: color 0.2s ease;
+}
+
+.neo-bottom-link:hover svg {
+  color: rgba(34, 211, 238, 1);
+}
+
+.neo-bottom-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  margin: 0 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(90deg, #06c2d7 0%, #18c6d9 45%, #21d6c2 100%);
+  color: #f7fbff;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 0 28px rgba(6, 182, 212, 0.45);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+.neo-bottom-cta:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 0 36px rgba(6, 182, 212, 0.6);
+}
+
+.neo-bottom-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-140%);
+  transition: transform 1s ease;
+}
+
+.neo-bottom-cta:hover::before {
+  transform: translateX(140%);
+}
+
+.neo-bottom-cta::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 2px solid rgba(34, 211, 238, 0.5);
+  opacity: 0;
+  animation: neoCtaPulse 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.neo-bottom-cta svg {
+  width: 20px;
+  height: 20px;
+}
+
+.neo-bottom-cta .neo-cta-zap {
+  position: absolute;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  animation: neoCtaZap 2.2s ease-in-out infinite;
+}
+
+.neo-bottom-cta:hover .neo-cta-zap {
+  opacity: 1;
+}
+
+@keyframes neoCtaPulse {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  50% { opacity: 0.6; transform: scale(1.03); }
+}
+
+@keyframes neoCtaZap {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.9; }
+}
+
+@media (max-width: 760px) {
+  .neo-header-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "topbar topbar"
+      "search search" 
+      "subbar subbar";
+    gap: 10px;
+  }
+  .neo-header {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
+    padding: 10px 12px;
+  }
+  .neo-topbar {
+    grid-area: topbar;
+    justify-content: space-between;
+  }
+  .neo-subbar {
+    grid-area: subbar;
+    justify-content: space-between;
+  }
+  .neo-breadcrumb {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+  .neo-search {
+    grid-area: search;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 12px;
+  }
+  .neo-search input {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+  }
+  .neo-actions {
+    grid-area: actions;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .neo-min-toggle {
+    padding: 6px 10px;
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+  }
+  .neo-min-label {
+    display: none;
+  }
+  .neo-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .neo-menu-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    margin: 0;
+  }
+  .neo-menu-grid {
+    grid-template-columns: 1fr;
+  }
+  .neo-menu-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(126, 234, 255, 0.12);
+    padding-bottom: 10px;
+  }
+  .neo-submenu-panels {
+    position: absolute;
+    inset: 0;
+    padding: 14px;
+    background: rgba(8, 12, 28, 0.98);
+    border-radius: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .neo-menu-panel.is-submenu-open .neo-submenu-panels {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .neo-submenu-back {
+    display: inline-flex;
+  }
+  .gallery-card { padding: 16px; }
+  .hero-shell { padding: 8px; }
+  .hero-frame { padding: 10px; }
+  .product-title span { letter-spacing: 0.14em; }
+  .gallery-dots { right: 10px; bottom: 10px; }
+  .hero-media { aspect-ratio: 4 / 3; }
+  .feature-card { grid-template-columns: 1fr; text-align: center; }
+  .feature-icon { margin: 0 auto; }
+  .feature-card .value { grid-column: 1 / -1; }
+  .cta-buttons { grid-template-columns: 1fr; }
+  .neo-shell { padding-top: var(--tele-header-offset, 120px); }
+  .options-panel { gap: 12px; }
+  .color-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tab-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .info-tabs { top: calc(var(--tele-header-offset, 90px) + 6px); }
+  .tab-btn { font-size: 0.62rem; padding: 8px; }
+  .neo-bottom-bar {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
+    bottom: 6px;
+  }
+  .neo-bottom-nav {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .neo-bottom-link {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+  }
+  .neo-bottom-cta {
+    padding: 12px 16px;
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+  .hero-frame,
+  .gallery-card,
+  .options-panel,
+  .info-tabs,
+  .description-accordion {
+    filter: none !important;
+  }
+  .teleporter-ring,
+  .teleporter-base,
+  .teleporter-particle {
+    animation: none !important;
+  }
+  .teleporter-ring {
+    opacity: 0.55 !important;
+  }
+  .teleporter-base {
+    filter: none !important;
+  }
+  .teleporter-particle {
+    opacity: 0 !important;
+  }
+}
+
+
+/* ===========================
+   Responsive tweaks
+   =========================== */
+
+@media (min-width: 1024px) {
+  .neo-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+  }
+
+  .hero-shell {
+    position: relative;
+    top: auto;
+  }
+
+  .gallery-card {
+    max-width: 980px;
+    width: 100%;
+    padding: 12px 16px 16px;
+    margin: 0 auto;
+  }
+
+  .gallery-main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    column-gap: 12px;
+    row-gap: 10px;
+    align-items: start;
+  }
+
+  .gallery-media .hero-frame {
+    width: 100%;
+    max-width: 520px;
+    margin: 0;
+  }
+
+  .gallery-buy {
+    max-width: 380px;
+    justify-self: start;
+  }
+
+  .gallery-buy {
+    align-content: start;
+  }
+
+  .gallery-buy .price-tag {
+    margin-top: 0;
+    text-align: left;
+  }
+
+  /* Keep the details/tabs tight on desktop */
+  .info-tabs {
+    position: static;
+    top: auto;
+    margin-top: 10px;
+  }
+}
+
+/* Give the hero media a consistent footprint */
+.hero-media {
+  width: 100%;
+}
+
+/* On small screens, make sure we use the full width */
+@media (max-width: 520px) {
+  .gallery-card {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* Optional: fight upstream theme max-width constraints */
+#teleporter-hub {
+  width: 100%;
+}
+
+#teleporter-hub .neo-shell {
+  width: min(1440px, calc(100% - 24px));
+  max-width: 1440px;
+}
+
+</style>
+
+{% assign current_product = product %}
+{% if current_product == blank and section.settings.product != blank %}
+  {% assign current_product = section.settings.product %}
+{% endif %}
+
+{% assign is_customizable = section.settings.customization_toggle %}
+{% assign customization_override = blank %}
+{% assign has_override = false %}
+{% if current_product and current_product.metafields.custom.customization_enabled != blank %}
+  {% assign customization_override = current_product.metafields.custom.customization_enabled.value | default: current_product.metafields.custom.customization_enabled %}
+{% endif %}
+{% if customization_override != blank %}
+  {% assign override_string = customization_override | downcase %}
+  {% if override_string == 'true' %}
+    {% assign is_customizable = true %}
+    {% assign has_override = true %}
+  {% elsif override_string == 'false' %}
+    {% assign is_customizable = false %}
+    {% assign has_override = true %}
+  {% endif %}
+{% endif %}
+
+{% assign type_rule_applied = false %}
+{% if has_override == false and current_product and section.settings.custom_product_types != blank %}
+  {% assign product_type_key = current_product.type | downcase | strip %}
+  {% if product_type_key != blank %}
+    {% assign type_list = section.settings.custom_product_types | replace: '\n', ',' | split: ',' %}
+    {% for entry in type_list %}
+      {% assign entry_key = entry | downcase | strip %}
+      {% if entry_key != blank and entry_key == product_type_key %}
+        {% assign is_customizable = true %}
+        {% assign type_rule_applied = true %}
+      {% endif %}
+    {% endfor %}
+    {% if type_rule_applied == false %}
+      {% assign is_customizable = false %}
+      {% assign type_rule_applied = true %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% if has_override == false and type_rule_applied == false and is_customizable == false and current_product and current_product.tags %}
+  {% if current_product.tags contains 'customizable' or current_product.tags contains 'personalized' or current_product.tags contains 'custom' %}
+    {% assign is_customizable = true %}
+  {% endif %}
+{% endif %}
+
+{% assign is_text_only = false %}
+{% if current_product %}
+  {% if current_product.tags contains 'text-only' or current_product.metafields.custom.text_only == true %}
+    {% assign is_text_only = true %}
+  {% endif %}
+{% endif %}
+
+{%- comment -%} Build allowed customization methods (Sublimation/Vinyl) {%- endcomment -%}
+{% assign allowed_methods = blank %}
+{% if current_product and current_product.metafields.custom.allowed_methods != blank %}
+  {% assign raw_methods = current_product.metafields.custom.allowed_methods.value | default: current_product.metafields.custom.allowed_methods %}
+  {% assign raw_json = raw_methods | json %}
+  {% if raw_json contains '[' %}
+    {% assign allowed_methods = raw_methods %}
+  {% else %}
+    {% assign allowed_methods = raw_methods | replace: '\n', ',' | split: ',' %}
+  {% endif %}
+{% endif %}
+{% assign default_methods = 'Sublimation,Vinyl' | split: ',' %}
+{% if allowed_methods == blank %}
+  {% assign allowed_methods = default_methods %}
+  {% endif %}
+  {% if current_product and current_product.tags contains 'no-sublimation' %}
+    {% assign allowed_methods = allowed_methods | join: ',' | remove: 'Sublimation' | split: ',' %}
+  {% endif %}
+  {% if current_product and current_product.tags contains 'vinyl-only' %}
+    {% assign allowed_methods = 'Vinyl' | split: ',' %}
+  {% endif %}
+
+{% assign gallery_images = current_product.images %}
+{% if gallery_images == blank and product %}
+  {% assign gallery_images = product.images %}
+{% endif %}
+{% assign main_image = gallery_images.first %}
+
+{% assign menu_links = section.settings.shop_menu.links %}
+{% if menu_links == blank %}
+  {% assign menu_links = section.settings.menu.links %}
+{% endif %}
+{% if menu_links == blank and settings.main_menu != blank %}
+  {% assign menu_links = linklists[settings.main_menu].links %}
+{% endif %}
+{% if menu_links == blank and settings.menu != blank %}
+  {% assign menu_links = linklists[settings.menu].links %}
+{% endif %}
+{% if menu_links == blank and settings.header_menu != blank %}
+  {% assign menu_links = linklists[settings.header_menu].links %}
+{% endif %}
+{% if menu_links == blank and linklists['main-menu'] != blank %}
+  {% assign menu_links = linklists['main-menu'].links %}
+{% endif %}
+{% assign active_menu = nil %}
+{% if menu_links != blank %}
+  {% for link in menu_links %}
+    {% if link.active or link.child_active %}
+      {% assign active_menu = link %}
+    {% endif %}
+  {% endfor %}
+  {% if active_menu == nil %}
+    {% assign active_menu = menu_links[0] %}
+  {% endif %}
+{% endif %}
+{% assign active_menu_key = '' %}
+{% if active_menu %}
+  {% assign active_menu_key = active_menu.title | handleize %}
+{% endif %}
+
+{% assign overview_html = '' %}
+{% assign specs_html = '' %}
+{% assign reviews_html = '' %}
+{% if current_product %}
+  {% assign raw_desc = current_product.description | default: '' %}
+  {% assign overview_html = raw_desc %}
+  {% assign specs_from_desc = '' %}
+  {% if raw_desc contains '<!-- specs -->' %}
+    {% assign parts = raw_desc | split: '<!-- specs -->' %}
+    {% assign overview_html = parts[0] %}
+    {% assign specs_from_desc = parts[1] %}
+  {% endif %}
+  {% assign specs_html = specs_from_desc | default: current_product.metafields.custom.specs %}
+  {% if current_product.metafields.spr.reviews != blank %}
+    {% assign reviews_html = current_product.metafields.spr.reviews %}
+  {% elsif current_product.metafields.judgeme.widget != blank %}
+    {% assign reviews_html = current_product.metafields.judgeme.widget %}
+  {% elsif current_product.metafields.loox.reviews != blank %}
+    {% assign reviews_html = current_product.metafields.loox.reviews %}
+  {% endif %}
+{% endif %}
+
+{% assign shop_url = routes.collections_url %}
+{% assign category_title = blank %}
+{% assign category_url = blank %}
+{% assign subcat_title = blank %}
+{% assign subcat_url = blank %}
+
+{% if template.name == 'product' and current_product %}
+  {% assign primary_collection = current_product.collections.first %}
+  {% if primary_collection %}
+    {% assign category_title = primary_collection.title %}
+    {% assign category_url = primary_collection.url %}
+  {% endif %}
+{% elsif template.name == 'collection' and collection %}
+  {% assign category_title = collection.title %}
+  {% assign category_url = collection.url %}
+{% endif %}
+
+{% comment %}Neon customizer gating{% endcomment %}
+{% assign enable_neon_customizer = false %}
+{% if is_customizable and current_product %}
+  {% assign _ptype = current_product.type | downcase %}
+  {% if _ptype contains 'neon' or current_product.tags contains 'neon' or current_product.tags contains 'neon-custom' or current_product.tags contains 'neon-customizer' %}
+    {% assign enable_neon_customizer = true %}
+  {% endif %}
+{% endif %}
+
+<section id="teleporter-hub" data-fx="on">
+  {% comment %}
+    PHASE I: Metaobjects → JSON payload for Neon Engine
+  {% endcomment %}
+
+  {% if enable_neon_customizer %}
+    {% paginate shop.metaobjects.custom_font_def.values by 250 %}
+      <script id="neon-engine-data" type="application/json">
+      {
+        "fonts": [
+          {% for font in shop.metaobjects.custom_font_def.values %}
+            {
+              "name": {{ font.display_name | json }},
+              "family": {{ font.css_family_name | json }},
+              "src": {{ font.font_file_source | file_url | json }},
+              "offset": {{ font.vertical_offset | default: 0 }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "glows": [
+          {% for effect in shop.metaobjects.glow_effect_def.values %}
+            {
+              "name": {{ effect.effect_name | json }},
+              "primary": {{ effect.hex_primaryColor | json }},
+              "secondary": {{ effect.hex_secondaryColor | json }},
+              "blur": {{ effect.blur_intensity | default: 20 }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }
+      </script>
+    {% endpaginate %}
+  {% endif %}
+
+
+  <div class="neo-shell">
+    <header class="neo-header">
+      <div class="neo-header-row">
+        <div class="neo-topbar">
+          <div class="neo-shop-toggle">
+            <button class="neo-icon-btn neo-menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="neo-menu-{{ section.id }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16" stroke-linecap="round"></path>
+                <path d="M4 12h16" stroke-linecap="round"></path>
+                <path d="M4 18h16" stroke-linecap="round"></path>
+              </svg>
+              <span class="neo-menu-label">SHOP</span>
+            </button>
+          </div>
+          <div class="neo-brand" aria-label="ONES4">ONES4</div>
+          <div class="neo-actions">
+            <a class="neo-icon-btn neo-account-btn" href="{{ routes.account_login_url }}" aria-label="Account">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c2.5-4 13.5-4 16 0" stroke-linecap="round"></path>
+              </svg>
+            </a>
+            <a class="neo-icon-btn neo-cart-btn" href="{{ routes.cart_url }}" aria-label="Cart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="9" cy="20" r="1"></circle>
+                <circle cx="17" cy="20" r="1"></circle>
+                <path d="M5 5h2l2 10h9l2-7H8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              {% if cart.item_count > 0 %}
+                <span class="cart-badge">{{ cart.item_count }}</span>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+
+        <form class="neo-search" action="{{ routes.search_url }}" method="get" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5" stroke-linecap="round"></path>
+          </svg>
+          <input type="search" name="q" placeholder="SEARCH DATABASE..." aria-label="Search products">
+          <button class="neo-search-mic" type="button" aria-label="Voice search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M12 19v4" stroke-linecap="round"></path>
+              <path d="M8 23h8" stroke-linecap="round"></path>
+            </svg>
+          </button>
+        </form>
+
+        <div class="neo-subbar">
+          <div class="neo-breadcrumb" role="list">
+            <a href="{{ shop_url }}" role="listitem">Shop</a>
+            {% if category_title != blank %}
+              <span class="sep">/</span>
+              <a href="{{ category_url }}" role="listitem">{{ category_title }}</a>
+              {% if subcat_title != blank and subcat_url != blank %}
+                <span class="sep">/</span>
+                <a href="{{ subcat_url }}" role="listitem">{{ subcat_title }}</a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <button class="neo-min-toggle" type="button" aria-pressed="false" aria-label="Minimal Mode" data-minimal-toggle>
+            <span class="neo-min-dot" aria-hidden="true"></span>
+            <span class="neo-min-label">Minimal Mode</span>
+          </button>
+        </div>
+      </div>
+      {% if menu_links != blank %}
+        <div class="neo-menu-panel" id="neo-menu-{{ section.id }}" aria-hidden="true">
+          <nav aria-label="Menu">
+            <div class="neo-menu-grid">
+              <div class="neo-menu-left">
+                <ul class="neo-menu-items">
+                  {% for link in menu_links %}
+                    {% assign menu_key = link.title | handleize %}
+                    {% assign has_children = false %}
+                    {% if link.links != blank %}
+                      {% assign has_children = true %}
+                    {% endif %}
+                    <li>
+                      <a class="neo-menu-item-link{% if menu_key == active_menu_key %} active{% endif %}"
+                         href="{{ link.url }}"
+                         data-menu-key="{{ menu_key }}"
+                         {% if has_children %}data-has-children="true"{% endif %}>
+                        <span>{{ link.title }}</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="neo-submenu-panels">
+                {% for link in menu_links %}
+                  {% assign menu_key = link.title | handleize %}
+                  <div class="neo-submenu-panel{% if menu_key == active_menu_key %} is-active{% endif %}" data-menu-panel="{{ menu_key }}">
+                    <div class="neo-submenu-header">
+                      <span>{{ link.title }}</span>
+                      <button type="button" class="neo-submenu-back" aria-label="Back to categories">Back</button>
+                    </div>
+                    <ul class="neo-submenu-list">
+                      {% if link.links != blank %}
+                        {% for sub_link in link.links %}
+                          <li>
+                            <a class="neo-submenu-item" href="{{ sub_link.url }}">
+                              <span>{{ sub_link.title }}</span>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </a>
+                          </li>
+                        {% endfor %}
+                        <li>
+                          <a class="neo-submenu-item" href="{{ link.url }}">
+                            <span>View All {{ link.title }}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        </li>
+                      {% else %}
+                        <li>
+                          <a class="neo-submenu-item" href="{{ link.url }}">
+                            <span>View All {{ link.title }}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </nav>
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="neo-grid">
+      <div class="gallery-card">
+        <div class="product-title">
+          <span>{{ current_product.title | default: "H-Town Tank Top" }}</span>
+        </div>
+
+        <div class="gallery-main">
+          <div class="gallery-media">
+            <div class="hero-shell">
+              <div class="hero-frame">
+                <div class="hero-media">
+                  <div id="preview-stage" style="position: relative; width: 100%; height: 100%;">
+                    {% if main_image %}
+                      <img id="hero-img"
+                           src="{{ main_image | image_url: width: 1400 }}"
+                           alt="{{ current_product.title | escape }}"
+                           loading="eager"
+                           decoding="async"
+                           style="position: absolute; inset: 0; z-index: 1; object-fit: cover;">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'hero-placeholder' }}
+                    {% endif %}
+
+                    {% if enable_neon_customizer %}
+                      <canvas id="neon-canvas"
+                              style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; mix-blend-mode: screen; pointer-events: none;"></canvas>
+
+                      <img id="texture-map"
+                           src="{{ 'texture-grain.png' | asset_url }}"
+                           style="position: absolute; inset: 0; z-index: 3; mix-blend-mode: multiply; opacity: 0.6; pointer-events: none; display: none;"
+                           aria-hidden="true">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="tele-overlay" aria-hidden="true">
+                  <div class="teleporter-base">
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-particles"></div>
+                  </div>
+                </div>
+
+                {% if gallery_images.size > 1 %}
+                  <div class="gallery-dots" role="list">
+                    {% for image in gallery_images %}
+                      <button class="dot{% if forloop.first %} active{% endif %}" role="listitem" data-gallery-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-buy">
+            <div class="price-tag">
+              <div class="amount">
+                {% if current_product %}
+                  {{ current_product.price | money }}
+                {% else %}
+                  $20.00
+                {% endif %}
+              </div>
+              <div class="sub">Limited time price</div>
+            </div>
+
+            {% if current_product %}
+              <div class="stock-shipping">
+                {% if current_product.available %}
+                  <span class="status is-in">In stock</span>
+                {% else %}
+                  <span class="status is-out">Out of stock</span>
+                {% endif %}
+                <span class="divider">|</span>
+                <span class="shipping">Ships in 1-2 business days</span>
+              </div>
+
+              <div class="options-panel">
+                {% for option in current_product.options_with_values %}
+                  {% assign option_key = option.name | downcase %}
+                  {% if option_key contains 'color' %}
+                    <div class="option-block">
+                      <div class="option-title">Color</div>
+                      <div class="color-options" role="list">
+                        {% for value in option.values %}
+                          {% assign swatch_value = value | downcase %}
+                          {% assign swatch_hex = '#4ad7ff' %}
+                          {% case swatch_value %}
+                            {% when 'black' %}{% assign swatch_hex = '#0c1119' %}
+                            {% when 'white' %}{% assign swatch_hex = '#f4f8ff' %}
+                            {% when 'red' %}{% assign swatch_hex = '#ff4b6e' %}
+                            {% when 'blue' %}{% assign swatch_hex = '#4aa3ff' %}
+                            {% when 'green' %}{% assign swatch_hex = '#5bffb5' %}
+                            {% when 'yellow' %}{% assign swatch_hex = '#ffd36c' %}
+                            {% when 'orange' %}{% assign swatch_hex = '#ff9b4a' %}
+                            {% when 'purple' %}{% assign swatch_hex = '#b07dff' %}
+                            {% when 'pink' %}{% assign swatch_hex = '#ff7fd8' %}
+                            {% when 'gray' %}{% assign swatch_hex = '#9aa6b2' %}
+                            {% when 'grey' %}{% assign swatch_hex = '#9aa6b2' %}
+                            {% when 'navy' %}{% assign swatch_hex = '#223b6f' %}
+                            {% when 'teal' %}{% assign swatch_hex = '#33d0c9' %}
+                            {% when 'brown' %}{% assign swatch_hex = '#9c6b3c' %}
+                          {% endcase %}
+                          {% assign neon_class = 'color-cyan' %}
+                          {% if swatch_value contains 'blue' %}
+                            {% assign neon_class = 'color-blue' %}
+                          {% elsif swatch_value contains 'cyan' %}
+                            {% assign neon_class = 'color-cyan' %}
+                          {% elsif swatch_value contains 'green' %}
+                            {% assign neon_class = 'color-green' %}
+                          {% elsif swatch_value contains 'yellow' or swatch_value contains 'orange' %}
+                            {% assign neon_class = 'color-yellow' %}
+                          {% elsif swatch_value contains 'magenta' or swatch_value contains 'pink' or swatch_value contains 'red' %}
+                            {% assign neon_class = 'color-magenta' %}
+                          {% endif %}
+                          {% assign swatch_image = blank %}
+                          {% assign swatch_variant_id = blank %}
+                          {% assign option_index = option.position | minus: 1 %}
+                          {% for variant in current_product.variants %}
+                            {% if variant.options[option_index] == value %}
+                              {% if swatch_variant_id == blank %}
+                                {% assign swatch_variant_id = variant.id %}
+                              {% endif %}
+                              {% if variant.featured_media != blank %}
+                                {% assign swatch_image = variant.featured_media.preview_image %}
+                                {% break %}
+                              {% elsif variant.featured_image != blank %}
+                                {% assign swatch_image = variant.featured_image %}
+                                {% break %}
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                          {% if swatch_image == blank %}
+                            {% assign swatch_image = gallery_images[forloop.index0] %}
+                          {% endif %}
+                          {% assign swatch_hero_src = blank %}
+                          {% if swatch_image != blank %}
+                            {% assign swatch_hero_src = swatch_image | image_url: width: 1400 %}
+                          {% endif %}
+                          <label class="color-chip{% if option.selected_value == value %} active{% endif %}" role="listitem" data-gallery-index="{{ forloop.index0 }}" data-color-value="{{ swatch_value }}" data-swatch="{{ swatch_hex }}" data-neon="{{ neon_class }}" style="--swatch-color: {{ swatch_hex }};"{% if swatch_variant_id != blank %} data-variant-id="{{ swatch_variant_id }}"{% endif %}{% if swatch_hero_src != blank %} data-hero-src="{{ swatch_hero_src }}"{% endif %}>
+                            <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                            <span class="color-dot"></span>
+                            <span class="color-name">{{ value }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% for option in current_product.options_with_values %}
+                  {% assign option_key = option.name | downcase %}
+                  {% unless option_key contains 'color' %}
+                    <div class="option-block">
+                      <div class="option-title">{{ option.name }}</div>
+                      <div class="size-pills" data-option="{{ option_key }}">
+                        {% for value in option.values %}
+                          <label class="pill{% if option.selected_value == value %} active{% endif %}">
+                            <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                            <span>{{ value }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endunless %}
+                {% endfor %}
+              </div>
+
+              {% assign product_form_id = 'product-form-' | append: section.id %}
+              {% form 'product', current_product, class: 'cta-panel', id: product_form_id %}
+                <div class="cta-price">
+                  {{ current_product.price | money }}
+                </div>
+
+                <input type="hidden" id="variant-select-{{ section.id }}" name="id" class="variant-select" value="{{ current_product.selected_or_first_available_variant.id }}">
+
+                <div class="qty-row">
+                  <button type="button" class="qty-btn" data-qty-dec aria-label="Decrease quantity">-</button>
+                  <input class="qty-input" name="quantity" value="1" min="1" pattern="[0-9]*" inputmode="numeric">
+                  <button type="button" class="qty-btn" data-qty-inc aria-label="Increase quantity">+</button>
+                </div>
+
+                <div class="cta-buttons">
+                  <button type="submit" class="btn btn-primary" {% unless current_product.available %}disabled{% endunless %}>Add to cart</button>
+                  <button type="submit" name="checkout" class="btn btn-secondary" {% unless current_product.available %}disabled{% endunless %}>Buy now</button>
+                </div>
+              {% endform %}
+
+              {% if is_customizable %}
+            {% assign customization_designs = section.settings.custom_designs | default: '' %}
+            {% if current_product.metafields.custom.designs != blank %}
+              {% assign customization_designs = current_product.metafields.custom.designs.value | default: current_product.metafields.custom.designs %}
+            {% endif %}
+            {% assign customization_designs_list = blank %}
+            {% if customization_designs != blank %}
+              {% assign customization_designs_raw = customization_designs | strip %}
+              {% assign first_char = customization_designs_raw | slice: 0, 1 %}
+              {% if first_char == '[' or first_char == '{' %}
+                {% assign customization_designs_list = customization_designs_raw | parse_json %}
+              {% else %}
+                {% assign customization_designs_list = customization_designs_raw | replace: '\n', ',' | split: ',' %}
+              {% endif %}
+            {% endif %}
+
+                <button class="banner customize-banner" type="button" data-customize-toggle aria-controls="customize-panel-{{ section.id }}">
+                  {% if enable_neon_customizer %}Neon customize{% else %}Customize{% endif %}
+                </button>
+
+                <div class="customize-panel" id="customize-panel-{{ section.id }}" data-customize-panel aria-hidden="true">
+                  <div class="option-block">
+                    <div class="option-title">Customization method</div>
+                    <div class="size-pills" role="list">
+                      {% assign methods_list = allowed_methods | default: default_methods %}
+                      {% for method in methods_list %}
+                        {% assign method_label = method | strip %}
+                        {% if method_label != blank %}
+                          <label class="pill" role="listitem">
+                            <input type="radio" name="properties[Method]" value="{{ method_label | escape }}" {% if forloop.first %}checked{% endif %} data-customize-method disabled>
+                            <span>{{ method_label }}</span>
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {% if enable_neon_customizer %}
+                    <div class="customize-field">
+                      <div class="option-title">Cyber Text</div>
+                      <input class="customize-input" type="text" id="neon-text-input" placeholder="ENTER TEXT" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                    </div>
+
+                    <div class="option-block">
+                      <div class="option-title">Typography</div>
+                      <div class="size-pills" id="font-selector-container" role="list"></div>
+                    </div>
+
+                    <div class="option-block">
+                      <div class="option-title">Neon Resonance</div>
+                      <div class="color-options" id="glow-selector-container" role="list"></div>
+                    </div>
+
+                    {%- comment -%}
+                      Hidden fields for line item properties are injected on submit by the engine:
+                      - properties[Custom Text]
+                      - properties[_Preview]
+                    {%- endcomment -%}
+                  {% else %}
+                    {% if customization_designs_list != blank %}
+                      <div class="option-block">
+                        <div class="option-title">Designs</div>
+                        <div class="size-pills" role="list">
+                      {% for design in customization_designs_list %}
+                        {% assign design_label = '' %}
+                        {% assign design_image = '' %}
+                        {% assign raw_design = design %}
+
+                        {%- comment -%}
+                          Support formats:
+                          - Array of strings: "Label" or "Label|https://image"
+                          - Array of objects: { "label": "...", "title": "...", "name": "...", "image": "...", "hero": "...", "src": "..." }
+                        {%- endcomment -%}
+
+                        {% if design.label %}
+                          {% assign design_label = design.label %}
+                        {% elsif design.title %}
+                          {% assign design_label = design.title %}
+                        {% elsif design.name %}
+                          {% assign design_label = design.name %}
+                        {% elsif design.text %}
+                          {% assign design_label = design.text %}
+                        {% endif %}
+
+                        {% if design.image %}
+                          {% assign design_image = design.image %}
+                        {% elsif design.hero %}
+                          {% assign design_image = design.hero %}
+                        {% elsif design.src %}
+                          {% assign design_image = design.src %}
+                        {% endif %}
+
+                        {% if design_label == '' %}
+                          {% assign raw_design_str = raw_design | strip %}
+                          {% if raw_design_str contains '|' %}
+                            {% assign parts = raw_design_str | split: '|' %}
+                            {% assign design_label = parts[0] | strip %}
+                            {% assign design_image = parts[1] | strip %}
+                          {% else %}
+                            {% assign design_label = raw_design_str %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% assign design_hero = design_image %}
+                        {% if design_hero != blank %}
+                          {% capture maybe_cdn %}{{ design_image | image_url: width: 1400 }}{% endcapture %}
+                          {% assign maybe_cdn = maybe_cdn | strip %}
+                          {% if maybe_cdn contains 'cdn' or maybe_cdn contains 'shopify' %}
+                            {% assign design_hero = maybe_cdn %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% if design_label != blank %}
+                          <label class="pill" role="listitem">
+                            <input type="radio"
+                                   name="properties[Design]"
+                                   value="{{ design_label | escape }}"
+                                   {% if forloop.first %}checked{% endif %}
+                                   data-customize-design
+                                   {% if design_hero != blank %}data-design-hero="{{ design_hero }}"{% endif %}
+                                   disabled>
+                            {% if design_hero != blank %}
+                              <span style="display: inline-flex; align-items: center; gap: 8px;">
+                                <img src="{{ design_hero }}" alt="{{ design_label | escape }}" loading="lazy" style="width: 26px; height: 26px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <span>{{ design_label }}</span>
+                              </span>
+                            {% else %}
+                              <span>{{ design_label }}</span>
+                            {% endif %}
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+
+                    <div class="customize-field">
+                      <div class="option-title">{{ section.settings.custom_text_label | default: 'Custom text' }}</div>
+                      <input class="customize-input" type="text"
+                             name="properties[{{ section.settings.custom_text_label | default: 'Custom text' }}]"
+                             maxlength="{{ section.settings.custom_text_max | default: 8 }}"
+                             placeholder="{{ section.settings.custom_text_placeholder | default: 'Your text' }}"
+                             data-customize-text disabled>
+                    </div>
+                  {% endif %}
+                </div>
+
+              {% endif %}
+            {% else %}
+              <p class="spec-empty">Select a product to configure.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if current_product %}
+          <div class="info-tabs" data-tabs>
+            <div class="tab-list" role="tablist">
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="details">Overview</button>
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="shipping">Shipping & returns</button>
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="specs">Specs</button>
+              <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="reviews">Reviews</button>
+            </div>
+            <div class="tab-panels">
+              <div class="tab-panel" role="tabpanel" data-tab-panel="details">
+                <ul class="details-list">
+                  <li><span>Vendor</span><span>{{ current_product.vendor | default: "Ones4" }}</span></li>
+                  <li><span>Type</span><span>{{ current_product.type | default: "Performance Gear" }}</span></li>
+                  <li><span>SKU</span><span>{{ current_product.selected_or_first_available_variant.sku | default: "N/A" }}</span></li>
+                </ul>
+                {% if overview_html != blank %}
+                  <div class="tab-copy">
+                    {{ overview_html }}
+                  </div>
+                {% else %}
+                  <p class="spec-empty">Overview syncing. Check back soon.</p>
+                {% endif %}
+              </div>
+              <div class="tab-panel" role="tabpanel" data-tab-panel="shipping">
+                Ships at light speed. Free returns within 30 days of delivery. Contact support for warp portal pickup.
+              </div>
+              <div class="tab-panel" role="tabpanel" data-tab-panel="specs">
+                {% if specs_html != blank %}
+                  <div class="tab-copy">
+                    {{ specs_html }}
+                  </div>
+                {% else %}
+                  <p>Specs syncing. Check back soon.</p>
+                {% endif %}
+              </div>
+              <div class="tab-panel active" role="tabpanel" data-tab-panel="reviews">
+                {% if current_product.metafields.spr.reviews != blank %}
+                  <div id="shopify-product-reviews" data-id="{{ current_product.id }}" class="tab-copy">
+                    {{ current_product.metafields.spr.reviews }}
+                  </div>
+                {% elsif reviews_html != blank %}
+                  <div class="tab-copy">
+                    {{ reviews_html }}
+                  </div>
+                {% else %}
+                  <p class="spec-empty">Reviews are loading. Check back soon.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="neo-bottom-bar" aria-label="Quick navigation">
+      <div class="neo-bottom-glow"></div>
+      <nav class="neo-bottom-nav">
+        <a href="{{ routes.root_url }}" class="neo-bottom-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <path d="M9 22V12h6v10"/>
+          </svg>
+          <span>Home</span>
+        </a>
+
+        <form method="post" action="/cart/add" class="neo-bottom-form">
+          <input type="hidden" name="id" value="{{ current_product.selected_or_first_available_variant.id }}" data-bottom-variant>
+          {% if is_customizable %}
+            <input type="hidden" name="properties[Method]" value="" data-bottom-method disabled>
+            <input type="hidden" name="properties[Design]" value="" data-bottom-design disabled>
+            <input type="hidden" name="properties[Custom text]" value="" data-bottom-text disabled>
+          {% endif %}
+          <button type="submit" class="neo-bottom-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <span>Add to cart</span>
+            <svg class="neo-cta-zap" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </button>
+        </form>
+
+        <a href="{{ routes.all_products_collection_url }}" class="neo-bottom-link">
+          <span>Shop</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+            <path d="M3 6h18"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const root = document.getElementById('teleporter-hub');
+  if (!root) return;
+  document.body.classList.add('o4-hide-theme-header');
+  const enableHeroMotion = false;
+
+  const heroImg = root.querySelector('#hero-img');
+  const heroFrame = root.querySelector('.hero-frame');
+  const heroShell = root.querySelector('.hero-shell');
+  const dots = Array.from(root.querySelectorAll('.dot'));
+  const variantSelect = root.querySelector('.variant-select');
+  const header = root.querySelector('.neo-header');
+  const menuToggle = root.querySelector('.neo-menu-toggle');
+  const menuPanel = root.querySelector('.neo-menu-panel');
+  const minimalToggle = root.querySelector('[data-minimal-toggle]');
+  const customizeToggle = root.querySelector('[data-customize-toggle]');
+  const customizePanel = root.querySelector('[data-customize-panel]');
+  const customizeInputs = customizePanel ? Array.from(customizePanel.querySelectorAll('input, textarea, select')) : [];
+  const customizeMethods = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-method]')) : [];
+  const customizeText = customizePanel ? customizePanel.querySelector('[data-customize-text]') : null;
+  const customizeDesigns = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-design]')) : [];
+  const bottomVariantInput = root.querySelector('[data-bottom-variant]');
+  const bottomMethodInput = root.querySelector('[data-bottom-method]');
+  const bottomDesignInput = root.querySelector('[data-bottom-design]');
+  const bottomTextInput = root.querySelector('[data-bottom-text]');
+  const baseHeroSrc = heroImg ? heroImg.src : '';
+  const menuItems = Array.from(root.querySelectorAll('.neo-menu-item-link[data-menu-key]'));
+  const submenuPanels = Array.from(root.querySelectorAll('.neo-submenu-panel'));
+  const submenuBacks = Array.from(root.querySelectorAll('.neo-submenu-back'));
+  const bottomBar = root.querySelector('.neo-bottom-bar');
+  const mq = window.matchMedia('(max-width: 760px)');
+  const images = {{ gallery_images | json }} || [];
+  const variants = {{ current_product.variants | json | default: '[]' }} || [];
+  const optionNames = {{ current_product.options | json | default: '[]' }} || [];
+  let radioGroups = [];
+  let isSyncing = false;
+  let teleTimer;
+  let initialBurstDone = false;
+
+  function updateOffsets() {
+    let headerOffset = 90;
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      headerOffset = rect.bottom + 12;
+    } else {
+      const themeHeader = document.querySelector('#shopify-section-header, .shopify-section--header, .site-header');
+      if (themeHeader) {
+        const rect = themeHeader.getBoundingClientRect();
+        headerOffset = rect.bottom + 12;
+      }
+    }
+    root.style.setProperty('--tele-header-offset', headerOffset + 'px');
+
+    let bottomOffset = 200;
+    if (bottomBar) {
+      const rectB = bottomBar.getBoundingClientRect();
+      bottomOffset = rectB.height + 40; // Extra padding for breathing room
+    }
+    root.style.setProperty('--tele-bottom-offset', bottomOffset + 'px');
+  }
+
+  updateOffsets();
+
+  const resolveSrc = (img) => {
+    if (!img) return '';
+    if (typeof img === 'string') return img;
+    return img.src || img.url || '';
+  };
+
+  const MINIMAL_KEY = 'o4MinimalMode';
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const applyMinimal = (enabled, persist) => {
+    document.body.classList.toggle('mode-minimal', enabled);
+    root.classList.toggle('is-minimal', enabled);
+    if (minimalToggle) {
+      minimalToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    }
+    if (persist) {
+      localStorage.setItem(MINIMAL_KEY, String(enabled));
+    }
+  };
+
+  const storedMinimal = localStorage.getItem(MINIMAL_KEY);
+  const initialMinimal = storedMinimal === null ? prefersReduced.matches : storedMinimal === 'true';
+  applyMinimal(initialMinimal, false);
+
+  if (minimalToggle) {
+    minimalToggle.addEventListener('click', () => {
+      applyMinimal(!root.classList.contains('is-minimal'), true);
+    });
+  }
+
+  if (storedMinimal === null) {
+    prefersReduced.addEventListener('change', (event) => {
+      applyMinimal(event.matches, false);
+    });
+  }
+
+  const syncCustomizeToBottom = () => {
+    if (bottomMethodInput && customizeMethods.length) {
+      const selectedMethod = customizeMethods.find(input => input.checked);
+      bottomMethodInput.value = selectedMethod ? selectedMethod.value : '';
+    }
+    if (bottomTextInput && customizeText) {
+      bottomTextInput.value = customizeText.value || '';
+    }
+    if (bottomDesignInput) {
+      const selected = customizeDesigns.find(input => input.checked);
+      bottomDesignInput.value = selected ? selected.value : '';
+    }
+  };
+
+  const setCustomizeOpen = (open) => {
+    if (!customizePanel || !customizeToggle) return;
+    customizePanel.classList.toggle('is-open', open);
+    customizePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    customizeToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    customizeInputs.forEach(input => {
+      input.disabled = !open;
+    });
+    if (bottomMethodInput) bottomMethodInput.disabled = !customizeMethods.length;
+    if (bottomTextInput) bottomTextInput.disabled = !open;
+    if (bottomDesignInput) bottomDesignInput.disabled = !customizeDesigns.length || !open;
+    syncCustomizeToBottom();
+    if (open) {
+      setHeroFromDesign();
+    } else {
+      resetHeroToVariant();
+    }
+  };
+
+  if (customizeToggle && customizePanel) {
+    setCustomizeOpen(false);
+    customizeToggle.addEventListener('click', () => {
+      const isOpen = customizePanel.classList.contains('is-open');
+      setCustomizeOpen(!isOpen);
+    });
+  }
+
+  if (customizeText) {
+    customizeText.addEventListener('input', syncCustomizeToBottom);
+  }
+
+  customizeMethods.forEach(input => {
+    input.addEventListener('change', syncCustomizeToBottom);
+  });
+
+  customizeDesigns.forEach(input => {
+    input.addEventListener('change', () => {
+      syncCustomizeToBottom();
+      setHeroFromDesign();
+    });
+  });
+
+  if (customizeDesigns.length) {
+    setHeroFromDesign();
+  }
+
+  const syncBottomVariant = () => {
+    if (bottomVariantInput && variantSelect) {
+      bottomVariantInput.value = variantSelect.value;
+    }
+  };
+
+  const setActiveMenu = (key) => {
+    if (!key) return;
+    menuItems.forEach((item) => {
+      item.classList.toggle('active', item.dataset.menuKey === key);
+    });
+    submenuPanels.forEach((panel) => {
+      panel.classList.toggle('is-active', panel.dataset.menuPanel === key);
+    });
+  };
+
+  const closeSubmenu = () => {
+    if (menuPanel) menuPanel.classList.remove('is-submenu-open');
+  };
+
+  const openSubmenu = (key) => {
+    if (!menuPanel) return;
+    setActiveMenu(key);
+    menuPanel.classList.add('is-submenu-open');
+  };
+
+  const updateMenuPosition = () => {
+    if (!header || !menuPanel) return;
+    const rect = header.getBoundingClientRect();
+    const maxWidth = Math.min(560, rect.width);
+    const left = Math.max(rect.left, rect.right - maxWidth);
+    const top = Math.round(rect.bottom + 10);
+    menuPanel.style.setProperty('--neo-menu-left', `${left}px`);
+    menuPanel.style.setProperty('--neo-menu-width', `${Math.round(maxWidth)}px`);
+    menuPanel.style.setProperty('--neo-menu-top', `${top}px`);
+    menuPanel.style.setProperty('--neo-menu-shift', '0px');
+  };
+
+  const setMenuOpen = (open) => {
+    if (!header || !menuToggle || !menuPanel) return;
+    header.classList.toggle('is-menu-open', open);
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuPanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (open) updateMenuPosition();
+    if (!open) closeSubmenu();
+  };
+
+  if (menuToggle && header && menuPanel) {
+    setMenuOpen(false);
+    const initialActive = root.querySelector('.neo-menu-item-link.active[data-menu-key]') || menuItems[0];
+    if (initialActive) setActiveMenu(initialActive.dataset.menuKey);
+    menuToggle.addEventListener('click', () => {
+      const isOpen = header.classList.contains('is-menu-open');
+      setMenuOpen(!isOpen);
+    });
+    window.addEventListener('scroll', () => {
+      if (header.classList.contains('is-menu-open')) updateMenuPosition();
+    }, { passive: true });
+    document.addEventListener('click', (event) => {
+      if (!header.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    updateOffsets();
+    if (header && header.classList.contains('is-menu-open')) updateMenuPosition();
+  });
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(updateOffsets, 350);
+  });
+
+  menuItems.forEach((item) => {
+    const key = item.dataset.menuKey;
+    const hasChildren = item.dataset.hasChildren === 'true';
+    item.addEventListener('click', (event) => {
+      if (!menuPanel) return;
+      const href = item.getAttribute('href');
+      const isPlaceholder = !href || href === '#';
+      if (hasChildren) {
+        event.preventDefault();
+        openSubmenu(key);
+        return;
+      }
+      if (isPlaceholder) {
+        event.preventDefault();
+        setActiveMenu(key);
+        closeSubmenu();
+      }
+    });
+  });
+
+  submenuBacks.forEach((btn) => {
+    btn.addEventListener('click', closeSubmenu);
+  });
+
+  if (mq) {
+    mq.addEventListener('change', () => {
+      closeSubmenu();
+    });
+  }
+
+  const normalizeSrc = (src) => {
+    if (!src) return '';
+    const clean = src.split('?')[0];
+    return clean.replace(/(_\d+x\d*|_\d+x|_x\d+)(?=\.[a-z]+$)/i, '');
+  };
+
+  const normalizeVariantId = (id) => {
+    if (id === null || id === undefined) return '';
+    return String(id);
+  };
+
+  const parseColor = (value) => {
+    if (!value) return null;
+    const color = value.trim();
+    if (color.startsWith('#')) {
+      let hex = color.slice(1);
+      if (hex.length === 3) {
+        hex = hex.split('').map(ch => ch + ch).join('');
+      }
+      if (hex.length !== 6) return null;
+      const num = parseInt(hex, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+    if (color.startsWith('rgb')) {
+      const match = color.match(/rgba?\(([^)]+)\)/i);
+      if (!match) return null;
+      const parts = match[1].split(',').map(part => parseFloat(part.trim()));
+      if (parts.length < 3) return null;
+      return parts.slice(0, 3);
+    }
+    return null;
+  };
+
+  const applyAccent = (value) => {
+    const rgb = parseColor(value);
+    if (!rgb) return;
+    const [r, g, b] = rgb;
+    const brighten = (channel, amt) => Math.round(channel + (255 - channel) * amt);
+    const bright = `rgb(${brighten(r, 0.35)}, ${brighten(g, 0.35)}, ${brighten(b, 0.35)})`;
+    root.style.setProperty('--accent-live', `rgb(${r}, ${g}, ${b})`);
+    root.style.setProperty('--accent-live-soft', `rgba(${r}, ${g}, ${b}, 0.25)`);
+    root.style.setProperty('--accent-live-strong', `rgba(${r}, ${g}, ${b}, 0.65)`);
+    root.style.setProperty('--accent-live-bright', bright);
+  };
+
+  const glowMap = {
+    'color-blue': '--glow-blue',
+    'color-cyan': '--glow-cyan',
+    'color-green': '--glow-green',
+    'color-yellow': '--glow-yellow',
+    'color-magenta': '--glow-magenta'
+  };
+
+  const setGlow = (neonClass) => {
+    const varName = glowMap[neonClass] || '--glow-blue';
+    const color = getComputedStyle(root).getPropertyValue(varName).trim() || '#00aeff';
+    root.style.setProperty('--glow', color);
+    applyAccent(color);
+  };
+
+  const applyAccentFromLabel = (label) => {
+    if (!label) return;
+    const neon = label.dataset.neon;
+    if (neon) {
+      setGlow(neon);
+      return;
+    }
+    const swatch = label.dataset.swatch || getComputedStyle(label).getPropertyValue('--swatch-color');
+    if (swatch) applyAccent(swatch);
+  };
+
+  const findImageIndexByVariant = (variantId) => {
+    const target = normalizeVariantId(variantId);
+    if (!target || !Array.isArray(images)) return -1;
+    return images.findIndex(img => Array.isArray(img.variant_ids) && img.variant_ids.some(id => String(id) === target));
+  };
+
+  const findImageIndexBySrc = (src) => {
+    if (!src || !Array.isArray(images)) return -1;
+    const target = normalizeSrc(src);
+    return images.findIndex(img => normalizeSrc(resolveSrc(img)) === target);
+  };
+
+  const setActiveDot = (index) => {
+    if (!dots.length || index < 0 || index >= dots.length) return;
+    dots.forEach(d => d.classList.remove('active'));
+    dots[index].classList.add('active');
+  };
+
+  const setHeroImage = (src, variantId, preferredIndex) => {
+    if (!heroImg || !src) return;
+    heroImg.src = src;
+    let index = -1;
+    if (variantId) index = findImageIndexByVariant(variantId);
+    if (index < 0 && Number.isInteger(preferredIndex)) index = preferredIndex;
+    if (index < 0) index = findImageIndexBySrc(src);
+    if (index >= 0) setActiveDot(index);
+    teleporterBurst();
+  };
+
+  const updateActiveLabels = () => {
+    root.querySelectorAll('.pill, .color-chip').forEach(label => label.classList.remove('active'));
+    radioGroups.forEach(r2 => {
+      if (r2.checked) {
+        const label = r2.closest('label');
+        if (label) {
+          label.classList.add('active');
+          // Apply color accent immediately when color is selected
+          if (label.classList.contains('color-chip')) {
+            applyAccentFromLabel(label);
+          }
+        }
+      }
+    });
+  };
+
+  const syncOptionRadios = (variant) => {
+    if (!variant || !Array.isArray(variant.options) || !radioGroups.length) return;
+    isSyncing = true;
+    radioGroups.forEach(r => {
+      const optionName = r.name.replace('options[','').replace(']','');
+      const optionIndex = optionNames.indexOf(optionName);
+      if (optionIndex >= 0 && variant.options[optionIndex] === r.value) {
+        r.checked = true;
+      }
+    });
+    isSyncing = false;
+    updateActiveLabels();
+  };
+
+  const applyVariantById = (variantId) => {
+    const target = normalizeVariantId(variantId);
+    if (!target) return null;
+    const variant = Array.isArray(variants)
+      ? variants.find(v => normalizeVariantId(v.id) === target)
+      : null;
+    if (variant && variantSelect) {
+      variantSelect.value = variant.id;
+      syncOptionRadios(variant);
+      syncBottomVariant();
+    }
+    return variant;
+  };
+
+  const getVariantImage = (variant) => {
+    if (!variant) return '';
+    if (variant.featured_media) {
+      const media = variant.featured_media.preview_image || variant.featured_media;
+      const mediaSrc = resolveSrc(media);
+      if (mediaSrc) return mediaSrc;
+    }
+    if (variant.featured_image) {
+      const imageSrc = resolveSrc(variant.featured_image);
+      if (imageSrc) return imageSrc;
+    }
+    const linkedIndex = findImageIndexByVariant(variant.id);
+    if (linkedIndex >= 0 && images[linkedIndex]) {
+      return resolveSrc(images[linkedIndex]);
+    }
+    return '';
+  };
+
+  function getCurrentVariant() {
+    const id = variantSelect ? normalizeVariantId(variantSelect.value) : '';
+    if (!id || !Array.isArray(variants)) return null;
+    return variants.find(v => normalizeVariantId(v.id) === id) || null;
+  }
+
+  function resetHeroToVariant() {
+    const variant = getCurrentVariant();
+    const heroSrc = getVariantImage(variant) || baseHeroSrc || (heroImg ? heroImg.src : '');
+    if (heroSrc) setHeroImage(heroSrc, variant ? variant.id : null);
+  }
+
+  function setHeroFromDesign() {
+    if (!customizePanel || !customizeDesigns.length) return;
+    const panelOpen = customizePanel.classList.contains('is-open');
+    if (!panelOpen) {
+      resetHeroToVariant();
+      return;
+    }
+    const chosen = customizeDesigns.find(input => input.checked && !input.disabled);
+    if (!chosen) {
+      resetHeroToVariant();
+      return;
+    }
+    let heroSrc = chosen.dataset.designHero || '';
+    if (!heroSrc) {
+      const label = (chosen.value || '').toLowerCase().trim();
+      const match = Array.isArray(images) ? images.find(img => {
+        const alt = (img && (img.alt || img.alt_text || '')).toLowerCase();
+        const src = resolveSrc(img).toLowerCase();
+        return (alt && alt.includes(label)) || (src && src.includes(label));
+      }) : null;
+      if (match) heroSrc = resolveSrc(match);
+    }
+    if (heroSrc) {
+      setHeroImage(heroSrc, null);
+    } else {
+      resetHeroToVariant();
+    }
+  }
+
+  const teleporterBurst = () => {
+    if (!heroFrame) return;
+    heroFrame.classList.remove('is-materializing');
+    void heroFrame.offsetWidth;
+    heroFrame.classList.add('is-materializing');
+    const field = heroFrame.querySelector('.teleporter-particles');
+    if (field) {
+      field.innerHTML = '';
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'teleporter-particle';
+        particle.style.left = `${50 + (Math.random() * 30 - 15)}%`;
+        particle.style.animationDelay = `${Math.random() * 0.6}s`;
+        field.appendChild(particle);
+      }
+    }
+    if (teleTimer) clearTimeout(teleTimer);
+    teleTimer = setTimeout(() => heroFrame.classList.remove('is-materializing'), 1000);
+  };
+
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      const image = images[idx];
+      const src = image ? resolveSrc(image) : (heroImg ? heroImg.src : '');
+      let variantId = null;
+      if (image && Array.isArray(image.variant_ids) && image.variant_ids.length) {
+        variantId = image.variant_ids[0];
+        applyVariantById(variantId);
+      }
+      if (!variantId && image) {
+        const altText = (image.alt || image.alt_text || '').toLowerCase();
+        if (altText) {
+          const chips = Array.from(root.querySelectorAll('.color-chip'));
+          const matchChip = chips.find(chip => {
+            const value = (chip.dataset.colorValue || '').toLowerCase();
+            return value && altText.includes(value);
+          });
+          if (matchChip) {
+            const input = matchChip.querySelector('input[type="radio"]');
+            if (input) input.checked = true;
+            updateActiveLabels();
+          }
+        }
+      }
+      if (src) {
+        setHeroImage(src, variantId, idx);
+      }
+    });
+  });
+
+  const qtyInput = root.querySelector('.qty-input');
+  root.querySelectorAll('[data-qty-inc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = Math.max(1, parseInt(qtyInput.value || '1', 10) + 1);
+      qtyInput.value = val;
+    });
+  });
+  root.querySelectorAll('[data-qty-dec]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = Math.max(1, parseInt(qtyInput.value || '1', 10) - 1);
+      qtyInput.value = val;
+    });
+  });
+
+  if (enableHeroMotion && heroShell && heroFrame) {
+    let rafId;
+    const resetHalo = () => {
+      heroShell.style.setProperty('--halo-x', '50%');
+      heroShell.style.setProperty('--halo-y', '56%');
+      heroShell.style.setProperty('--tilt-x', '-2deg');
+      heroShell.style.setProperty('--tilt-y', '2deg');
+    };
+    const handleMove = (event) => {
+      const rect = heroFrame.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      const tiltX = ((y - 50) / 50) * -6;
+      const tiltY = ((x - 50) / 50) * 6;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        heroShell.style.setProperty('--halo-x', `${Math.max(0, Math.min(100, x))}%`);
+        heroShell.style.setProperty('--halo-y', `${Math.max(0, Math.min(100, y))}%`);
+        heroShell.style.setProperty('--tilt-x', `${Math.max(-6, Math.min(6, tiltX))}deg`);
+        heroShell.style.setProperty('--tilt-y', `${Math.max(-6, Math.min(6, tiltY))}deg`);
+      });
+    };
+    heroFrame.addEventListener('pointermove', handleMove);
+    heroFrame.addEventListener('pointerleave', resetHalo);
+  }
+
+  if (variantSelect) {
+    radioGroups = Array.from(root.querySelectorAll('.options-panel input[type="radio"]'));
+    radioGroups.forEach(r => {
+      r.addEventListener('change', () => {
+        if (isSyncing) return;
+        
+        // Get current color selection for accent application
+        const colorChip = r.closest('.color-chip');
+        if (colorChip) {
+          applyAccentFromLabel(colorChip);
+        }
+        
+        const selections = {};
+        radioGroups.forEach(r2 => {
+          if (r2.checked) selections[r2.name.replace('options[','').replace(']','')] = r2.value;
+        });
+        updateActiveLabels();
+        
+        const match = Array.isArray(variants) ? variants.find(v => {
+          if (!v || !v.options) return false;
+          return v.options.every((opt, i) => {
+            const key = optionNames[i];
+            return selections[key] === opt;
+          });
+        }) : null;
+        
+        let heroSource = '';
+        let variantId = '';
+        let preferredIndex = null;
+        if (match) {
+          variantId = normalizeVariantId(match.id);
+          variantSelect.value = match.id;
+          heroSource = getVariantImage(match);
+          syncBottomVariant();
+        }
+
+        const label = r.closest('.color-chip');
+        if (!heroSource && label) {
+          const heroSrc = label.dataset.heroSrc;
+          const galleryIndex = parseInt(label.dataset.galleryIndex || '-1', 10);
+          const colorValue = label.dataset.colorValue || '';
+          const labelVariantId = normalizeVariantId(label.dataset.variantId);
+          if (!variantId && labelVariantId) variantId = labelVariantId;
+
+          const imageMatch = Array.isArray(images) ? images.find(img => {
+            const alt = (img && (img.alt || img.alt_text || '')).toLowerCase();
+            const src = resolveSrc(img).toLowerCase();
+            return colorValue && (alt.includes(colorValue) || src.includes(colorValue));
+          }) : null;
+
+          if (heroSrc) {
+            heroSource = heroSrc;
+          } else if (imageMatch) {
+            heroSource = resolveSrc(imageMatch);
+          } else if (!Number.isNaN(galleryIndex) && images[galleryIndex]) {
+            heroSource = resolveSrc(images[galleryIndex]);
+          }
+          if (!Number.isNaN(galleryIndex)) preferredIndex = galleryIndex;
+        }
+
+        if (heroSource) {
+          setHeroImage(heroSource, variantId, Number.isInteger(preferredIndex) ? preferredIndex : undefined);
+        }
+        setHeroFromDesign();
+      });
+    });
+  }
+
+  // Enhanced color chip event handling for immediate response
+  const handleColorChipChange = (colorChip) => {
+    // Remove active from all chips first
+    root.querySelectorAll('.color-chip').forEach(chip => chip.classList.remove('active'));
+    
+    // Add active to clicked chip
+    colorChip.classList.add('active');
+    
+    // Apply accent immediately
+    applyAccentFromLabel(colorChip);
+    
+    // Check the radio input
+    const input = colorChip.querySelector('input[type="radio"]');
+    if (input) input.checked = true;
+    
+    // Trigger variant update
+    updateActiveLabels();
+    
+    // Handle image switching
+    const heroSrc = colorChip.dataset.heroSrc;
+    const galleryIndex = parseInt(colorChip.dataset.galleryIndex || '-1', 10);
+    const colorValue = colorChip.dataset.colorValue || '';
+    const variantId = colorChip.dataset.variantId;
+    
+    let heroSource = '';
+    let preferredIndex = null;
+    
+    if (heroSrc) {
+      heroSource = heroSrc;
+    } else if (!Number.isNaN(galleryIndex) && images[galleryIndex]) {
+      heroSource = resolveSrc(images[galleryIndex]);
+      preferredIndex = galleryIndex;
+    } else if (colorValue) {
+      const imageMatch = Array.isArray(images) ? images.find(img => {
+        const alt = (img && (img.alt || img.alt_text || '')).toLowerCase();
+        const src = resolveSrc(img).toLowerCase();
+        return alt.includes(colorValue) || src.includes(colorValue);
+      }) : null;
+      if (imageMatch) {
+        heroSource = resolveSrc(imageMatch);
+      }
+    }
+    
+    if (heroSource) {
+      setHeroImage(heroSource, variantId, preferredIndex);
+    }
+  };
+
+  // Add enhanced click handlers for color chips
+  root.querySelectorAll('.color-chip').forEach(colorChip => {
+    colorChip.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleColorChipChange(colorChip);
+    });
+    
+    // Also handle input changes
+    const input = colorChip.querySelector('input[type="radio"]');
+    if (input) {
+      input.addEventListener('change', () => {
+        if (!isSyncing) {
+          handleColorChipChange(colorChip);
+        }
+      });
+    }
+  });
+
+  const initialColor = root.querySelector('.color-chip.active') || root.querySelector('.color-chip input:checked')?.closest('label');
+  if (initialColor) {
+    applyAccentFromLabel(initialColor);
+  } else {
+    // Apply first color if none selected
+    const firstColor = root.querySelector('.color-chip');
+    if (firstColor) {
+      handleColorChipChange(firstColor);
+    }
+  }
+  syncBottomVariant();
+
+  const tabsRoot = root.querySelector('[data-tabs]');
+  if (tabsRoot) {
+    const tabButtons = Array.from(tabsRoot.querySelectorAll('[data-tab]'));
+    const tabPanels = Array.from(tabsRoot.querySelectorAll('[data-tab-panel]'));
+    const setTabsCollapsed = () => {
+      const hasActive = tabButtons.some(btn => btn.classList.contains('active'));
+      tabsRoot.classList.toggle('is-collapsed', !hasActive);
+    };
+    setTabsCollapsed();
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabButtons.forEach(b => {
+          const isActive = b === btn;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-selected', String(isActive));
+        });
+        tabPanels.forEach(panel => {
+          panel.classList.toggle('active', panel.dataset.tabPanel === target);
+        });
+        setTabsCollapsed();
+        if (target === 'reviews') {
+          if (window.SPR && typeof window.SPR.initDomEls === 'function') {
+            window.SPR.initDomEls();
+            if (typeof window.SPR.loadBadges === 'function') window.SPR.loadBadges();
+            if (typeof window.SPR.loadProducts === 'function') window.SPR.loadProducts();
+          }
+          if (window.jdgm && typeof window.jdgm.renderWidgets === 'function') {
+            window.jdgm.renderWidgets();
+          }
+        }
+      });
+    });
+  }
+
+  if (heroImg) {
+    const handleInitialBurst = () => {
+      if (initialBurstDone) return;
+      initialBurstDone = true;
+      teleporterBurst();
+    };
+    if (heroImg.complete) {
+      handleInitialBurst();
+    } else {
+      heroImg.addEventListener('load', handleInitialBurst, { once: true });
+    }
+  }
+
+  if (customizeDesigns.length) {
+    customizeDesigns.forEach(input => {
+      input.addEventListener('change', setHeroFromDesign);
+    });
+    setHeroFromDesign();
+  }
+})();
+</script>
+
+
+<script type="module">
+  /**
+   * NEON CUSTOMIZER ENGINE
+   * - Metaobject-driven font/glow options (from #neon-engine-data)
+   * - FontFace API for dynamic font loading
+   * - Multi-pass Canvas rendering for neon glow
+   * - Adds line item properties on Add to Cart:
+   *   - properties[Custom Text]
+   *   - properties[_Preview] (data URL)
+   */
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const Engine = {
+    canvas: null,
+    ctx: null,
+    data: { fonts: [], glows: [] },
+    state: {
+      text: 'CYBER',
+      font: null,
+      glow: null
+    },
+
+    init() {
+      this.canvas = $('#neon-canvas');
+      if (!this.canvas) return;
+
+      const payload = $('#neon-engine-data');
+      if (payload?.textContent) {
+        try {
+          this.data = JSON.parse(payload.textContent) || this.data;
+        } catch (e) {
+          console.warn('Neon payload parse failed', e);
+        }
+      }
+
+      if (!Array.isArray(this.data.fonts) || this.data.fonts.length === 0) {
+        this.data.fonts = [{ name: 'System', family: 'system-ui', src: null, offset: 0 }];
+      }
+      if (!Array.isArray(this.data.glows) || this.data.glows.length === 0) {
+        this.data.glows = [{ name: 'White', primary: '#ffffff', secondary: 'rgba(255,255,255,0.5)', blur: 18 }];
+      }
+
+      this.ctx = this.canvas.getContext('2d');
+      this.resize();
+
+      this.state.font = this.data.fonts[0] || this.state.font;
+      this.state.glow = this.data.glows[0] || this.state.glow;
+
+      this.buildUI();
+      this.bindEvents();
+      this.loadFontAndRender();
+
+      window.addEventListener('resize', () => {
+        this.resize();
+        this.render();
+      });
+    },
+
+    resize() {
+      const parent = this.canvas.parentElement;
+      const w = Math.max(1, parent.offsetWidth);
+      const h = Math.max(1, parent.offsetHeight);
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      this.canvas.width = Math.floor(w * dpr);
+      this.canvas.height = Math.floor(h * dpr);
+      this.canvas.style.width = `${w}px`;
+      this.canvas.style.height = `${h}px`;
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    },
+
+    buildUI() {
+      const fontContainer = $('#font-selector-container');
+      const glowContainer = $('#glow-selector-container');
+
+      if (fontContainer) {
+        fontContainer.innerHTML = '';
+        this.data.fonts.forEach((font, index) => {
+          const lbl = document.createElement('label');
+          lbl.className = `pill${index === 0 ? ' active' : ''}`;
+          lbl.setAttribute('role', 'listitem');
+          lbl.innerHTML = `<span>${this.escape(font.name)}</span>`;
+          lbl.addEventListener('click', () => {
+            $$('.pill', fontContainer).forEach(p => p.classList.remove('active'));
+            lbl.classList.add('active');
+            this.state.font = font;
+            this.loadFontAndRender();
+          });
+          fontContainer.appendChild(lbl);
+        });
+      }
+
+      if (glowContainer) {
+        glowContainer.innerHTML = '';
+        this.data.glows.forEach((glow, index) => {
+          const lbl = document.createElement('label');
+          lbl.className = `color-chip${index === 0 ? ' active' : ''}`;
+          lbl.setAttribute('role', 'listitem');
+          lbl.style.setProperty('--swatch-color', glow.primary);
+          lbl.innerHTML = `<span class="color-name">${this.escape(glow.name)}</span>`;
+          lbl.addEventListener('click', () => {
+            $$('.color-chip', glowContainer).forEach(c => c.classList.remove('active'));
+            lbl.classList.add('active');
+            this.state.glow = glow;
+            document.documentElement.style.setProperty('--glow', glow.primary);
+            this.render();
+          });
+          glowContainer.appendChild(lbl);
+        });
+      }
+
+      const input = $('#neon-text-input');
+      if (input) {
+        input.value = this.state.text;
+      }
+    },
+
+    bindEvents() {
+      const input = $('#neon-text-input');
+      if (input) {
+        input.addEventListener('input', (e) => {
+          const raw = String(e.target.value || '');
+          this.state.text = raw.toUpperCase();
+          this.render();
+        });
+      }
+
+      const forms = $$('form[action*="/cart/add"]');
+      forms.forEach(form => {
+        if (form.dataset.neonBound === 'true') return;
+        form.dataset.neonBound = 'true';
+
+        form.addEventListener('submit', async (e) => {
+          if (!this.canvas) return;
+          e.preventDefault();
+
+          const submitBtn = form.querySelector('[type="submit"]');
+          const originalText = submitBtn ? submitBtn.innerText : '';
+          if (submitBtn) {
+            submitBtn.innerText = "Processing Design...";
+            submitBtn.disabled = true;
+          }
+
+          try {
+            const previewUrl = await this.generatePreviewUrl();
+
+            let previewInput = form.querySelector('input[name="properties[_Preview]"]');
+            if (!previewInput) {
+              previewInput = document.createElement('input');
+              previewInput.type = 'hidden';
+              previewInput.name = 'properties[_Preview]';
+              form.appendChild(previewInput);
+            }
+            previewInput.value = previewUrl;
+
+            let textInput = form.querySelector('input[name="properties[Custom Text]"]');
+            if (!textInput) {
+              textInput = document.createElement('input');
+              textInput.type = 'hidden';
+              textInput.name = 'properties[Custom Text]';
+              form.appendChild(textInput);
+            }
+            textInput.value = this.state.text;
+
+            form.submit();
+          } catch (err) {
+            console.error("Design Processing Failed", err);
+            if (submitBtn) {
+              submitBtn.innerText = originalText || "Add to cart";
+              submitBtn.disabled = false;
+            }
+          }
+        });
+      });
+    },
+
+    async loadFontAndRender() {
+      const font = this.state.font;
+      if (!font) return;
+
+      if (!font.src) {
+        this.render();
+        return;
+      }
+
+      try {
+        const face = new FontFace(font.family, `url(${font.src})`, { style: 'normal', weight: '700' });
+        await face.load();
+        document.fonts.add(face);
+      } catch (e) {
+        console.warn('Font load failed; falling back to system font.', e);
+        this.state.font = { ...font, family: 'system-ui', src: null, offset: 0 };
+      }
+      this.render();
+    },
+
+    render() {
+      if (!this.ctx || !this.state.font || !this.state.glow) return;
+
+      const parent = this.canvas.parentElement;
+      const w = Math.max(1, parent.offsetWidth);
+      const h = Math.max(1, parent.offsetHeight);
+      const { text, font, glow } = this.state;
+      const ctx = this.ctx;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+
+      const x = w / 2;
+      const y = h / 2 + (font.offset || 0);
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const size = Math.max(28, Math.min(w * 0.15, 120));
+      ctx.font = `700 ${size}px "${font.family}"`;
+
+      ctx.shadowColor = glow.secondary;
+      ctx.shadowBlur = (glow.blur || 20) * 2;
+      ctx.fillStyle = glow.secondary;
+      ctx.fillText(text, x, y);
+
+      ctx.shadowColor = glow.primary;
+      ctx.shadowBlur = (glow.blur || 20);
+      ctx.fillStyle = glow.primary;
+      ctx.fillText(text, x, y);
+
+      ctx.shadowColor = 'rgba(255,255,255,0.85)';
+      ctx.shadowBlur = 10;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(text, x, y);
+
+      ctx.restore();
+    },
+
+    generatePreviewUrl() {
+      return new Promise((resolve, reject) => {
+        try {
+          this.canvas.toBlob((blob) => {
+            if (!blob) return reject(new Error('Canvas blob generation failed'));
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(String(reader.result || ''));
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          }, 'image/png');
+        } catch (e) {
+          reject(e);
+        }
+      });
+    },
+
+    escape(str) {
+      return String(str || '').replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m]));
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => Engine.init());
+</script>
+
+{% schema %}
+{
+  "name": "Teletransport Product",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Fallback product (optional)" },
+    { "type": "link_list", "id": "shop_menu", "label": "Shop menu (header links)" },
+    { "type": "link_list", "id": "menu", "label": "Header menu fallback" },
+    { "type": "checkbox", "id": "customization_toggle", "label": "Enable customization toggle", "default": true, "info": "When off, the Customize button appears only for products tagged 'customizable', 'personalized', or 'custom'." },
+    { "type": "textarea", "id": "custom_product_types", "label": "Customizable product types (comma separated)", "info": "Overrides tags when set. Example: Shirts, Hoodies, Accessories" },
+    { "type": "textarea", "id": "custom_designs", "label": "Design options (comma separated)", "info": "Used when the product metafield custom.designs is blank." },
+    { "type": "text", "id": "custom_text_label", "label": "Custom text label", "default": "Custom text" },
+    { "type": "text", "id": "custom_text_placeholder", "label": "Custom text placeholder", "default": "Your text" },
+    { "type": "range", "id": "custom_text_max", "label": "Custom text max characters", "min": 1, "max": 24, "step": 1, "default": 8 }
+  ],
+  "presets": [
+    { "name": "Teletransport Product" }
+  ]
+}
+{% endschema %}

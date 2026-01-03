@@ -1,0 +1,498 @@
+﻿<style>
+  :root {
+    --glow-color: #7eeaff;
+    --secondary-glow-color: #ffc2ff;
+    --glow-color-soft: rgba(126, 234, 255, 0.55);
+    --primary-text: #f2f7ff;
+    --muted-text: #b8c7e7;
+    --panel: rgba(255,255,255,.08);
+    --panel-strong: rgba(255,255,255,.16);
+    --divider-color: rgba(255,255,255,.08);
+    --bg: #05070d;
+    --noise: radial-gradient(circle at 20% 20%, rgba(255,255,255,.05) 0 10%, transparent 16%), radial-gradient(circle at 80% 30%, rgba(255,255,255,.04) 0 8%, transparent 16%), radial-gradient(circle at 40% 70%, rgba(255,255,255,.03) 0 9%, transparent 16%);
+  }
+
+  @keyframes pulse-glow {
+    0% { filter: drop-shadow(0 0 6px var(--glow-color-soft)); opacity: 0.9; }
+    50% { filter: drop-shadow(0 0 16px var(--glow-color)); opacity: 1; }
+    100% { filter: drop-shadow(0 0 6px var(--glow-color-soft)); opacity: 0.9; }
+  }
+
+  .futuristic-header-body {
+    position: relative;
+    isolation: isolate;
+    font-family: 'Space Grotesk','Sora','Inter','Orbitron',sans-serif;
+    color: var(--primary-text);
+    padding: 26px 0;
+    z-index: 100;
+    background:
+      radial-gradient(80% 70% at 12% 20%, rgba(126,234,255,.15), transparent 55%),
+      radial-gradient(80% 70% at 88% 18%, rgba(255,169,255,.12), transparent 60%),
+      linear-gradient(140deg, #05070d 0%, #060813 50%, #04070f 100%);
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 18px 42px rgba(0,0,0,.45);
+  }
+
+  .futuristic-header-body::before {
+    content:"";
+    position:absolute; inset:-12%;
+    background:
+      var(--bg-image, none),
+      radial-gradient(60% 60% at 50% 10%, rgba(255,255,255,.12), transparent 60%),
+      radial-gradient(60% 80% at 50% 90%, rgba(126,234,255,.1), transparent 65%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0, rgba(255,255,255,0) 6px, transparent 12px);
+    background-size: var(--bg-size, cover), auto, auto, auto;
+    background-position: var(--bg-pos, center), 50% 10%, 50% 90%, 0 0;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    mix-blend-mode:soft-light;
+    opacity: var(--bg-op, .6);
+    pointer-events:none;
+    filter: var(--bg-filter, blur(14px));
+    z-index:0;
+  }
+
+  .futuristic-header-body::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), transparent 55%), linear-gradient(120deg, rgba(255,255,255,.05), transparent 50%);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    z-index:0;
+    pointer-events: none;
+  }
+
+  .futuristic-header-container { position: relative; z-index: 2; display: flex; justify-content: center; padding: 0 16px; }
+
+  .menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95vw;
+    max-width: 1080px;
+    padding: 16px 32px;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,.12);
+    background:
+      linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
+      var(--noise);
+    background-blend-mode: screen, normal;
+    box-shadow: -16px -16px 30px rgba(255,255,255,.02), 18px 22px 48px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 14px rgba(0,0,0,.35);
+    transform: perspective(2600px) rotateX(6deg);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    overflow: visible;
+  }
+
+  .menu-container::before {
+    content:"";
+    position:absolute; inset:1px;
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 0 24px rgba(255,255,255,.05) inset;
+    pointer-events:none;
+  }
+
+  .menu-container:hover {
+    transform: perspective(2600px) rotateX(4deg) translateY(-4px);
+    box-shadow:-14px -14px 26px rgba(255,255,255,.03), 20px 24px 60px rgba(0,0,0,.62), 0 0 40px rgba(126,234,255,.18);
+    border-color:rgba(255,255,255,.16);
+  }
+
+  .mouse-spotlight {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(126,234,255,0.35) 0%, rgba(255,194,255,0.08) 45%, rgba(190, 0, 255, 0) 60%);
+    border-radius: 50%;
+    left: var(--mouse-x, -200px);
+    top: var(--mouse-y, -200px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: screen;
+    filter: blur(6px);
+    transition: left 0.08s ease-out, top 0.08s ease-out;
+  }
+
+  .menu-items {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    flex-grow: 1;
+    padding: 0 46px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--primary-text);
+    padding: 14px 26px;
+    position: relative;
+    transition: background-color 0.28s ease, color 0.28s ease, transform 0.28s ease;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .menu-item:not(:last-child) {
+    border-right: 1px solid var(--divider-color);
+    box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04);
+  }
+  
+  .menu-item:hover {
+    background-color: rgba(255,255,255,0.06);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .menu-item span {
+    margin-top: 12px;
+    font-size: 0.95rem; 
+    font-weight: 600;
+    text-shadow: 0 0 3px #fff, 0 0 12px var(--glow-color-soft), 0 0 18px var(--glow-color);
+    letter-spacing: 0.12em;
+    transition: text-shadow 0.28s ease;
+  }
+  
+  .menu-item:hover span {
+    text-shadow: 0 0 4px #fff, 0 0 16px var(--glow-color), 0 0 22px var(--glow-color);
+  }
+
+  .menu-item svg {
+    width: 56px;
+    height: 56px;
+    transition: filter 0.3s ease, transform 0.3s ease;
+    animation: pulse-glow 3s infinite ease-in-out;
+    position: relative;
+    z-index: 2; 
+  }
+
+  .menu-item:hover svg { transform: translateY(-2px); }
+
+  .login-section {
+    position: absolute;
+    top: 14px;
+    right: 26px;
+    z-index: 2;
+  }
+  
+  .login-btn {
+    background: linear-gradient(130deg, rgba(126,234,255,.22), rgba(255,194,255,.16));
+    border: 1px solid rgba(255,255,255,.14);
+    color: var(--primary-text);
+    padding: 9px 18px;
+    font-family: 'Space Grotesk','Sora','Inter','Orbitron',sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: -8px -8px 16px rgba(255,255,255,.02), 12px 14px 30px rgba(0,0,0,.52), inset 0 1px 0 rgba(255,255,255,.12), inset 0 -1px 10px rgba(0,0,0,.28);
+    backdrop-filter: blur(12px) saturate(150%);
+  }
+
+  .login-btn:hover {
+    background: linear-gradient(130deg, rgba(126,234,255,.3), rgba(255,194,255,.22));
+    box-shadow: 0 0 24px var(--glow-color), inset 0 0 12px rgba(255,255,255,.12);
+    transform: translateY(-2px);
+  }
+
+  .login-btn .chevron { font-weight: bold; transition: transform 0.3s ease; }
+  .login-btn:hover .chevron { transform: translateX(5px); }
+  
+  .profile-section { display: flex; align-items: center; gap: 10px; }
+
+  .profile-section .username {
+    color: var(--primary-text);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-size: 0.92rem;
+    text-shadow: 0 0 10px var(--glow-color-soft);
+  }
+
+  .profile-icon-btn {
+    background: linear-gradient(130deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.16);
+    padding: 6px;
+    cursor: pointer;
+    width: 46px;
+    height: 46px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: drop-shadow(0 0 10px var(--secondary-glow-color));
+    text-decoration: none;
+    border-radius: 12px;
+    box-shadow:-8px -8px 16px rgba(255,255,255,.02), 12px 14px 30px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1), inset 0 -1px 10px rgba(0,0,0,.25);
+  }
+
+  .profile-icon-btn:hover {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 16px var(--secondary-glow-color));
+  }
+
+  .profile-icon-btn svg { width: 100%; height: 100%; }
+  
+  .hub-item { position: relative; }
+
+  .hub-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(150deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+    backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 16px;
+    padding: 12px 0;
+    width: 190px;
+    z-index: 999;
+    box-shadow: -10px -10px 20px rgba(255,255,255,.02), 14px 16px 36px rgba(0,0,0,.55);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
+    transform-origin: top center;
+  }
+  
+  .hub-item:hover .hub-dropdown {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .hub-dropdown a {
+    display: block;
+    color: var(--primary-text);
+    text-decoration: none;
+    padding: 10px 22px;
+    font-size: 0.96rem;
+    transition: background-color 0.2s, color 0.2s;
+    letter-spacing: 0.04em;
+  }
+  
+  .hub-dropdown a:hover {
+    background-color: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .menu-items { padding: 0; }
+    .menu-item { padding: 12px 14px; }
+    .menu-item span { font-size: 0.9rem; letter-spacing: 0.1em; }
+    .menu-container { flex-direction: column; transform: none; padding: 18px; }
+    .login-section { position: relative; top: auto; right: auto; align-self: flex-end; margin-bottom: 12px; }
+  }
+
+  @media (max-width: 500px) {
+    .menu-items {
+      padding: 0 8px;
+      gap: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+
+    .menu-item {
+      flex: 0 0 auto;
+      min-width: 94px;
+      padding: 10px 10px;
+      text-align: center;
+      scroll-snap-align: center;
+    }
+
+    .menu-item svg { width: 38px; height: 38px; }
+
+    .menu-item span {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      white-space: nowrap;
+      text-shadow: 0 0 2px #fff, 0 0 8px var(--glow-color-soft);
+    }
+  }
+  @media (max-width: 380px) {
+    .menu-container { padding: 14px 14px; border-radius: 22px; }
+    .menu-item { min-width: 82px; padding: 8px 8px; }
+    .menu-item svg { width: 32px; height: 32px; }
+    .menu-item span { font-size: 0.78rem; letter-spacing: 0.06em; }
+  }
+</style>
+
+<div
+  class="futuristic-header-body"
+  id="FuturisticHeader-{{ section.id }}"
+  {% if section.settings.bg_image %}
+  style="--bg-image: url('{{ section.settings.bg_image | image_url: width: 2000 }}');
+         --bg-op: {{ section.settings.bg_opacity | times: 0.01 }};
+         --bg-size: {{ section.settings.bg_fit }};
+         --bg-pos: {{ section.settings.bg_pos }};
+         --bg-filter: blur({{ section.settings.bg_blur }}px);"
+  {% endif %}
+>
+  <div class="futuristic-header-container">
+    <div class="menu-container">
+      <div class="mouse-spotlight"></div>
+      
+      <div class="login-section">
+        {% if customer %}
+          <div class="profile-section">
+            <span class="username">{{ customer.first_name }}</span>
+            <a href="{{ routes.account_url }}" class="profile-icon-btn" title="Profile">
+              <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="profileGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--glow-color);" />
+                    <stop offset="100%" style="stop-color:var(--secondary-glow-color);" />
+                  </linearGradient>
+                </defs>
+                <g fill="none" stroke="url(#profileGradient)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                  <circle cx="50" cy="50" r="45" stroke-width="1.5" opacity="0.4"/>
+                  <circle cx="50" cy="50" r="40" stroke-width="2"/>
+                  <path d="M50, 31 A 11 11, 0, 1, 1, 50, 53 A 11 11, 0, 1, 1, 50, 31 Z" />
+                  <path d="M28 78 v -9 c 0 -10 8 -18 22 -18 s 22 8 22 18 v 9"/>
+                  <rect x="28" y="70" width="44" height="12" rx="6" stroke-width="2"/>
+                  <g fill="url(#profileGradient)" stroke="none">
+                    <circle cx="38" cy="76" r="2" /><circle cx="45" cy="76" r="2" /><circle cx="52" cy="76" r="2" /><circle cx="59" cy="76" r="2" /><circle cx="66" cy="76" r="2" />
+                  </g>
+                </g>
+              </svg>
+            </a>
+          </div>
+        {% else %}
+          <a href="{{ routes.account_login_url }}" class="login-btn">
+            <span>LOGIN</span>
+            <span class="chevron">&gt;</span>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="menu-items">
+        {%- for link in section.settings.menu.links -%}
+          {%- liquid
+            assign link_title_downcased = link.title | downcase
+          -%}
+          
+          {%- capture icon_svg -%}
+            {%- case link_title_downcased -%}
+              {%- when 'home' -%}
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="none" stroke="var(--glow-color)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M25 75 V 45 L 50 25 L 75 45 V 75 H 25 Z"/>
+                    <path d="M42 75 V 55 H 58 V 75"/>
+                  </g>
+                </svg>
+              {%- when 'shop' or 'catalog' or 'products' -%}
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="none" stroke="var(--glow-color)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M25 40 H80 L75 65 H30 Z"/>
+                    <path d="M26 45 H 79 M27 50 H 78 M28 55 H 77 M29 60 H 76" stroke-width="1.5"/>
+                    <path d="M25 40 C 15 40, 15 25, 25 25 H 35"/>
+                    <path d="M30 65 L30 70 C 30 75, 25 75, 25 70 V 68" />
+                    <path d="M75 65 L75 70 C 75 75, 80 75, 80 70 V 68" />
+                    <circle cx="35" cy="78" r="5" stroke-width="2"/><circle cx="70" cy="78" r="5" stroke-width="2"/>
+                  </g>
+                </svg>
+              {%- else -%}
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="none" stroke="var(--glow-color)" stroke-width="2">
+                    <path d="M20 50 C 20 20, 80 20, 80 50 C 80 80, 20 80, 20 50 Z" opacity="0.5" transform="rotate(20 50 50)"/>
+                    <path d="M30 50 C 30 30, 70 30, 70 50 C 70 70, 30 70, 30 50 Z" opacity="0.7" transform="rotate(-30 50 50)"/>
+                    <path d="M40 28 L60 28 L70 50 L60 72 L40 72 L30 50 Z" stroke-width="3.5" fill="rgba(0, 217, 255, 0.1)"/>
+                    <path d="M45 42 L55 42 L60 50 L55 58 L45 58 L40 50 Z" stroke="#fff" stroke-width="1.5" />
+                    <circle cx="20" cy="50" r="3" fill="var(--glow-color)" /><circle cx="80" cy="50" r="4" fill="var(--glow-color)" /><circle cx="50" cy="23" r="3" fill="var(--glow-color)" /><rect x="28" y="70" width="6" height="6" fill="var(--glow-color)" transform="rotate(45 31 73)"/>
+                  </g>
+                </svg>
+            {%- endcase -%}
+          {%- endcapture -%}
+
+          {%- if link.links != blank -%}
+            <div class="menu-item hub-item">
+              {{ icon_svg }}
+              <span>{{ link.title }}</span>
+              <div class="hub-dropdown">
+                {%- for child_link in link.links -%}
+                  <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- else -%}
+            <a href="{{ link.url }}" class="menu-item">
+              {{ icon_svg }}
+              <span>{{ link.title }}</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const headerElement = document.querySelector('#FuturisticHeader-{{ section.id }}');
+    if (!headerElement) return;
+
+    const menuContainer = headerElement.querySelector('.menu-container');
+    if (menuContainer) {
+      menuContainer.addEventListener('mousemove', (e) => {
+        const rect = menuContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        menuContainer.style.setProperty('--mouse-x', `${x}px`);
+        menuContainer.style.setProperty('--mouse-y', `${y}px`);
+      });
+      menuContainer.addEventListener('mouseleave', () => {
+        menuContainer.style.setProperty('--mouse-x', `-200px`);
+        menuContainer.style.setProperty('--mouse-y', `-200px`);
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Futuristic Header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "default": "main-menu", "label": "Menu" },
+
+    { "type": "image_picker", "id": "bg_image", "label": "BG image" },
+    { "type": "range", "id": "bg_opacity", "label": "BG opacity (%)", "min": 0, "max": 100, "step": 1, "default": 35 },
+    { "type": "range", "id": "bg_blur", "label": "BG blur (px)", "min": 0, "max": 30, "step": 1, "default": 0 },
+    { "type": "select", "id": "bg_fit", "label": "BG size", "default": "cover",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" }
+      ]
+    },
+    { "type": "select", "id": "bg_pos", "label": "BG position", "default": "center",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "top", "label": "Top" },
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" },
+        { "value": "center top", "label": "Center top" },
+        { "value": "center bottom", "label": "Center bottom" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Futuristic Header" }
+  ]
+}
+{% endschema %}

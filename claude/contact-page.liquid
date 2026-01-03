@@ -1,0 +1,247 @@
+<style>
+#contact-{{ section.id }}{
+  --bg: radial-gradient(120% 120% at 15% 20%, rgba(126,234,255,0.08), transparent 55%),
+        radial-gradient(140% 140% at 80% 10%, rgba(191,0,255,0.08), transparent 60%),
+        linear-gradient(150deg, #05070f 0%, #080b16 60%, #05060e 100%);
+  --panel: rgba(255,255,255,0.05);
+  --edge: rgba(255,255,255,0.14);
+  --text: #e9f4ff;
+  --muted: #9db5d9;
+  --accent: #7eeaff;
+  --accent-2: #c77dff;
+  background: var(--bg);
+  color: var(--text);
+  padding: clamp(48px, 6vw, 80px) clamp(16px, 4vw, 32px);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
+}
+#contact-{{ section.id }}::before{
+  content:"";
+  position:absolute;inset:-20%;
+  background:radial-gradient(70% 70% at 50% 50%, rgba(255,255,255,0.06), transparent 65%);
+  filter:blur(30px);
+  opacity:0.7;
+  pointer-events:none;
+}
+#contact-{{ section.id }} .shell{
+  max-width: 1160px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+#contact-{{ section.id }} .section-head{
+  text-align: center;
+  margin-bottom: clamp(32px,5vw,52px);
+}
+#contact-{{ section.id }} .section-kicker{
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+#contact-{{ section.id }} h2{
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin: 10px 0;
+  letter-spacing: 0.06em;
+}
+#contact-{{ section.id }} .section-sub{
+  color: var(--muted);
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+#contact-{{ section.id }} .grid{
+  display:grid;
+  gap: clamp(18px,3vw,28px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+#contact-{{ section.id }} .panel{
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 18px;
+  padding: clamp(20px,2.4vw,28px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(14px);
+}
+#contact-{{ section.id }} .form-grid{
+  display:grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+}
+#contact-{{ section.id }} label{
+  display:block;
+  font-weight:700;
+  margin-bottom:6px;
+  letter-spacing:0.03em;
+}
+#contact-{{ section.id }} input,
+#contact-{{ section.id }} textarea{
+  width:100%;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 1rem;
+  outline:none;
+  transition:border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#contact-{{ section.id }} input:focus,
+#contact-{{ section.id }} textarea:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+#contact-{{ section.id }} textarea{min-height:140px; resize: vertical;}
+#contact-{{ section.id }} .actions{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+#contact-{{ section.id }} .btn{
+  border:0;
+  border-radius:14px;
+  padding: 14px 18px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  color:#0a1220;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+#contact-{{ section.id }} .btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+#contact-{{ section.id }} .status{
+  font-weight:700;
+  color: var(--accent);
+}
+#contact-{{ section.id }} .info-list{
+  list-style:none;padding:0;margin:0;display:grid;gap:12px;
+}
+#contact-{{ section.id }} .info-item{
+  display:flex;gap:10px;align-items:flex-start;
+  color: var(--muted);
+}
+#contact-{{ section.id }} .info-icon{
+  width:32px;height:32px;border-radius:10px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  color:var(--accent);
+}
+@media(max-width:640px){
+  #contact-{{ section.id }}{padding:42px 14px 60px;}
+  #contact-{{ section.id }} .section-head{text-align:left;}
+}
+@media (prefers-reduced-motion: reduce){
+  #contact-{{ section.id }} *,
+  #contact-{{ section.id }} .panel{transition:none!important;animation:none!important;}
+}
+</style>
+
+<section id="contact-{{ section.id }}">
+  <div class="shell">
+    <div class="section-head">
+      <div class="section-kicker">{{ section.settings.kicker | default: 'Reach out' }}</div>
+      <h2>{{ section.settings.heading | default: 'Contact Ones4 Support' }}</h2>
+      {% if section.settings.subtext != blank %}
+        <p class="section-sub">{{ section.settings.subtext }}</p>
+      {% endif %}
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        {% form 'contact', id: 'ContactForm-{{ section.id }}' %}
+          {% if form.posted_successfully? %}
+            <p class="status">Thanks! We received your message and will reply shortly.</p>
+          {% elsif form.errors %}
+            <div class="status" style="color:#ffb4c1;">Please correct the highlighted fields.</div>
+          {% endif %}
+
+          <div class="form-grid">
+            <div>
+              <label for="ContactName-{{ section.id }}">Name</label>
+              <input id="ContactName-{{ section.id }}" name="contact[name]" type="text" required value="{{ form.name }}">
+            </div>
+            <div>
+              <label for="ContactEmail-{{ section.id }}">Email</label>
+              <input id="ContactEmail-{{ section.id }}" name="contact[email]" type="email" required value="{{ form.email }}">
+            </div>
+            <div>
+              <label for="ContactPhone-{{ section.id }}">Phone (optional)</label>
+              <input id="ContactPhone-{{ section.id }}" name="contact[phone]" type="tel" value="{{ form.phone }}">
+            </div>
+            <div>
+              <label for="ContactOrder-{{ section.id }}">Order # (optional)</label>
+              <input id="ContactOrder-{{ section.id }}" name="contact[Order #]" type="text" placeholder="#1234">
+            </div>
+          </div>
+          <div style="margin-top:14px;">
+            <label for="ContactMessage-{{ section.id }}">How can we help?</label>
+            <textarea id="ContactMessage-{{ section.id }}" name="contact[body]" required>{{ form.body }}</textarea>
+          </div>
+          <div class="actions" style="margin-top:16px;">
+            <button type="submit" class="btn">Send message</button>
+          </div>
+        {% endform %}
+      </div>
+
+      <div class="panel">
+        <h3 style="margin-bottom:12px;">Ones4 Support</h3>
+        <ul class="info-list">
+          {% if section.settings.email != blank %}
+          <li class="info-item">
+            <span class="info-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
+            <span>{{ section.settings.email }}</span>
+          </li>
+          {% endif %}
+          {% if section.settings.phone != blank %}
+          <li class="info-item">
+            <span class="info-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></span>
+            <span>{{ section.settings.phone }}</span>
+          </li>
+          {% endif %}
+          {% if section.settings.hours != blank %}
+          <li class="info-item">
+            <span class="info-icon"><i class="fa-regular fa-clock" aria-hidden="true"></i></span>
+            <span>{{ section.settings.hours }}</span>
+          </li>
+          {% endif %}
+          {% if section.settings.address != blank %}
+          <li class="info-item">
+            <span class="info-icon"><i class="fa-regular fa-map" aria-hidden="true"></i></span>
+            <span>{{ section.settings.address }}</span>
+          </li>
+          {% endif %}
+        </ul>
+        {% if section.settings.map_embed != blank %}
+          <div style="margin-top:18px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+            {{ section.settings.map_embed }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ones4 Contact",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Eyebrow", "default": "Reach out" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Contact Ones4 Support" },
+    { "type": "textarea", "id": "subtext", "label": "Subtitle", "default": "Questions about an order, fit, or shipping? Drop us a line and the Ones4 crew will help." },
+    { "type": "text", "id": "email", "label": "Support email", "default": "support@ones4.com" },
+    { "type": "text", "id": "phone", "label": "Support phone", "default": "+1 (555) 123-4567" },
+    { "type": "text", "id": "hours", "label": "Hours", "default": "Mon–Fri • 9am–6pm (UTC-5)" },
+    { "type": "textarea", "id": "address", "label": "Address", "default": "Ones4 HQ, 123 Neon Ave, Future City" },
+    { "type": "html", "id": "map_embed", "label": "Map embed (optional)" }
+  ],
+  "presets": [
+    { "name": "Ones4 Contact" }
+  ]
+}
+{% endschema %}

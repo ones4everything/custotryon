@@ -1,0 +1,25 @@
+{%- comment -%}
+API Bridge - Handles communication between Print Designer App and Shopify
+Include this in your theme.liquid layout
+{%- endcomment -%}
+
+<script>
+window.CustomizationAPI = {
+  // Configuration
+  config: {
+    shopDomain: {{ shop.domain | json }},
+    currency: {{ shop.currency | json }},
+    customerLoggedIn: {% if customer %}true{% else %}false{% endif %},
+    customerId: {{ customer.id | json }},
+    customerEmail: {{ customer.email | json }}
+  },
+
+  // Get product data for the customization app
+  getProductData: function(productId) {
+    const productScript = document.getElementById(`product-data-${productId}`);
+    if (productScript) {
+      return JSON.parse(productScript.textContent);
+    }
+    return null;
+  }
+};

@@ -1,0 +1,25 @@
+{
+  "name": "ONES4",
+  "short_name": "ONES4",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#060f1c",
+  "theme_color": "#04d9ff",
+  "description": "ONES4 ecommerce",
+  "icons": [
+    {
+      "src": "ones4-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ones4-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

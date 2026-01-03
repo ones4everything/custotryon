@@ -1,0 +1,146 @@
+{% comment %}
+Product Customization Integration
+Add this to your product templates where you want the customization options to appear
+{% endcomment %}
+
+<!-- Check if product is customizable -->
+{% assign is_customizable = false %}
+{% assign has_vto = false %}
+
+{% for tag in product.tags %}
+  {% if tag contains 'customizable' %}
+    {% assign is_customizable = true %}
+  {% endif %}
+  {% if tag contains 'vto-enabled' %}
+    {% assign has_vto = true %}
+  {% endif %}
+{% endfor %}
+
+{% if is_customizable or has_vto %}
+<div class="product-customization-section">
+  <h3 class="customization-title">🎨 Make It Yours</h3>
+  
+  <div class="customization-options">
+    {% if is_customizable %}
+      <div class="customization-option">
+        <h4>✨ Design Your Own</h4>
+        <p>Personalize colors, text, graphics, and more</p>
+        <button class="customization-trigger" onclick="openCustomization('{{ product.id }}')">
+          Start Customizing
+        </button>
+      </div>
+    {% endif %}
+    
+    {% if has_vto %}
+      <div class="customization-option">
+        <h4>👓 Virtual Try-On</h4>
+        <p>See how it looks before you buy</p>
+        <button class="customization-trigger vto-trigger" onclick="openVTO('{{ product.id }}')">
+          Try It On
+        </button>
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Custom Properties for App -->
+  <script type="application/json" id="product-data-{{ product.id }}">
+    {
+      "id": {{ product.id }},
+      "handle": "{{ product.handle }}",
+      "title": "{{ product.title | escape }}",
+      "vendor": "{{ product.vendor | escape }}",
+      "type": "{{ product.type | escape }}",
+      "tags": {{ product.tags | json }},
+      "variants": [
+        {% for variant in product.variants %}
+        {
+          "id": {{ variant.id }},
+          "title": "{{ variant.title | escape }}",
+          "price": {{ variant.price }},
+          "sku": "{{ variant.sku | escape }}",
+          "available": {{ variant.available }},
+          "options": [
+            {% for option in variant.options %}
+            "{{ option | escape }}"{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
+      "images": [
+        {% for image in product.images %}
+        {
+          "url": "{{ image | img_url: 'master' }}",
+          "alt": "{{ image.alt | escape }}"
+        }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ],
+      "metafields": {
+        {% for metafield in product.metafields.custom %}
+          {% if metafield.value %}
+            "{{ metafield.key }}": {{ metafield.value | json }}{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      }
+    }
+  </script>
+</div>
+
+<!-- Include the overlay -->
+{% render 'customization-overlay', product: product %}
+
+<style>
+.product-customization-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(110,228,255,0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.customization-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #6ee4ff;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.customization-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.customization-option {
+  flex: 1;
+  min-width: 250px;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.customization-option h4 {
+  color: #e9f4ff;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.customization-option p {
+  color: #b7c5e8;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.vto-trigger {
+  background: linear-gradient(120deg, #ff6b6b, #ff8787) !important;
+}
+
+.vto-trigger:hover {
+  box-shadow: 0 12px 24px rgba(255, 107, 107, 0.4) !important;
+}
+</style>
+{% endif %}

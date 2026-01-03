@@ -1,0 +1,238 @@
+{% comment %}
+Customization Overlay - Connects to Print Designer App
+Usage: {% render 'customization-overlay', product: product %}
+{% endcomment %}
+
+<style>
+.customization-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.customization-overlay.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.customization-frame {
+  width: 95%;
+  height: 95%;
+  max-width: 1400px;
+  max-height: 900px;
+  border-radius: 16px;
+  border: 2px solid rgba(110, 228, 255, 0.3);
+  box-shadow: 0 0 50px rgba(110, 228, 255, 0.2);
+  background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  position: relative;
+  overflow: hidden;
+}
+
+.customization-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 14px;
+}
+
+.customization-close {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff4757, #ff3838);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.customization-close:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+}
+
+.customization-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6ee4ff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.customization-trigger {
+  background: linear-gradient(120deg, #6ee4ff, #c0f4ff);
+  color: #041017;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 16px rgba(110, 228, 255, 0.3);
+}
+
+.customization-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(110, 228, 255, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<!-- Customization Trigger Button -->
+<button class="customization-trigger" onclick="openCustomization('{{ product.id }}')">
+  🎨 Customize Product
+</button>
+
+<!-- VTO Trigger Button (if applicable) -->
+{% if product.tags contains 'vto-enabled' %}
+<button class="customization-trigger" onclick="openVTO('{{ product.id }}')" style="background: linear-gradient(120deg, #ff6b6b, #ff8787); margin-left: 10px;">
+  👓 Try On Virtual
+</button>
+{% endif %}
+
+<!-- Overlay Container -->
+<div id="customization-overlay" class="customization-overlay">
+  <div class="customization-frame">
+    <button class="customization-close" onclick="closeCustomization()">×</button>
+    <div class="customization-loading">Loading Customization App...</div>
+    <iframe id="customization-iframe" src="" style="display: none;"></iframe>
+  </div>
+</div>
+
+<script>
+// Configuration - Update with your app URL
+const PRINT_DESIGNER_URL = 'http://localhost:3000'; // Change to your app URL
+const VTO_URL = 'http://localhost:3001'; // Change to your VTO URL
+
+function openCustomization(productId) {
+  const overlay = document.getElementById('customization-overlay');
+  const iframe = document.getElementById('customization-iframe');
+  const loading = document.querySelector('.customization-loading');
+  
+  // Show overlay
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  // Build customization URL with product data
+  const customizationUrl = `${PRINT_DESIGNER_URL}/customize?productId=${productId}&shop={{ shop.domain }}&productHandle={{ product.handle }}`;
+  
+  // Load iframe
+  iframe.src = customizationUrl;
+  iframe.onload = function() {
+    loading.style.display = 'none';
+    iframe.style.display = 'block';
+  };
+}
+
+function openVTO(productId) {
+  const overlay = document.getElementById('customization-overlay');
+  const iframe = document.getElementById('customization-iframe');
+  const loading = document.querySelector('.customization-loading');
+  
+  // Show overlay
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  
+  // Build VTO URL
+  const vtoUrl = `${VTO_URL}/vto?productId=${productId}&shop={{ shop.domain }}`;
+  
+  iframe.src = vtoUrl;
+  iframe.onload = function() {
+    loading.style.display = 'none';
+    iframe.style.display = 'block';
+  };
+}
+
+function closeCustomization() {
+  const overlay = document.getElementById('customization-overlay');
+  const iframe = document.getElementById('customization-iframe');
+  const loading = document.querySelector('.customization-loading');
+  
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  
+  // Reset iframe
+  setTimeout(() => {
+    iframe.src = '';
+    iframe.style.display = 'none';
+    loading.style.display = 'block';
+  }, 300);
+}
+
+// Listen for messages from the app
+window.addEventListener('message', function(event) {
+  // Verify origin for security
+  if (event.origin !== PRINT_DESIGNER_URL && event.origin !== VTO_URL) return;
+  
+  if (event.data.type === 'CUSTOMIZATION_COMPLETE') {
+    // Handle customization completion
+    console.log('Customization complete:', event.data);
+    
+    // Add to cart with custom data
+    if (event.data.variantId && event.data.customData) {
+      addCustomizedToCart(event.data.variantId, event.data.customData);
+    }
+    
+    closeCustomization();
+  } else if (event.data.type === 'CLOSE_OVERLAY') {
+    closeCustomization();
+  }
+});
+
+function addCustomizedToCart(variantId, customData) {
+  fetch('/cart/add.js', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: variantId,
+      quantity: 1,
+      properties: {
+        '_customization_data': JSON.stringify(customData),
+        '_customized': 'true'
+      }
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Added to cart:', data);
+    // Update cart UI or redirect
+    window.location.href = '/cart';
+  })
+  .catch(error => {
+    console.error('Error adding to cart:', error);
+  });
+}
+
+// Close overlay on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closeCustomization();
+  }
+});
+</script>

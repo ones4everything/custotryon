@@ -1,0 +1,5390 @@
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet"> 
+
+<style>
+:root {
+  --glow: #6ee9ff;
+  --glow-2: #b7f7ff;
+  --accent: #00e6ff;
+  --accent-2: #7ef0c5;
+  --accent-3: #ff62e5;
+  --accent-4: #7c90ff;
+  --surface: #05070d;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.12);
+  --ink-strong: #f5fbff;
+  --ink-soft: #9fb6d8;
+  --danger: #ff4d8c;
+  --safe: #5bffb5;
+  --panel: rgba(7, 11, 22, 0.78);
+  --line: rgba(130, 200, 255, 0.2);
+  --line-strong: rgba(126, 234, 255, 0.48);
+  --neon: #57f6ff;
+  --neon-green: #72ff9a;
+  --neo-teal: #23f0ff;
+  --neo-teal-strong: #11c8ff;
+  --neo-teal-soft: rgba(35, 240, 255, 0.3);
+  --neo-teal-shadow: 0 0 26px rgba(35, 240, 255, 0.55), 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(255, 255, 255, 0.18);
+}
+
+.o4-hide-theme-header #shopify-section-header,
+.o4-hide-theme-header #shopify-section-announcement-bar,
+.o4-hide-theme-header .shopify-section--header,
+.o4-hide-theme-header .site-header,
+.o4-hide-theme-header .header-wrapper,
+.o4-hide-theme-header .announcement-bar,
+.o4-hide-theme-header [data-section-type="header"],
+.o4-hide-theme-header [id^="FuturisticHeader-"] {
+  display: none !important;
+}
+
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: #03040a;
+}
+
+#teleporter-hub * { box-sizing: border-box; }
+
+#teleporter-hub {
+  position: relative;
+  font-family: 'Space Grotesk', 'Orbitron', system-ui, sans-serif;
+  background: #03040a;
+  color: var(--ink-strong);
+  min-height: 100vh;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 12px var(--tele-bottom-offset, 180px);
+  --glow-blue: #00aeff;
+  --glow-cyan: #00e5ff;
+  --glow-green: #00ff8a;
+  --glow-yellow: #ffc400;
+  --glow-magenta: #ff00c8;
+  --glow: var(--glow-blue);
+  --accent-live: var(--glow);
+  --accent-live-soft: rgba(0, 174, 255, 0.25);
+  --accent-live-strong: rgba(0, 174, 255, 0.6);
+  --accent-live-bright: var(--glow-cyan);
+}
+
+#teleporter-hub::before {
+  content: none;
+  display: none;
+}
+
+#teleporter-hub::after {
+  content: none;
+  display: none;
+}
+
+.neo-shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding-top: var(--tele-header-offset, 90px);
+}
+
+/* Header */
+.neo-header {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1240px, calc(100% - 24px));
+  z-index: 2000;
+  background: linear-gradient(90deg, rgba(8, 14, 28, 0.95), rgba(6, 10, 20, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  padding: 12px 14px;
+  margin: 0;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.45);
+  overflow: visible;
+}
+
+.neo-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  border: 1px solid rgba(126, 234, 255, 0.12);
+  pointer-events: none;
+}
+
+.neo-header::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(126, 234, 255, 0.6), transparent);
+  opacity: 0.9;
+}
+
+.neo-header-row {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr) auto;
+  grid-template-areas: "subbar search topbar";
+  align-items: center;
+  gap: 12px;
+}
+
+.neo-topbar {
+  grid-area: topbar;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.neo-subbar {
+  grid-area: subbar;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.neo-shop-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.neo-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  padding: 0 12px;
+}
+
+.neo-menu-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.neo-brand {
+  display: none;
+  justify-self: center;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 0.82rem;
+  color: var(--accent-live-bright);
+  text-shadow: 0 0 12px var(--accent-live-soft);
+}
+
+.neo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(5, 10, 20, 0.7);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.neo-breadcrumb a {
+  color: var(--ink-strong);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.neo-breadcrumb a:last-child {
+  color: var(--glow);
+}
+
+.neo-breadcrumb .sep {
+  opacity: 0.7;
+}
+
+.neo-search {
+  grid-area: search;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(6, 10, 22, 0.7);
+  min-width: 300px;
+  box-shadow: inset 0 0 18px rgba(0, 255, 255, 0.14);
+}
+
+.neo-search input {
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  width: 100%;
+  flex: 1;
+  min-width: 0;
+  outline: none;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.neo-search input::placeholder {
+  color: rgba(159, 182, 216, 0.7);
+}
+
+.neo-search-mic {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.24);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: inset 0 0 14px rgba(0, 255, 255, 0.12);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.neo-search-mic:hover {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+  transform: translateY(-1px);
+}
+
+.neo-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+}
+
+.neo-min-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(126, 234, 255, 0.18);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.neo-min-toggle:hover {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+}
+
+.neo-min-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.4);
+  background: rgba(6, 10, 22, 0.8);
+  box-shadow: inset 0 0 6px rgba(0, 255, 255, 0.18);
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.neo-min-toggle[aria-pressed="true"] .neo-min-dot {
+  background: var(--accent-live);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 10px var(--accent-live-strong);
+}
+
+.neo-min-label {
+  line-height: 1;
+}
+
+.is-minimal {
+  background: #ffffff;
+  color: #0b0f15;
+}
+
+.is-minimal::before,
+.is-minimal::after {
+  opacity: 0.04;
+}
+
+.is-minimal .neo-header,
+.is-minimal .neo-search,
+.is-minimal .neo-breadcrumb,
+.is-minimal .gallery-card,
+.is-minimal .hero-frame,
+.is-minimal .hero-shell,
+.is-minimal .tab-list,
+.is-minimal .tab-panels,
+.is-minimal .feature-card,
+.is-minimal .cta-panel,
+.is-minimal .customize-banner,
+.is-minimal .customize-panel,
+.is-minimal .color-chip,
+.is-minimal .pill,
+.is-minimal .info-tabs {
+  background: #ffffff;
+  box-shadow: none !important;
+  border-color: #d7dde5;
+}
+
+.is-minimal .neo-search input,
+.is-minimal .neo-breadcrumb,
+.is-minimal .option-title,
+.is-minimal .price-tag .sub,
+.is-minimal .details-list span:first-child,
+.is-minimal .tab-panel,
+.is-minimal .feature-card .label {
+  color: #1f2a37;
+  font-weight: 700;
+}
+
+.is-minimal .product-title span,
+.is-minimal .price-tag .amount,
+.is-minimal .cta-price,
+.is-minimal .tab-btn,
+.is-minimal .tab-copy,
+.is-minimal .details-list,
+.is-minimal .feature-card .value,
+.is-minimal .color-name,
+.is-minimal .pill,
+.is-minimal .neo-bottom-link,
+.is-minimal .neo-bottom-cta {
+  color: #0b0f15;
+  font-weight: 800;
+  text-shadow: none !important;
+}
+
+.is-minimal .tab-btn {
+  background: #ffffff;
+  border-color: #d7dde5;
+}
+
+.is-minimal .tab-btn.active {
+  border-color: #0b0f15;
+  box-shadow: none;
+}
+
+.is-minimal .tele-overlay,
+.is-minimal .teleporter-base {
+  display: none !important;
+}
+
+.is-minimal .hero-media {
+  transform: none !important;
+}
+
+.is-minimal .hero-media::after,
+.is-minimal .hero-media::before {
+  opacity: 0.12;
+}
+
+.is-minimal .hero-media img {
+  filter: none;
+}
+
+.is-minimal .neo-bottom-nav {
+  background: #ffffff;
+  border-color: #d7dde5;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+.is-minimal .neo-bottom-link svg {
+  color: #0b0f15;
+}
+
+.is-minimal .neo-bottom-cta {
+  background: #0b0f15;
+  color: #ffffff;
+  border-color: #0b0f15;
+  box-shadow: none;
+}
+
+.is-minimal .neo-bottom-cta::after,
+.is-minimal .neo-bottom-cta::before {
+  display: none;
+}
+
+.is-minimal .customize-input {
+  background: #ffffff;
+  border-color: #d7dde5;
+  color: #0b0f15;
+  font-weight: 700;
+}
+
+.is-minimal .customize-input::placeholder {
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.is-minimal .customize-banner {
+  background: #ffffff;
+  color: #0b0f15;
+  border-color: #0b0f15;
+  box-shadow: none;
+}
+
+.is-minimal {
+  font-size: 1.05rem;
+}
+
+.is-minimal .btn,
+.is-minimal .btn-primary,
+.is-minimal .btn-secondary,
+.is-minimal .neo-bottom-cta {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.is-minimal .btn-primary {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  box-shadow: none;
+}
+
+.is-minimal .btn-secondary {
+  background: #0d0d0d;
+  color: #ffffff;
+  border-color: #2a2a2a;
+  box-shadow: none;
+}
+
+.is-minimal .product-title span {
+  letter-spacing: 0.14em;
+}
+
+.is-minimal .option-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+}
+
+.is-minimal .tab-copy,
+.is-minimal .details-list {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.neo-menu-panel {
+  position: fixed;
+  top: var(--neo-menu-top, 96px);
+  left: var(--neo-menu-left, 50%);
+  width: var(--neo-menu-width, min(560px, calc(100% - 24px)));
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(6, 10, 22, 0.95);
+  box-shadow: 0 22px 40px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--neo-menu-shift, -50%), -8px, 0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  max-height: calc(100vh - var(--neo-menu-top, 96px) - 20px);
+  overflow-y: auto;
+  z-index: 2001;
+}
+
+.neo-header.is-menu-open .neo-menu-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(var(--neo-menu-shift, -50%), 0, 0);
+}
+
+.neo-menu-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+  gap: 12px;
+  position: relative;
+  min-height: 220px;
+}
+
+.neo-menu-left {
+  padding: 4px 4px 4px 2px;
+  border-right: 1px solid rgba(126, 234, 255, 0.12);
+}
+
+.neo-menu-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.neo-menu-item-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  border: 1px solid rgba(126, 234, 255, 0.12);
+  background: rgba(7, 12, 22, 0.7);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.neo-menu-item-link:hover,
+.neo-menu-item-link:focus-visible {
+  color: var(--ink-strong);
+  border-color: rgba(0, 255, 255, 0.35);
+  box-shadow: 0 0 16px rgba(0, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.neo-menu-item-link.active {
+  color: var(--ink-strong);
+  border-color: rgba(0, 255, 255, 0.35);
+  background: linear-gradient(90deg, rgba(0, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.18);
+}
+
+.neo-menu-item-link svg {
+  opacity: 0.6;
+}
+
+.neo-submenu-panels {
+  position: relative;
+  padding: 4px 4px 4px 12px;
+}
+
+.neo-submenu-panel {
+  display: none;
+}
+
+.neo-submenu-panel.is-active {
+  display: block;
+}
+
+.neo-submenu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: rgba(210, 245, 255, 0.65);
+}
+
+.neo-submenu-back {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.neo-submenu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.neo-submenu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(7, 12, 22, 0.65);
+  color: #c7d4ee;
+  text-decoration: none;
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.neo-submenu-item:hover,
+.neo-submenu-item:focus-visible {
+  color: #fff;
+  border-color: rgba(0, 255, 255, 0.28);
+  transform: translateX(2px);
+}
+
+.neo-submenu-item svg {
+  opacity: 0.6;
+}
+
+.neo-icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(126, 234, 255, 0.22);
+  background: rgba(6, 10, 22, 0.7);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-strong);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  box-shadow: inset 0 0 16px rgba(0, 255, 255, 0.08);
+}
+
+.neo-icon-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 22px var(--accent-live-soft);
+}
+
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-3);
+  color: #050510;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 2px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 12px rgba(255, 98, 229, 0.6);
+}
+
+/* Main layout */
+.neo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .neo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.options-panel {
+  margin-top: 6px;
+  display: grid;
+  gap: 8px;
+}
+
+.option-block {
+  display: grid;
+  gap: 8px;
+}
+
+.option-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 6px;
+}
+
+.color-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0.92), rgba(4, 8, 16, 0.96));
+  color: var(--ink-strong);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.35), 0 0 10px var(--swatch-color, var(--accent-live));
+}
+
+.color-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.color-chip::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.color-chip::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--swatch-color, var(--accent-live));
+  box-shadow: 0 0 12px var(--swatch-color, var(--accent-live));
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.color-chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--swatch-color, var(--accent-live));
+  box-shadow: 0 0 16px var(--swatch-color, var(--accent-live));
+}
+
+.color-chip.active {
+  border-color: var(--glow);
+  box-shadow:
+    0 0 18px var(--glow),
+    0 0 30px var(--accent-live-soft);
+  transform: translateY(-1px);
+}
+
+.color-dot {
+  display: none;
+}
+
+.color-name {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 0 12px var(--swatch-color, var(--accent-live));
+}
+
+.size-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+  gap: 3px;
+}
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 4px;
+  border-radius: 4px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 20, 0.7);
+  color: var(--ink-strong);
+  font-weight: 600;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-soft);
+}
+
+.pill.active {
+  border-color: var(--glow);
+  box-shadow: 0 0 22px var(--glow);
+  background: rgba(6, 10, 22, 0.78);
+}
+
+.info-tabs {
+  margin-top: 0;
+  display: grid;
+  gap: 4px;
+  position: static;
+  z-index: 40;
+}
+
+.info-tabs.is-collapsed .tab-panels {
+  display: none;
+}
+
+.tab-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 6px;
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+}
+
+.tab-btn {
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.6);
+  color: var(--ink-soft);
+  padding: 6px;
+  border-radius: 12px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.tab-btn.active {
+  color: var(--ink-strong);
+  border-color: var(--accent-live);
+  box-shadow: 0 0 18px var(--accent-live-soft);
+  background: rgba(6, 10, 22, 0.75);
+}
+
+.tab-panels {
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.75);
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08);
+  display: flow-root;
+}
+
+.tab-panel {
+  display: none;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.tab-panel.active {
+  display: flow-root;
+}
+
+.tab-panel.active::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.details-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--ink-strong);
+}
+
+.details-list span:first-child {
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.65rem;
+}
+
+.details-list {
+  margin-bottom: 14px;
+}
+
+.tab-copy {
+  color: #e6f0ff;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.tab-copy p {
+  margin: 0 0 0.85em;
+}
+
+.tab-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.tab-copy ul,
+.tab-copy ol {
+  margin: 0.4em 0 0.85em 1.1em;
+  padding: 0;
+}
+
+.tab-copy li {
+  margin: 0.35em 0;
+}
+
+.tab-copy a {
+  color: var(--glow);
+}
+
+.tab-panel #shopify-product-reviews,
+.tab-panel .spr-container,
+.tab-panel .jdgm-widget,
+.tab-panel .loox-reviews {
+  color: var(--ink-strong);
+}
+
+.tab-panel .spr-container,
+.tab-panel .jdgm-widget,
+.tab-panel .loox-reviews {
+  background: transparent;
+}
+
+.tab-panel .spr-summary-actions a,
+.tab-panel .jdgm-write-rev-link,
+.tab-panel .loox-write-review {
+  color: var(--glow);
+}
+
+.spec-empty {
+  color: var(--ink-soft);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.gallery-card {
+  position: relative;
+  background: linear-gradient(160deg, rgba(10, 16, 30, 0.85), rgba(6, 9, 18, 0.95));
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  padding: 16px 16px 18px;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.55);
+  overflow: visible;
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  row-gap: 12px;
+}
+
+.gallery-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  background:
+    linear-gradient(120deg, rgba(0, 255, 255, 0.12), transparent 45%),
+    linear-gradient(300deg, rgba(255, 98, 229, 0.12), transparent 40%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.gallery-card::after {
+  content: "";
+  position: absolute;
+  left: -12%;
+  bottom: -18%;
+  width: 60%;
+  height: 40%;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.35);
+  box-shadow: 0 0 28px rgba(126, 234, 255, 0.4);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.gallery-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gallery-main {
+  display: grid;
+  gap: 4px;
+}
+
+.gallery-media,
+.gallery-buy {
+  display: grid;
+  gap: 4px;
+}
+
+.product-title {
+  text-align: center;
+  margin: 2px 0 4px;
+}
+
+.product-title span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.45);
+  background: linear-gradient(90deg, rgba(20, 32, 58, 0.9), rgba(7, 12, 24, 0.95));
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(126, 234, 255, 0.55);
+  box-shadow: 0 0 26px rgba(124, 144, 255, 0.35), inset 0 0 18px rgba(0, 255, 255, 0.2);
+  position: relative;
+}
+
+.product-title span::before,
+.product-title span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(255, 98, 229, 0.6);
+  transform: translateY(-50%) rotate(45deg);
+  opacity: 0.8;
+}
+
+.product-title span::before {
+  left: -10px;
+}
+
+.product-title span::after {
+  right: -10px;
+}
+
+.hero-frame {
+  position: relative;
+  border-radius: 20px;
+  padding: 14px;
+  background: linear-gradient(160deg, rgba(12, 20, 35, 0.88), rgba(6, 10, 20, 0.95));
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--glow);
+  overflow: visible;
+  z-index: 2;
+  perspective: 1000px;
+}
+
+.hero-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  border: 1px solid var(--glow);
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-shell {
+  position: relative;
+  padding: 10px;
+  border-radius: 24px;
+  background: transparent;
+  box-shadow: none;
+  --halo-x: 50%;
+  --halo-y: 56%;
+  --tilt-x: -2deg;
+  --tilt-y: 2deg;
+}
+
+.hero-shell::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 20px;
+  border: 1px solid rgba(126, 234, 255, 0.35);
+  box-shadow: inset 0 0 22px rgba(126, 234, 255, 0.2);
+  pointer-events: none;
+}
+
+.hero-shell::after,
+.hero-media::after {
+  content: none;
+  display: none;
+}
+
+.tele-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.hero-media {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #03060f;
+  z-index: 1;
+  aspect-ratio: 4 / 3.75;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.18s ease;
+  will-change: transform;
+}
+
+.hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 1px solid var(--glow);
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  display: block;
+  background: #000;
+  filter: none;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.hero-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  display: block;
+}
+
+/* Teleport materialize */
+.teleporter-base {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%) perspective(300px) rotateX(75deg);
+  width: 350px;
+  max-width: 90%;
+  height: 175px;
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 18px var(--glow));
+}
+
+.teleporter-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid var(--glow);
+  box-shadow: 0 0 12px var(--glow), inset 0 0 12px var(--glow);
+  --ring-scale: 1;
+  z-index: 1;
+  animation: spin-teleporter 8s linear infinite;
+}
+
+.teleporter-ring:nth-child(2) {
+  --ring-scale: 0.7;
+  animation-delay: -2.7s;
+  animation-duration: 6s;
+}
+
+.teleporter-ring:nth-child(3) {
+  --ring-scale: 0.4;
+  animation-delay: -1.3s;
+  animation-duration: 4s;
+}
+
+.teleporter-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.teleporter-particle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  height: 15px;
+  background: var(--glow);
+  border-radius: 50%;
+  opacity: 0;
+  animation: rise-display 1.5s ease-out forwards;
+}
+
+.hero-frame.is-materializing {
+  animation: glow-pulse 1s ease-out;
+}
+
+@keyframes spin-teleporter {
+  from { transform: rotate(0) scale(var(--ring-scale, 1)); }
+  to { transform: rotate(360deg) scale(var(--ring-scale, 1)); }
+}
+
+@keyframes rise-display {
+  0% { transform: translateY(0) scale(1.5); opacity: 0.8; }
+  100% { transform: translateY(-450px) scale(0.5); opacity: 0; }
+}
+
+@keyframes glow-pulse {
+  from { box-shadow: 0 0 20px -5px var(--glow); }
+  50% { box-shadow: 0 0 50px 10px var(--glow); }
+  to { box-shadow: 0 0 25px 0 var(--glow); }
+}
+
+#teleporter-hub .btn-primary {
+  animation: glowPulse 2.8s ease-in-out infinite;
+}
+
+#teleporter-hub .btn-secondary {
+  animation: glowPulseSoft 3.4s ease-in-out infinite;
+}
+
+#teleporter-hub .banner {
+  animation: bannerPulse 3.4s ease-in-out infinite;
+}
+
+#teleporter-hub .feature-card {
+  animation: cardPulse 4.6s ease-in-out infinite;
+}
+
+#teleporter-hub .feature-icon {
+  animation: iconPulse 3.2s ease-in-out infinite;
+}
+
+#teleporter-hub .cta-panel {
+  animation: cardPulse 5.2s ease-in-out infinite;
+}
+
+#teleporter-hub .gallery-dots {
+  animation: glowPulseSoft 3.2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 var(--accent-live-soft); }
+  50% { box-shadow: 0 0 24px var(--accent-live-strong); }
+}
+
+@keyframes glowPulseSoft {
+  0%, 100% { box-shadow: inset 0 0 10px var(--accent-live-soft); }
+  50% { box-shadow: inset 0 0 18px var(--accent-live-strong); }
+}
+
+@keyframes bannerPulse {
+  0%, 100% { box-shadow: 0 8px 22px var(--accent-live-soft); }
+  50% { box-shadow: 0 12px 30px var(--accent-live-strong); }
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: inset 0 0 18px var(--accent-live-soft); }
+  50% { box-shadow: inset 0 0 26px var(--accent-live-strong); }
+}
+
+@keyframes iconPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(114, 255, 154, 0.25); }
+  50% { box-shadow: 0 0 18px rgba(114, 255, 154, 0.6); }
+}
+
+#teleporter-hub .btn-primary,
+#teleporter-hub .btn-secondary,
+#teleporter-hub .banner,
+#teleporter-hub .feature-card,
+#teleporter-hub .feature-icon,
+#teleporter-hub .cta-panel,
+#teleporter-hub .gallery-dots,
+#teleporter-hub .neo-bottom-cta,
+#teleporter-hub .neo-bottom-cta::after,
+#teleporter-hub .neo-cta-zap {
+  animation: none !important;
+}
+
+#teleporter-hub .hero-media {
+  transform: none;
+  transition: none;
+}
+
+.gallery-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  z-index: 8;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(6, 12, 24, 0.7);
+  border: 1px solid rgba(126, 234, 255, 0.55);
+  box-shadow: inset 0 0 18px rgba(0, 255, 255, 0.22), 0 0 18px rgba(0, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(126, 234, 255, 0.4);
+  background: rgba(0, 255, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.dot.active {
+  background: var(--accent-live);
+  box-shadow: 0 0 16px var(--accent-live-strong);
+  transform: scale(1.2);
+}
+
+.price-tag {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.price-tag .amount {
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: var(--accent-live);
+  text-shadow: 0 0 18px var(--accent-live-soft);
+}
+
+.price-tag .sub {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.customize-fee {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-live);
+}
+
+.stock-shipping {
+  margin-top: 1px;
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+}
+
+.stock-shipping .status {
+  font-weight: 700;
+}
+
+.stock-shipping .status.is-in {
+  color: var(--safe);
+}
+
+.stock-shipping .status.is-out {
+  color: var(--danger);
+}
+
+.stock-shipping .divider {
+  margin: 0 1px;
+  color: var(--ink-soft);
+}
+
+.banner {
+  margin: 8px 0 6px;
+  padding: 10px 14px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--accent-live-soft), rgba(6, 10, 22, 0.32), var(--accent-live-soft));
+  border: 1px solid var(--accent-live-strong);
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 12px var(--accent-live-strong);
+  box-shadow: 0 10px 26px var(--accent-live-soft);
+  clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+  position: relative;
+  cursor: pointer;
+  appearance: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customize-banner {
+  background: linear-gradient(120deg, rgba(114, 255, 154, 0.28), rgba(17, 200, 255, 0.85));
+  color: #eafff6;
+  border: 1px solid rgba(114, 255, 154, 0.85);
+  box-shadow: 0 0 24px rgba(114, 255, 154, 0.45), 0 14px 32px rgba(0, 0, 0, 0.45);
+  text-shadow: 0 0 14px rgba(114, 255, 154, 0.6);
+  filter: drop-shadow(0 0 18px rgba(114, 255, 154, 0.45));
+  font-size: 0.72rem;
+}
+.shipping {
+    font-size: 12px; /* Adjust the font size */
+    text-align: center; /* Centers the text horizontally */
+    display: flex; /* Uses Flexbox for vertical centering */
+    justify-content: center; /* Centers the content horizontally within the container */
+    align-items: center; /* Centers the content vertically within the container */
+    height: 100%; /* Ensure the div takes up the full height of its parent if needed */
+}
+}
+.customize-banner:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 34px rgba(35, 240, 255, 0.75),
+    0 14px 34px rgba(0, 0, 0, 0.45),
+    inset 0 0 18px rgba(255, 255, 255, 0.24);
+}
+
+.customize-banner:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.customize-panel {
+  margin: 0 0 2px;
+  padding: 2px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.75);
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08);
+  display: none;
+  gap: 6px;
+}
+
+.customize-panel.is-open {
+  display: grid;
+}
+
+.customize-field {
+  display: grid;
+  gap: 8px;
+}
+
+.customize-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.customize-input::placeholder {
+  color: var(--ink-soft);
+}
+
+/* Virtual Try-On (VTO) */
+.vto-entry {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 10px;
+}
+
+.vto-banner {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, rgba(0, 230, 255, 0.25), rgba(124, 144, 255, 0.2), rgba(114, 255, 154, 0.22));
+  border: 1px solid rgba(110, 233, 255, 0.7);
+  color: #e9fbff;
+  font-size: 0.72rem;
+}
+
+.vto-banner::after {
+  content: "";
+  position: absolute;
+  inset: -60% -20%;
+  background: radial-gradient(circle, rgba(110, 233, 255, 0.4), transparent 60%);
+  opacity: 0.6;
+  animation: vtoPulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.vto-banner-title {
+  display: block;
+  font-size: 0.75rem;
+}
+
+.vto-banner-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.55rem;
+  letter-spacing: 0.24em;
+  color: rgba(198, 244, 255, 0.9);
+}
+
+.vto-note {
+  font-size: 0.64rem;
+  color: var(--ink-soft);
+  text-align: center;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.vto-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 5000;
+  overscroll-behavior: contain;
+}
+
+.vto-modal.is-open {
+  display: flex;
+}
+
+.vto-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 6, 14, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.vto-dialog {
+  position: relative;
+  width: min(980px, 96vw);
+  max-height: 92vh;
+  max-height: 92dvh;
+  background: rgba(6, 10, 22, 0.92);
+  border-radius: 22px;
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 50px rgba(35, 240, 255, 0.2);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.vto-dialog::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, transparent 1px, transparent 3px),
+    radial-gradient(circle at 20% 20%, rgba(35, 240, 255, 0.12), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(255, 98, 229, 0.12), transparent 60%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.vto-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.35);
+  background: rgba(7, 12, 22, 0.85);
+  color: var(--ink-strong);
+  cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 0 16px rgba(110, 233, 255, 0.35);
+}
+
+.vto-header {
+  position: relative;
+  padding: 18px 52px 12px 20px;
+  border-bottom: 1px solid rgba(126, 234, 255, 0.2);
+  z-index: 2;
+}
+
+.vto-kicker {
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  color: rgba(198, 244, 255, 0.7);
+}
+
+.vto-title {
+  margin: 6px 0 4px;
+  font-size: 1.25rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.vto-subtitle {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.vto-body {
+  position: relative;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 16px;
+  z-index: 2;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vto-stage {
+  display: grid;
+  gap: 10px;
+}
+
+.vto-stage-frame {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  background: radial-gradient(circle at 50% 30%, rgba(12, 18, 32, 0.9), rgba(4, 8, 16, 0.95));
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  cursor: grab;
+  touch-action: none;
+  --vto-x: 0px;
+  --vto-y: 0px;
+  --vto-scale: 1;
+}
+
+.vto-stage-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.18);
+  pointer-events: none;
+}
+
+.vto-stage-media {
+  position: absolute;
+  inset: 0;
+}
+
+.vto-stage-media canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+}
+
+.vto-stage-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.vto-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  max-width: 92%;
+  transform: translate(-50%, -50%) translate(var(--vto-x), var(--vto-y)) scale(var(--vto-scale));
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(110, 233, 255, 0.4));
+  pointer-events: none;
+}
+
+.vto-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(110, 233, 255, 0.1) 0, rgba(110, 233, 255, 0.1) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode: screen;
+  opacity: 0.4;
+  animation: vtoScan 6s linear infinite;
+  pointer-events: none;
+}
+
+.vto-portal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vto-ring {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 233, 255, 0.35);
+  box-shadow: 0 0 18px rgba(110, 233, 255, 0.45);
+  animation: vtoRing 8s linear infinite;
+}
+
+.vto-ring:nth-child(2) {
+  inset: 20%;
+  border-color: rgba(255, 98, 229, 0.4);
+  animation-duration: 10s;
+}
+
+.vto-ring:nth-child(3) {
+  inset: 28%;
+  border-color: rgba(114, 255, 154, 0.4);
+  animation-duration: 12s;
+}
+
+.vto-loading,
+.vto-empty {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(2, 6, 14, 0.6);
+}
+
+.vto-stage.is-loading .vto-loading {
+  display: grid;
+}
+
+.vto-stage.is-empty .vto-empty {
+  display: grid;
+}
+
+.vto-status {
+  min-height: 18px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.vto-controls-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.vto-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vto-option {
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  padding: 10px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.6rem;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.vto-option.is-active {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 18px var(--accent-live-soft);
+}
+
+.vto-controls {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+  display: grid;
+  gap: 10px;
+}
+
+.vto-slider label {
+  display: block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 6px;
+  color: var(--ink-soft);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.vto-slider input {
+  width: 100%;
+}
+
+.vto-align {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.vto-align button {
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.65);
+  color: var(--ink-strong);
+  border-radius: 10px;
+  padding: 6px 4px;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.vto-control-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+}
+
+.vto-control-buttons button {
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  background: rgba(10, 16, 30, 0.8);
+  color: var(--ink-strong);
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.vto-cta-row {
+  display: grid;
+}
+
+.vto-add-cart {
+  width: 100%;
+}
+
+.vto-snapshot-preview {
+  display: none;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+}
+
+.vto-snapshot-preview img {
+  width: 100%;
+  display: block;
+}
+
+.vto-model-panel {
+  display: none;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+}
+
+.vto-modal[data-vto-mode="model"] .vto-model-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.vto-model-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vto-model {
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  border-radius: 14px;
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 6px;
+  display: grid;
+  gap: 6px;
+}
+
+.vto-model-thumb {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(140deg, rgba(12, 18, 32, 0.9), rgba(4, 8, 16, 0.95));
+}
+
+.vto-model-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vto-model-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.vto-model.is-active {
+  border-color: var(--accent-live);
+  box-shadow: 0 0 18px var(--accent-live-soft);
+}
+
+.vto-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(198, 244, 255, 0.8);
+  margin-top: 6px;
+}
+
+.vto-modal[data-vto-has-snapshot="true"] .vto-snapshot-preview {
+  display: block;
+}
+
+.is-minimal .vto-dialog {
+  background: #ffffff;
+  border-color: #d7dde5;
+  box-shadow: none;
+}
+
+.is-minimal .vto-dialog::before {
+  opacity: 0.08;
+}
+
+.is-minimal .vto-option,
+.is-minimal .vto-controls,
+.is-minimal .vto-model-panel,
+.is-minimal .vto-model,
+.is-minimal .vto-stage-frame {
+  background: #ffffff;
+  border-color: #d7dde5;
+  color: #0b0f15;
+}
+
+@keyframes vtoPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-6px); opacity: 0.9; }
+}
+
+@keyframes vtoScan {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+@keyframes vtoRing {
+  0% { transform: rotate(0deg); opacity: 0.7; }
+  50% { opacity: 0.4; }
+  100% { transform: rotate(360deg); opacity: 0.7; }
+}
+
+@media (max-width: 760px) {
+  .vto-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .vto-dialog {
+    width: 100%;
+    max-height: 100vh;
+    max-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 20px 20px 0 0;
+    align-self: flex-end;
+  }
+
+  .vto-body {
+    grid-template-columns: 1fr;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .vto-options {
+    grid-template-columns: 1fr;
+  }
+
+  .vto-stage-frame {
+    max-height: 56vh;
+  }
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 10px 0 8px;
+  clear: both;
+}
+
+.feature-card {
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: rgba(6, 10, 22, 0.6);
+  border: 1px solid rgba(126, 234, 255, 0.18);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--neon-green);
+  background: rgba(114, 255, 154, 0.12);
+  border: 1px solid rgba(114, 255, 154, 0.4);
+  box-shadow: 0 0 12px rgba(114, 255, 154, 0.3);
+}
+
+.feature-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.feature-card .label {
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.feature-card .value {
+  font-weight: 700;
+  color: var(--ink-strong);
+  grid-column: 2 / 3;
+  font-size: 0.9rem;
+}
+
+.accordions {
+  margin: 18px 0;
+  border-top: 1px solid rgba(126, 234, 255, 0.18);
+}
+
+.accordion-item {
+  border-bottom: 1px solid rgba(126, 234, 255, 0.18);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 6px;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.accordion-header span:last-child {
+  transition: transform 0.2s ease;
+}
+
+.accordion-body {
+  display: none;
+  padding: 0 6px 12px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.accordion-item.open .accordion-header span:last-child {
+  transform: rotate(45deg);
+}
+
+.accordion-item.open .accordion-body {
+  display: block;
+}
+
+.cta-panel {
+  margin: 4px 0 0;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(6, 10, 22, 0.7);
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  display: grid;
+  gap: 10px;
+  box-shadow: inset 0 0 24px rgba(0, 255, 255, 0.08);
+}
+
+.cta-price {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-live);
+  text-shadow: 0 0 14px var(--accent-live-soft);
+  letter-spacing: 0.08em;
+}
+
+.qty-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(6, 10, 22, 0.6);
+  border-radius: 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+  cursor: pointer;
+}
+
+.qty-input {
+  width: 48px;
+  text-align: center;
+  border: 0;
+  background: transparent;
+  color: var(--ink-strong);
+  font-weight: 700;
+}
+
+.cta-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.btn {
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.22);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  background: radial-gradient(140% 160% at 30% 30%, rgba(35, 240, 255, 0.9), rgba(17, 200, 255, 0.85));
+  color: #04141c;
+  border-color: rgba(35, 240, 255, 0.9);
+  box-shadow:
+    0 0 32px rgba(35, 240, 255, 0.7),
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    inset 0 0 18px rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-strong);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-primary:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:
+    0 0 40px rgba(35, 240, 255, 0.85),
+    0 14px 36px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.24);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.neo-bottom-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: min(760px, calc(100% - 20px));
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.neo-bottom-bar::before,
+.neo-bottom-bar::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 46px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.8), transparent);
+  opacity: 0.35;
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease;
+}
+
+.neo-bottom-bar::before { left: -24px; }
+.neo-bottom-bar::after { right: -24px; }
+
+.neo-bottom-glow {
+  position: absolute;
+  inset: -18% -6%;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.2), transparent 70%);
+  filter: blur(1px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.neo-bottom-nav {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(3, 6, 12, 0.96), rgba(6, 10, 20, 0.9));
+  backdrop-filter: blur(16px);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.55),
+    0 0 55px -12px rgba(6, 182, 212, 0.35);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.neo-bottom-nav::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  box-shadow: inset 0 0 18px rgba(34, 211, 238, 0.12);
+  pointer-events: none;
+}
+
+.neo-bottom-nav:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 70px -5px rgba(6, 182, 212, 0.5);
+}
+
+.neo-bottom-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(232, 255, 255, 0.9);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.2s ease, color 0.2s ease;
+  position: relative;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.35);
+}
+
+.neo-bottom-link:hover {
+  color: rgba(230, 255, 255, 0.95);
+  background: rgba(6, 182, 212, 0.12);
+}
+
+.neo-bottom-link svg {
+  width: 22px;
+  height: 22px;
+  color: rgba(34, 211, 238, 0.8);
+  transition: color 0.2s ease;
+}
+
+.neo-bottom-link:hover svg {
+  color: rgba(34, 211, 238, 1);
+}
+
+.neo-bottom-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  margin: 0 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(90deg, #06c2d7 0%, #18c6d9 45%, #21d6c2 100%);
+  color: #f7fbff;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 0 28px rgba(6, 182, 212, 0.45);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+}
+
+.neo-bottom-cta:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 0 36px rgba(6, 182, 212, 0.6);
+}
+
+.neo-bottom-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-140%);
+  transition: transform 1s ease;
+}
+
+.neo-bottom-cta:hover::before {
+  transform: translateX(140%);
+}
+
+.neo-bottom-cta::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 2px solid rgba(34, 211, 238, 0.5);
+  opacity: 0;
+  animation: neoCtaPulse 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.neo-bottom-cta svg {
+  width: 20px;
+  height: 20px;
+}
+
+.neo-bottom-cta .neo-cta-zap {
+  position: absolute;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  animation: neoCtaZap 2.2s ease-in-out infinite;
+}
+
+.neo-bottom-cta:hover .neo-cta-zap {
+  opacity: 1;
+}
+
+@keyframes neoCtaPulse {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  50% { opacity: 0.6; transform: scale(1.03); }
+}
+
+@keyframes neoCtaZap {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.9; }
+}
+
+@media (max-width: 760px) {
+  .neo-header-row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "topbar"
+      "search"
+      "subbar";
+    gap: 12px;
+  }
+  .neo-header {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
+    padding: 10px 12px 12px;
+  }
+  .neo-topbar {
+    width: 100%;
+  }
+  .neo-subbar {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .neo-brand {
+    display: inline-flex;
+  }
+  .neo-menu-toggle {
+    height: 36px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+  .neo-menu-label {
+    display: inline-flex;
+  }
+  .neo-breadcrumb {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+  .neo-search {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 12px;
+  }
+  .neo-search input {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+  }
+  .neo-search-mic {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+  .neo-actions {
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .neo-account-btn {
+    display: none;
+  }
+  .neo-min-toggle {
+    padding: 6px 10px;
+    font-size: 0.55rem;
+    letter-spacing: 0.16em;
+  }
+  .neo-min-label {
+    display: inline;
+  }
+  .neo-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .neo-menu-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    margin: 0;
+  }
+  .neo-menu-grid {
+    grid-template-columns: 1fr;
+  }
+  .neo-menu-left {
+    border-right: none;
+    border-bottom: 1px solid rgba(126, 234, 255, 0.12);
+    padding-bottom: 10px;
+  }
+  .neo-submenu-panels {
+    position: absolute;
+    inset: 0;
+    padding: 14px;
+    background: rgba(8, 12, 28, 0.98);
+    border-radius: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .neo-menu-panel.is-submenu-open .neo-submenu-panels {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+  .neo-submenu-back {
+    display: inline-flex;
+  }
+  .gallery-card { padding: 12px; }
+  .hero-shell { padding: 8px; }
+  .hero-frame { padding: 10px; }
+  .product-title span { letter-spacing: 0.14em; }
+  .gallery-dots { right: 10px; bottom: 10px; }
+  .hero-media { aspect-ratio: 4 / 3.75; }
+  .feature-card { grid-template-columns: 1fr; text-align: center; }
+  .feature-icon { margin: 0 auto; }
+  .feature-card .value { grid-column: 1 / -1; }
+  .cta-buttons { grid-template-columns: 1fr; }
+  .neo-shell { padding-top: var(--tele-header-offset, 120px); }
+  .options-panel { gap: 8px; }
+  .color-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tab-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+   }
+  .tab-btn { font-size: 0.62rem; padding: 8px; }
+  .neo-bottom-bar {
+    left: 12px;
+    right: 12px;
+    transform: none;
+    width: auto;
+    bottom: 6px;
+  }
+  .neo-bottom-nav {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+  .neo-bottom-link {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+  }
+  .neo-bottom-cta {
+    padding: 12px 16px;
+    font-size: 0.76rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+  }
+  .hero-frame,
+  .gallery-card,
+  .options-panel,
+  .info-tabs,
+  .description-accordion {
+    filter: none !important;
+  }
+  .teleporter-ring,
+  .teleporter-base,
+  .teleporter-particle {
+    animation: none !important;
+  }
+  .teleporter-ring {
+    opacity: 0.55 !important;
+  }
+  .teleporter-base {
+    filter: none !important;
+  }
+  .teleporter-particle {
+    opacity: 0 !important;
+  }
+}
+
+
+/* ===========================
+   Responsive tweaks
+   =========================== */
+
+@media (min-width: 1024px) {
+  .neo-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+  }
+
+  .hero-shell {
+    position: relative;
+    top: auto;
+  }
+
+  .gallery-card {
+    max-width: 980px;
+    width: 100%;
+    padding: 10px 14px 14px;
+    margin: 0 auto;
+  }
+
+  .gallery-main {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    column-gap: 12px;
+    row-gap: 4px;
+    align-items: start;
+  }
+
+  .gallery-media .hero-frame {
+    width: 100%;
+    max-width: 520px;
+    margin: 0;
+  }
+
+  .gallery-buy {
+    max-width: 380px;
+    justify-self: start;
+  }
+
+  .gallery-buy {
+    align-content: start;
+  }
+
+  .gallery-buy .price-tag {
+    margin-top: 0;
+    text-align: left;
+  }
+
+  /* Keep the details/tabs tight on desktop */
+  .info-tabs {
+    position: static;
+    top: auto;
+    margin-top: 0;
+  }
+}
+
+/* Give the hero media a consistent footprint */
+.hero-media {
+  width: 100%;
+}
+
+/* On small screens, make sure we use the full width */
+@media (max-width: 520px) {
+  .gallery-card {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+/* Optional: fight upstream theme max-width constraints */
+#teleporter-hub {
+  width: 100%;
+}
+
+#teleporter-hub .neo-shell {
+  width: min(1440px, calc(100% - 24px));
+  max-width: 1440px;
+}
+
+</style>
+
+{% assign current_product = product %}
+{% if current_product == blank and section.settings.product != blank %}
+  {% assign current_product = section.settings.product %}
+{% endif %}
+
+{% assign is_customizable = section.settings.customization_toggle %}
+{% assign customization_override = blank %}
+{% assign has_override = false %}
+{% if current_product and current_product.metafields.custom.customization_enabled != blank %}
+  {% assign customization_override = current_product.metafields.custom.customization_enabled.value | default: current_product.metafields.custom.customization_enabled %}
+{% endif %}
+{% if customization_override != blank %}
+  {% assign override_string = customization_override | downcase %}
+  {% if override_string == 'true' %}
+    {% assign is_customizable = true %}
+    {% assign has_override = true %}
+  {% elsif override_string == 'false' %}
+    {% assign is_customizable = false %}
+    {% assign has_override = true %}
+  {% endif %}
+{% endif %}
+
+{% assign type_rule_applied = false %}
+{% if has_override == false and current_product and section.settings.custom_product_types != blank %}
+  {% assign product_type_key = current_product.type | downcase | strip %}
+  {% if product_type_key != blank %}
+    {% assign type_list = section.settings.custom_product_types | replace: '\n', ',' | split: ',' %}
+    {% for entry in type_list %}
+      {% assign entry_key = entry | downcase | strip %}
+      {% if entry_key != blank and entry_key == product_type_key %}
+        {% assign is_customizable = true %}
+        {% assign type_rule_applied = true %}
+      {% endif %}
+    {% endfor %}
+    {% if type_rule_applied == false %}
+      {% assign is_customizable = false %}
+      {% assign type_rule_applied = true %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% comment %} REPORT FIX: Normalize tags to handle Case Sensitivity (Section 2.2) {% endcomment %}
+{% assign tags_downcased = blank %}
+{% if current_product and current_product.tags %}
+  {% assign tags_downcased = current_product.tags | join: ',' | downcase | split: ',' %}
+{% endif %}
+
+{% if has_override == false and type_rule_applied == false and is_customizable == false and tags_downcased != blank %}
+  {% if tags_downcased contains 'customizable' or tags_downcased contains 'personalized' or tags_downcased contains 'custom' %}
+    {% assign is_customizable = true %}
+  {% endif %}
+{% endif %}
+
+{% assign is_text_only = false %}
+{% if current_product %}
+  {% if current_product.tags contains 'text-only' or current_product.metafields.custom.text_only == true %}
+    {% assign is_text_only = true %}
+  {% endif %}
+{% endif %}
+
+{%- comment -%} Build allowed customization methods (Sublimation/Vinyl) {%- endcomment -%}
+{% assign allowed_methods = blank %}
+{% if current_product and current_product.metafields.custom.allowed_methods != blank %}
+  {% assign raw_methods = current_product.metafields.custom.allowed_methods.value | default: current_product.metafields.custom.allowed_methods %}
+  {% assign raw_json = raw_methods | json %}
+  {% if raw_json contains '[' %}
+    {% assign allowed_methods = raw_methods %}
+  {% else %}
+    {% assign allowed_methods = raw_methods | replace: '\n', ',' | split: ',' %}
+  {% endif %}
+{% endif %}
+{% assign default_methods = 'Sublimation,Vinyl' | split: ',' %}
+{% if allowed_methods == blank %}
+  {% assign allowed_methods = default_methods %}
+  {% endif %}
+
+{%- comment -%} Optional: restrict vinyl types and print sizes per product {%- endcomment -%}
+{% assign allowed_vinyl_types = blank %}
+{% if current_product and current_product.metafields.custom.allowed_vinyl_types != blank %}
+  {% assign raw_vinyl = current_product.metafields.custom.allowed_vinyl_types.value | default: current_product.metafields.custom.allowed_vinyl_types %}
+  {% assign raw_vinyl_json = raw_vinyl | json %}
+  {% if raw_vinyl_json contains '[' %}
+    {% assign allowed_vinyl_types = raw_vinyl %}
+  {% else %}
+    {% assign allowed_vinyl_types = raw_vinyl | replace: '\n', ',' | split: ',' %}
+  {% endif %}
+{% endif %}
+
+{% assign allowed_print_sizes = blank %}
+{% if current_product and current_product.metafields.custom.allowed_print_sizes != blank %}
+  {% assign raw_sizes = current_product.metafields.custom.allowed_print_sizes.value | default: current_product.metafields.custom.allowed_print_sizes %}
+  {% assign raw_sizes_json = raw_sizes | json %}
+  {% if raw_sizes_json contains '[' %}
+    {% assign allowed_print_sizes = raw_sizes %}
+  {% else %}
+    {% assign allowed_print_sizes = raw_sizes | replace: '\n', ',' | split: ',' %}
+  {% endif %}
+{% endif %}
+
+{% comment %} REPORT FIX: Case-insensitive method gating (Section 2.2) {% endcomment %}
+{% if tags_downcased contains 'no-sublimation' %}
+  {% assign allowed_methods = allowed_methods | join: ',' | remove: 'Sublimation' | split: ',' %}
+{% endif %}
+{% if tags_downcased contains 'vinyl-only' %}
+  {% assign allowed_methods = 'Vinyl' | split: ',' %}
+{% endif %}
+
+{% assign gallery_images = current_product.images %}
+{% if gallery_images == blank and product %}
+  {% assign gallery_images = product.images %}
+{% endif %}
+{% assign main_image = gallery_images.first %}
+
+{% assign menu_links = section.settings.shop_menu.links %}
+{% if menu_links == blank %}
+  {% assign menu_links = section.settings.menu.links %}
+{% endif %}
+{% if menu_links == blank and settings.main_menu != blank %}
+  {% assign menu_links = linklists[settings.main_menu].links %}
+{% endif %}
+{% if menu_links == blank and settings.menu != blank %}
+  {% assign menu_links = linklists[settings.menu].links %}
+{% endif %}
+{% if menu_links == blank and settings.header_menu != blank %}
+  {% assign menu_links = linklists[settings.header_menu].links %}
+{% endif %}
+{% if menu_links == blank and linklists['main-menu'] != blank %}
+  {% assign menu_links = linklists['main-menu'].links %}
+{% endif %}
+{% assign active_menu = nil %}
+{% if menu_links != blank %}
+  {% for link in menu_links %}
+    {% if link.active or link.child_active %}
+      {% assign active_menu = link %}
+    {% endif %}
+  {% endfor %}
+  {% if active_menu == nil %}
+    {% assign active_menu = menu_links[0] %}
+  {% endif %}
+{% endif %}
+{% assign active_menu_key = '' %}
+{% if active_menu %}
+  {% assign active_menu_key = active_menu.title | handleize %}
+{% endif %}
+
+{% assign overview_html = '' %}
+{% assign specs_html = '' %}
+{% assign reviews_html = '' %}
+{% if current_product %}
+  {% assign raw_desc = current_product.description | default: '' %}
+  {% assign overview_html = raw_desc %}
+  {% assign specs_from_desc = '' %}
+  {% assign specs_marker = '<h2>Specifications</h2>' %}
+  {% if raw_desc contains specs_marker %}
+    {% assign parts = raw_desc | split: specs_marker %}
+    {% assign overview_html = parts[0] %}
+    {% assign specs_from_desc = parts[1] %}
+  {% endif %}
+  {% if specs_from_desc == blank %}
+    {% assign specs_marker = '<h3>Specifications</h3>' %}
+    {% if raw_desc contains specs_marker %}
+      {% assign parts = raw_desc | split: specs_marker %}
+      {% assign overview_html = parts[0] %}
+      {% assign specs_from_desc = parts[1] %}
+    {% endif %}
+  {% endif %}
+  {% if specs_from_desc == blank %}
+    {% assign specs_marker = 'Specifications:' %}
+    {% if raw_desc contains specs_marker %}
+      {% assign parts = raw_desc | split: specs_marker %}
+      {% assign overview_html = parts[0] %}
+      {% assign specs_from_desc = parts[1] %}
+    {% endif %}
+  {% endif %}
+  {% assign specs_html = specs_from_desc | default: current_product.metafields.custom.specs %}
+  {% if current_product.metafields.spr.reviews != blank %}
+    {% assign reviews_html = current_product.metafields.spr.reviews %}
+  {% elsif current_product.metafields.judgeme.widget != blank %}
+    {% assign reviews_html = current_product.metafields.judgeme.widget %}
+  {% elsif current_product.metafields.loox.reviews != blank %}
+    {% assign reviews_html = current_product.metafields.loox.reviews %}
+  {% endif %}
+{% endif %}
+
+{% assign shop_url = routes.collections_url %}
+{% assign category_title = blank %}
+{% assign category_url = blank %}
+{% assign subcat_title = blank %}
+{% assign subcat_url = blank %}
+
+{% if template.name == 'product' and current_product %}
+  {% assign primary_collection = current_product.collections.first %}
+  {% if primary_collection %}
+    {% assign category_title = primary_collection.title %}
+    {% assign category_url = primary_collection.url %}
+  {% endif %}
+{% elsif template.name == 'collection' and collection %}
+  {% assign category_title = collection.title %}
+  {% assign category_url = collection.url %}
+{% endif %}
+
+{% comment %}Neon customizer gating{% endcomment %}
+{% assign enable_neon_customizer = false %}
+{% if is_customizable and current_product %}
+  {% assign _ptype = current_product.type | downcase %}
+  {% comment %} REPORT FIX: Case-insensitive neon gating (Section 2.2) {% endcomment %}
+  {% if _ptype contains 'neon' or tags_downcased contains 'neon' or tags_downcased contains 'neon-custom' or tags_downcased contains 'neon-customizer' %}
+    {% assign enable_neon_customizer = true %}
+  {% endif %}
+{% endif %}
+
+<section id="teleporter-hub" data-fx="on">
+  {% comment %}
+    PHASE I: Metaobjects → JSON payload for Neon Engine
+  {% endcomment %}
+
+  {% if enable_neon_customizer %}
+    {% paginate shop.metaobjects.custom_font_def.values by 250 %}
+      <script id="neon-engine-data" type="application/json">
+      {
+        "fonts": [
+          {% for font in shop.metaobjects.custom_font_def.values %}
+            {
+              "name": {{ font.display_name | json }},
+              "family": {{ font.css_family_name | json }},
+              "src": {{ font.font_file_source | file_url | json }},
+              "offset": {{ font.vertical_offset | default: 0 }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        "glows": [
+          {% for effect in shop.metaobjects.glow_effect_def.values %}
+            {
+              "name": {{ effect.effect_name | json }},
+              "primary": {{ effect.hex_primaryColor | json }},
+              "secondary": {{ effect.hex_secondaryColor | json }},
+              "blur": {{ effect.blur_intensity | default: 20 }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]
+      }
+      </script>
+    {% endpaginate %}
+  {% endif %}
+
+
+  <div class="neo-shell">
+    <header class="neo-header">
+      <div class="neo-header-row">
+        <div class="neo-topbar">
+          <div class="neo-shop-toggle">
+            <button class="neo-icon-btn neo-menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="neo-menu-{{ section.id }}">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M4 6h16" stroke-linecap="round"></path>
+                <path d="M4 12h16" stroke-linecap="round"></path>
+                <path d="M4 18h16" stroke-linecap="round"></path>
+              </svg>
+              <span class="neo-menu-label">Shop</span>
+            </button>
+          </div>
+          <div class="neo-brand" aria-label="ONES4">ONES4</div>
+          <div class="neo-actions">
+            <a class="neo-icon-btn neo-account-btn" href="{{ routes.account_login_url }}" aria-label="Account">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 20c2.5-4 13.5-4 16 0" stroke-linecap="round"></path>
+              </svg>
+            </a>
+            <a class="neo-icon-btn neo-cart-btn" href="{{ routes.cart_url }}" aria-label="Cart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="9" cy="20" r="1"></circle>
+                <circle cx="17" cy="20" r="1"></circle>
+                <path d="M5 5h2l2 10h9l2-7H8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              {% if cart.item_count > 0 %}
+                <span class="cart-badge">{{ cart.item_count }}</span>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+
+        <form class="neo-search" action="{{ routes.search_url }}" method="get" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5" stroke-linecap="round"></path>
+          </svg>
+          <input type="search" name="q" placeholder="SEARCH DATABASE..." aria-label="Search products">
+          <button class="neo-search-mic" type="button" aria-label="Voice search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M12 19v4" stroke-linecap="round"></path>
+              <path d="M8 23h8" stroke-linecap="round"></path>
+            </svg>
+          </button>
+        </form>
+
+        <div class="neo-subbar">
+          <div class="neo-breadcrumb" role="list">
+            <a href="{{ shop_url }}" role="listitem">Shop</a>
+            {% if category_title != blank %}
+              <span class="sep">/</span>
+              <a href="{{ category_url }}" role="listitem">{{ category_title }}</a>
+              {% if subcat_title != blank and subcat_url != blank %}
+                <span class="sep">/</span>
+                <a href="{{ subcat_url }}" role="listitem">{{ subcat_title }}</a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <button class="neo-min-toggle" type="button" aria-pressed="false" aria-label="Minimal Mode" data-minimal-toggle>
+            <span class="neo-min-dot" aria-hidden="true"></span>
+            <span class="neo-min-label">Minimal Mode</span>
+          </button>
+        </div>
+      </div>
+      {% if menu_links != blank %}
+        <div class="neo-menu-panel" id="neo-menu-{{ section.id }}" aria-hidden="true">
+          <nav aria-label="Menu">
+            <div class="neo-menu-grid">
+              <div class="neo-menu-left">
+                <ul class="neo-menu-items">
+                  {% for link in menu_links %}
+                    {% assign menu_key = link.title | handleize %}
+                    {% assign has_children = false %}
+                    {% if link.links != blank %}
+                      {% assign has_children = true %}
+                    {% endif %}
+                    <li>
+                      <a class="neo-menu-item-link{% if menu_key == active_menu_key %} active{% endif %}" 
+                         href="{{ link.url }}" 
+                         data-menu-key="{{ menu_key }}" 
+                         {% if has_children %}data-has-children="true"{% endif %}>
+                        <span>{{ link.title }}</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div class="neo-submenu-panels">
+                {% for link in menu_links %}
+                  {% assign menu_key = link.title | handleize %}
+                  <div class="neo-submenu-panel{% if menu_key == active_menu_key %} is-active{% endif %}" data-menu-panel="{{ menu_key }}">
+                    <div class="neo-submenu-header">
+                      <span>{{ link.title }}</span>
+                      <button type="button" class="neo-submenu-back" aria-label="Back to categories">Back</button>
+                    </div>
+                    <ul class="neo-submenu-list">
+                      {% if link.links != blank %}
+                        {% for sub_link in link.links %}
+                          <li>
+                            <a class="neo-submenu-item" href="{{ sub_link.url }}">
+                              <span>{{ sub_link.title }}</span>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </a>
+                          </li>
+                        {% endfor %}
+                        <li>
+                          <a class="neo-submenu-item" href="{{ link.url }}">
+                            <span>View All {{ link.title }}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        </li>
+                      {% else %}
+                        <li>
+                          <a class="neo-submenu-item" href="{{ link.url }}">
+                            <span>View All {{ link.title }}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </nav>
+        </div>
+      {% endif %}
+    </header>
+
+    <div class="neo-grid">
+      <div class="gallery-card">
+        <div class="product-title">
+          <span>{{ current_product.title | default: "H-Town Tank Top" }}</span>
+        </div>
+
+        <div class="gallery-main">
+          <div class="gallery-media">
+            <div class="hero-shell">
+              <div class="hero-frame">
+                <div class="hero-media">
+                  <div id="preview-stage" style="position: relative; width: 100%; height: 100%;">
+                    {% if main_image %}
+                      <img id="hero-img" 
+                           src="{{ main_image | image_url: width: 1400 }}" 
+                           alt="{{ current_product.title | escape }}" 
+                           loading="eager" 
+                           decoding="async" 
+                           style="position: absolute; inset: 0; z-index: 1; object-fit: cover;">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'hero-placeholder' }}
+                    {% endif %}
+
+                    {% if enable_neon_customizer %}
+                      <canvas id="neon-canvas" 
+                              style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; mix-blend-mode: screen; pointer-events: none;"></canvas>
+                      
+                      <img id="texture-map" 
+                           src="{{ 'texture-grain.png' | asset_url }}" 
+                           style="position: absolute; inset: 0; z-index: 3; mix-blend-mode: multiply; opacity: 0.6; pointer-events: none; display: none;" 
+                           aria-hidden="true">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="tele-overlay" aria-hidden="true">
+                  <div class="teleporter-base">
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-ring"></div>
+                    <div class="teleporter-particles"></div>
+                  </div>
+                </div>
+
+                {% if gallery_images.size > 1 %}
+                  <div class="gallery-dots" role="list">
+                    {% for image in gallery_images %}
+                      <button class="dot{% if forloop.first %} active{% endif %}" role="listitem" data-gallery-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}"></button>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="gallery-buy">
+            {% if current_product %}
+              <div class="options-panel">
+                {% for option in current_product.options_with_values %}
+                  {% assign option_key = option.name | downcase %}
+                  {% if option_key contains 'color' %}
+                    <div class="option-block">
+                      <div class="option-title">Color</div>
+                      <div class="color-options" role="list">
+                        {% for value in option.values %}
+                          {% assign swatch_value = value | downcase %}
+                          {% assign swatch_hex = '#4ad7ff' %}
+                          {% case swatch_value %}
+                            {% when 'black' %}{% assign swatch_hex = '#0c1119' %}
+                            {% when 'white' %}{% assign swatch_hex = '#f4f8ff' %}
+                            {% when 'red' %}{% assign swatch_hex = '#ff4b6e' %}
+                            {% when 'blue' %}{% assign swatch_hex = '#4aa3ff' %}
+                            {% when 'green' %}{% assign swatch_hex = '#5bffb5' %}
+                            {% when 'yellow' %}{% assign swatch_hex = '#ffd36c' %}
+                            {% when 'orange' %}{% assign swatch_hex = '#ff9b4a' %}
+                            {% when 'purple' %}{% assign swatch_hex = '#b07dff' %}
+                            {% when 'pink' %}{% assign swatch_hex = '#ff7fd8' %}
+                            {% when 'gray' %}{% assign swatch_hex = '#9aa6b2' %}
+                            {% when 'grey' %}{% assign swatch_hex = '#9aa6b2' %}
+                            {% when 'navy' %}{% assign swatch_hex = '#223b6f' %}
+                            {% when 'teal' %}{% assign swatch_hex = '#33d0c9' %}
+                            {% when 'brown' %}{% assign swatch_hex = '#9c6b3c' %}
+                          {% endcase %}
+                          {% assign neon_class = 'color-cyan' %}
+                          {% if swatch_value contains 'blue' %}
+                            {% assign neon_class = 'color-blue' %}
+                          {% elsif swatch_value contains 'cyan' %}
+                            {% assign neon_class = 'color-cyan' %}
+                          {% elsif swatch_value contains 'green' %}
+                            {% assign neon_class = 'color-green' %}
+                          {% elsif swatch_value contains 'yellow' or swatch_value contains 'orange' %}
+                            {% assign neon_class = 'color-yellow' %}
+                          {% elsif swatch_value contains 'magenta' or swatch_value contains 'pink' or swatch_value contains 'red' %}
+                            {% assign neon_class = 'color-magenta' %}
+                          {% endif %}
+                          {% assign swatch_image = blank %}
+                          {% assign swatch_variant_id = blank %}
+                          {% assign option_index = option.position | minus: 1 %}
+                          {% for variant in current_product.variants %}
+                            {% if variant.options[option_index] == value %}
+                              {% if swatch_variant_id == blank %}
+                                {% assign swatch_variant_id = variant.id %}
+                              {% endif %}
+                              {% if variant.featured_media != blank %}
+                                {% assign swatch_image = variant.featured_media.preview_image %}
+                                {% break %}
+                              {% elsif variant.featured_image != blank %}
+                                {% assign swatch_image = variant.featured_image %}
+                                {% break %}
+                              {% endif %}
+                            {% endif %}
+                          {% endfor %}
+                          {% if swatch_image == blank %}
+                            {% assign swatch_image = gallery_images[forloop.index0] %}
+                          {% endif %}
+                          {% assign swatch_hero_src = blank %}
+                          {% if swatch_image != blank %}
+                            {% assign swatch_hero_src = swatch_image | image_url: width: 1400 %}
+                          {% endif %}
+                          <label class="color-chip{% if option.selected_value == value %} active{% endif %}" role="listitem" data-gallery-index="{{ forloop.index0 }}" data-color-value="{{ swatch_value }}" data-swatch="{{ swatch_hex }}" data-neon="{{ neon_class }}" style="--swatch-color: {{ swatch_hex }};"{% if swatch_variant_id != blank %} data-variant-id="{{ swatch_variant_id }}"{% endif %}{% if swatch_hero_src != blank %} data-hero-src="{{ swatch_hero_src }}"{% endif %}>
+                            <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                            <span class="color-dot"></span>
+                            <span class="color-name">{{ value }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+
+                {% for option in current_product.options_with_values %}
+                  {% assign option_key = option.name | downcase %}
+                  {% unless option_key contains 'color' %}
+                    <div class="option-block">
+                      <div class="option-title">{{ option.name }}</div>
+                      <div class="size-pills" data-option="{{ option_key }}">
+                        {% for value in option.values %}
+                          <label class="pill{% if option.selected_value == value %} active{% endif %}">
+                            <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                            <span>{{ value }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endunless %}
+                {% endfor %}
+              </div>
+
+              <div class="vto-entry">
+                <button class="banner vto-banner" type="button" data-vto-open aria-haspopup="dialog">
+                  <span class="vto-banner-title">Virtual Try-On</span>
+                  <span class="vto-banner-sub">Live camera / upload / model</span>
+                </button>
+                <div class="vto-note">Photos stay on device unless you save a snapshot</div>
+              </div>
+
+              {% if is_customizable %}
+            {% assign customization_designs = section.settings.custom_designs | default: '' %}
+            {% if current_product.metafields.custom.designs != blank %}
+              {% assign customization_designs = current_product.metafields.custom.designs.value | default: current_product.metafields.custom.designs %}
+            {% endif %}
+            {% assign customization_designs_list = blank %}
+            {% if customization_designs != blank %}
+              {% assign customization_designs_raw = customization_designs | strip %}
+              {% assign first_char = customization_designs_raw | slice: 0, 1 %}
+              {% if first_char == '[' or first_char == '{' %}
+                {% assign customization_designs_list = customization_designs_raw | parse_json %}
+              {% else %}
+                {% assign customization_designs_list = customization_designs_raw | replace: '\n', ',' | split: ',' %}
+              {% endif %}
+            {% endif %}
+
+                <button class="banner customize-banner" type="button" data-customize-toggle aria-controls="customize-panel-{{ section.id }}">
+                  {% if enable_neon_customizer %}Neon customize{% else %}Customize{% endif %}
+                </button>
+
+                <div class="customize-panel" id="customize-panel-{{ section.id }}" data-customize-panel aria-hidden="true"
+                     {% if allowed_vinyl_types != blank %}data-allowed-vinyl-types="{{ allowed_vinyl_types | join: ',' | downcase | strip }}"{% endif %}
+                     {% if allowed_print_sizes != blank %}data-allowed-print-sizes="{{ allowed_print_sizes | join: ',' | downcase | strip }}"{% endif %}>
+                  <div class="option-block">
+                    <div class="option-title">Customization method</div>
+                    <div class="size-pills" role="list">
+                      {% assign methods_list = allowed_methods | default: default_methods %}
+                      {% for method in methods_list %}
+                        {% assign method_label = method | strip %}
+                        {% if method_label != blank %}
+                          <label class="pill" role="listitem">
+                            <input type="radio" name="properties[Method]" value="{{ method_label | escape }}" {% if forloop.first %}checked{% endif %} data-customize-method disabled>
+                            <span>{{ method_label }}</span>
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="option-block" data-customize-material-block>
+                    <div class="option-title">Vinyl type</div>
+                    <div class="size-pills" role="list">
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Material]" value="Regular Vinyl" data-customize-material data-material-key="regular" checked disabled>
+                        <span>Regular Vinyl</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Material]" value="3D Puff Vinyl" data-customize-material data-material-key="puff" disabled>
+                        <span>3D Puff Vinyl</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Material]" value="Glow in the Dark Vinyl" data-customize-material data-material-key="glow" disabled>
+                        <span>Glow in the Dark Vinyl</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Material]" value="Puff Glow in the Dark" data-customize-material data-material-key="puff-glow" disabled>
+                        <span>Puff Glow in the Dark</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="option-block" data-customize-size-block>
+                    <div class="option-title">Print size</div>
+                    <div class="size-pills" role="list">
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Size]" value="Small (3-4 in)" data-customize-size data-size-key="small" data-method="Vinyl" checked disabled>
+                        <span>Small (3-4")</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Size]" value="Medium (6-8 in)" data-customize-size data-size-key="medium" data-method="Vinyl" disabled>
+                        <span>Medium (6-8")</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Vinyl">
+                        <input type="radio" name="properties[Size]" value="Full front (10-12 in)" data-customize-size data-size-key="full" data-method="Vinyl" disabled>
+                        <span>Full front (10-12")</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Sublimation">
+                        <input type="radio" name="properties[Size]" value="Small logo" data-customize-size data-size-key="small" data-method="Sublimation" disabled>
+                        <span>Small logo</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Sublimation">
+                        <input type="radio" name="properties[Size]" value="Full front" data-customize-size data-size-key="full" data-method="Sublimation" disabled>
+                        <span>Full front</span>
+                      </label>
+                      <label class="pill" role="listitem" data-method="Sublimation">
+                        <input type="radio" name="properties[Size]" value="Large / near all-over" data-customize-size data-size-key="large" data-method="Sublimation" disabled>
+                        <span>Large / near all-over</span>
+                      </label>
+                    </div>
+                  </div>
+                  {% if enable_neon_customizer %}
+                    <div class="customize-field">
+                      <div class="option-title">Cyber Text</div>
+                      <input class="customize-input" type="text" id="neon-text-input" placeholder="ENTER TEXT" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false">
+                    </div>
+                    
+                    <div class="option-block">
+                      <div class="option-title">Typography</div>
+                      <div class="size-pills" id="font-selector-container" role="list"></div>
+                    </div>
+
+                    <div class="option-block">
+                      <div class="option-title">Neon Resonance</div>
+                      <div class="color-options" id="glow-selector-container" role="list"></div>
+                    </div>
+
+                    {%- comment -%}
+                      Hidden fields for line item properties are injected on submit by the engine:
+                      - properties[Custom Text]
+                      - properties[_Preview]
+                    {%- endcomment -%}
+                  {% else %}
+                    {% if customization_designs_list != blank %}
+                      <div class="option-block">
+                        <div class="option-title">Designs</div>
+                        <div class="size-pills" role="list">
+                      {% for design in customization_designs_list %}
+                        {% assign design_label = '' %}
+                        {% assign design_image = '' %}
+                        {% assign raw_design = design %}
+
+                        {%- comment -%}
+                          Support formats:
+                          - Array of strings: "Label" or "Label|https://image"
+                          - Array of objects: { "label": "...", "title": "...", "name": "...", "image": "...", "hero": "...", "src": "..." }
+                        {%- endcomment -%}
+
+                        {% if design.label %}
+                          {% assign design_label = design.label %}
+                        {% elsif design.title %}
+                          {% assign design_label = design.title %}
+                        {% elsif design.name %}
+                          {% assign design_label = design.name %}
+                        {% elsif design.text %}
+                          {% assign design_label = design.text %}
+                        {% endif %}
+
+                        {% if design.image %}
+                          {% assign design_image = design.image %}
+                        {% elsif design.hero %}
+                          {% assign design_image = design.hero %}
+                        {% elsif design.src %}
+                          {% assign design_image = design.src %}
+                        {% endif %}
+
+                        {% if design_label == '' %}
+                          {% assign raw_design_str = raw_design | strip %}
+                          {% if raw_design_str contains '|' %}
+                            {% assign parts = raw_design_str | split: '|' %}
+                            {% assign design_label = parts[0] | strip %}
+                            {% assign design_image = parts[1] | strip %}
+                          {% else %}
+                            {% assign design_label = raw_design_str %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% assign design_hero = design_image %}
+                        {% if design_hero != blank %}
+                          {% capture maybe_cdn %}{{ design_image | image_url: width: 1400 }}{% endcapture %}
+                          {% assign maybe_cdn = maybe_cdn | strip %}
+                          {% if maybe_cdn contains 'cdn' or maybe_cdn contains 'shopify' %}
+                            {% assign design_hero = maybe_cdn %}
+                          {% endif %}
+                        {% endif %}
+
+                        {% if design_label != blank %}
+                          <label class="pill" role="listitem">
+                            <input type="radio" 
+                                   name="properties[Design]" 
+                                   value="{{ design_label | escape }}" 
+                                   {% if forloop.first %}checked{% endif %} 
+                                   data-customize-design 
+                                   {% if design_hero != blank %}data-design-hero="{{ design_hero }}"{% endif %} 
+                                   disabled>
+                            {% if design_hero != blank %}
+                              <span style="display: inline-flex; align-items: center; gap: 8px;">
+                                <img src="{{ design_hero }}" alt="{{ design_label | escape }}" loading="lazy" style="width: 26px; height: 26px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255, 255, 255, 0.2);">
+                                <span>{{ design_label }}</span>
+                              </span>
+                            {% else %}
+                              <span>{{ design_label }}</span>
+                            {% endif %}
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                        </div>
+                      </div>
+                    {% endif %}
+
+                    <div class="customize-field">
+                      <div class="option-title">{{ section.settings.custom_text_label | default: 'Custom text' }}</div>
+                      <input class="customize-input" type="text" 
+                             name="properties[{{ section.settings.custom_text_label | default: 'Custom text' }}]" 
+                             maxlength="{{ section.settings.custom_text_max | default: 8 }}" 
+                             placeholder="{{ section.settings.custom_text_placeholder | default: 'Your text' }}" 
+                             data-customize-text disabled>
+                    </div>
+                  {% endif %}
+                </div>
+
+              {% endif %}
+
+              {% assign product_form_id = 'product-form-' | append: section.id %}
+              {% form 'product', current_product, class: 'cta-panel', id: product_form_id %}
+                <div class="cta-price" data-price-display>
+                  {{ current_product.price | money }}
+                </div>
+                <div class="stock-shipping">
+                  {% if current_product.available %}
+                    <span class="status is-in">In stock</span>
+                  {% else %}
+                    <span class="status is-out">Out of stock</span>
+                  {% endif %}
+                </div> 
+                <div class="shipping">
+                  <span class="shipping">Ships in 1-2 business days</span>
+                </div> 
+                <div class="customize-fee" data-customize-fee hidden></div>
+
+                <input type="hidden" id="variant-select-{{ section.id }}" name="id" class="variant-select" value="{{ current_product.selected_or_first_available_variant.id }}">
+                <input type="hidden" name="properties[Method]" value="" data-cta-method disabled>
+                <input type="hidden" name="properties[Material]" value="" data-cta-material disabled>
+                <input type="hidden" name="properties[Size]" value="" data-cta-size disabled>
+                <input type="hidden" name="properties[Design]" value="" data-cta-design disabled>
+                <input type="hidden" name="properties[{{ section.settings.custom_text_label | default: 'Custom text' }}]" value="" data-cta-text disabled>
+                <input type="hidden" name="properties[Customization add-on]" value="" data-cta-addon disabled>
+                <input type="hidden" name="properties[Virtual Try-On Used]" value="" data-vto-prop-used disabled>
+                <input type="hidden" name="properties[Virtual Try-On Mode]" value="" data-vto-prop-mode disabled>
+                <input type="hidden" name="properties[Virtual Try-On Model]" value="" data-vto-prop-model disabled>
+                <input type="hidden" name="properties[Virtual Try-On Snapshot]" value="" data-vto-prop-snapshot disabled>
+
+                <div class="qty-row">
+                  <button type="button" class="qty-btn" data-qty-dec aria-label="Decrease quantity">-</button>
+                  <input class="qty-input" name="quantity" value="1" min="1" pattern="[0-9]*" inputmode="numeric">
+                  <button type="button" class="qty-btn" data-qty-inc aria-label="Increase quantity">+</button>
+                </div>
+
+                <div class="cta-buttons">
+                  <button type="submit" class="btn btn-primary" {% unless current_product.available %}disabled{% endunless %}>Add to cart</button>
+                  <button type="submit" name="checkout" class="btn btn-secondary" {% unless current_product.available %}disabled{% endunless %}>Buy now</button>
+                </div>
+              {% endform %}
+
+            {% else %}
+              <p class="spec-empty">Select a product to configure.</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if current_product %}
+          <div class="info-tabs" data-tabs>
+            <div class="tab-list" role="tablist">
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="details">Overview</button>
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="shipping">Shipping & returns</button>
+              <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="specs">Specs</button>
+              <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="reviews">Reviews</button>
+            </div>
+            <div class="tab-panels">
+              <div class="tab-panel" role="tabpanel" data-tab-panel="details">
+                <ul class="details-list">
+                  <li><span>Vendor</span><span>{{ current_product.vendor | default: "Ones4" }}</span></li>
+                  <li><span>Type</span><span>{{ current_product.type | default: "Performance Gear" }}</span></li>
+                  <li><span>SKU</span><span>{{ current_product.selected_or_first_available_variant.sku | default: "N/A" }}</span></li>
+                </ul>
+                {% if overview_html != blank %}
+                  <div class="tab-copy">
+                    {{ overview_html }}
+                  </div>
+                {% else %}
+                  <p class="spec-empty">Overview syncing. Check back soon.</p>
+                {% endif %}
+              </div>
+              <div class="tab-panel" role="tabpanel" data-tab-panel="shipping">
+                Ships at light speed. Free returns within 30 days of delivery. Contact support for warp portal pickup.
+              </div>
+              <div class="tab-panel" role="tabpanel" data-tab-panel="specs">
+                {% if specs_html != blank %}
+                  <div class="tab-copy">
+                    {{ specs_html }}
+                  </div>
+                {% else %}
+                  <p>Specs syncing. Check back soon.</p>
+                {% endif %}
+              </div>
+              <div class="tab-panel active" role="tabpanel" data-tab-panel="reviews">
+                {% if current_product.metafields.spr.reviews != blank %}
+                  <div id="shopify-product-reviews" data-id="{{ current_product.id }}" class="tab-copy">
+                    {{ current_product.metafields.spr.reviews }}
+                  </div>
+                {% elsif reviews_html != blank %}
+                  <div class="tab-copy">
+                    {{ reviews_html }}
+                  </div>
+                {% else %}
+                  <p class="spec-empty">Reviews are loading. Check back soon.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if current_product %}
+      <script type="application/json" data-vto-data>
+        {
+          "variants": {
+            {% for variant in current_product.variants %}
+              {% assign overlay_image = variant.metafields.custom.vto_overlay | default: variant.metafields.vto.overlay %}
+              {% assign overlay_src = '' %}
+              {% if overlay_image != blank %}
+                {% capture overlay_attempt %}{{ overlay_image | image_url: width: 1400 }}{% endcapture %}
+                {% assign overlay_attempt = overlay_attempt | strip %}
+                {% if overlay_attempt contains 'cdn' or overlay_attempt contains 'shopify' %}
+                  {% assign overlay_src = overlay_attempt %}
+                {% else %}
+                  {% assign overlay_src = overlay_image %}
+                {% endif %}
+              {% elsif variant.featured_media != blank %}
+                {% assign overlay_src = variant.featured_media.preview_image | image_url: width: 1400 %}
+              {% elsif variant.featured_image != blank %}
+                {% assign overlay_src = variant.featured_image | image_url: width: 1400 %}
+              {% endif %}
+              "{{ variant.id }}": {
+                "overlay": "{{ overlay_src | escape }}"
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          }
+        }
+      </script>
+    {% endif %}
+
+    {% comment %}Virtual Try-On modal{% endcomment %}
+    <div class="vto-modal" id="vto-modal" data-vto-modal aria-hidden="true" data-vto-mode="idle" data-vto-has-snapshot="false">
+      <div class="vto-backdrop" data-vto-close></div>
+      <div class="vto-dialog" data-vto-dialog role="dialog" aria-modal="true" aria-labelledby="vto-title-{{ section.id }}">
+        <button class="vto-close vto-close-btn" type="button" data-vto-close aria-label="Close virtual try-on">X</button>
+        <div class="vto-header">
+          <div class="vto-kicker">Teleporter Lab</div>
+          <div class="vto-title" id="vto-title-{{ section.id }}">Virtual Try-On</div>
+          <p class="vto-subtitle">Preview with live camera, upload, or model. Photos stay on device unless you save a snapshot.</p>
+          <div class="vto-mode-badge" data-vto-mode-badge>Mode: standby</div>
+        </div>
+        <div class="vto-body">
+          <div class="vto-stage" data-vto-stage>
+            <div class="vto-stage-frame" data-vto-stage-frame>
+              <div class="vto-stage-media">
+                <canvas class="vto-canvas" id="vto-canvas" data-vto-canvas aria-label="Virtual try-on preview"></canvas>
+                <video id="vto-video" data-vto-video playsinline muted autoplay aria-hidden="true"></video>
+              </div>
+              <div class="vto-portal" aria-hidden="true">
+                <span class="vto-ring"></span>
+                <span class="vto-ring"></span>
+                <span class="vto-ring"></span>
+              </div>
+              <div class="vto-scanlines" aria-hidden="true"></div>
+              <div class="vto-loading" id="vto-loader" data-vto-loading>Loading</div>
+              <div class="vto-empty" data-vto-empty>Select a mode to begin</div>
+            </div>
+            <div class="vto-status" id="vto-status-text" data-vto-status aria-live="polite"></div>
+          </div>
+
+          <div class="vto-controls-panel">
+            <div class="vto-options">
+              <button class="vto-option" type="button" data-vto-mode="camera" aria-pressed="false">Live Camera</button>
+              <button class="vto-option" type="button" data-vto-mode="upload" aria-pressed="false">Upload Photo</button>
+              <button class="vto-option" type="button" data-vto-mode="model" aria-pressed="false">Try on a Model</button>
+            </div>
+
+            <div class="vto-controls">
+              <div class="vto-slider">
+                <label for="vto-scale-slider">Fit</label>
+                <input id="vto-scale-slider" type="range" min="0.6" max="1.6" step="0.02" value="1" data-vto-scale>
+              </div>
+              <div class="vto-slider">
+                <label for="vto-y-slider">Height</label>
+                <input id="vto-y-slider" type="range" min="-200" max="200" step="1" value="0" data-vto-y>
+              </div>
+              <div class="vto-align">
+                <button type="button" data-vto-nudge="up">Up</button>
+                <button type="button" data-vto-nudge="left">Left</button>
+                <button type="button" data-vto-nudge="right">Right</button>
+                <button type="button" data-vto-nudge="down">Down</button>
+              </div>
+              <div class="vto-control-buttons">
+                <button type="button" id="vto-reset-btn" data-vto-reset>Reset</button>
+                <button type="button" id="vto-snap-btn" data-vto-snapshot>Save Snapshot</button>
+                <button type="button" data-vto-clear-snapshot hidden>Clear Snapshot</button>
+              </div>
+              <div class="vto-cta-row">
+                <button type="button" class="btn btn-primary vto-add-cart" id="vto-add-cart-btn" data-vto-add-cart>Add to cart</button>
+              </div>
+              <div class="vto-snapshot-preview">
+                <img data-vto-snapshot-preview alt="Saved snapshot preview" hidden>
+              </div>
+            </div>
+
+            <div class="vto-model-panel" data-vto-model-panel>
+              <div class="option-title">Models</div>
+              {%- comment -%}Add assets named vto-model-1.jpg through vto-model-4.jpg in theme assets.{%- endcomment -%}
+              <div class="vto-model-grid" data-vto-model-grid>
+                <button type="button" class="vto-model" data-vto-model-button data-model-name="Model Atlas" data-model-src="{{ 'vto-model-1.jpg' | asset_url }}">
+                  <span class="vto-model-thumb">
+                    <img data-vto-model-img alt="Model Atlas" loading="lazy" decoding="async">
+                  </span>
+                  <span class="vto-model-label">Model Atlas</span>
+                </button>
+                <button type="button" class="vto-model" data-vto-model-button data-model-name="Model Nyx" data-model-src="{{ 'vto-model-2.jpg' | asset_url }}">
+                  <span class="vto-model-thumb">
+                    <img data-vto-model-img alt="Model Nyx" loading="lazy" decoding="async">
+                  </span>
+                  <span class="vto-model-label">Model Nyx</span>
+                </button>
+                <button type="button" class="vto-model" data-vto-model-button data-model-name="Model Orion" data-model-src="{{ 'vto-model-3.jpg' | asset_url }}">
+                  <span class="vto-model-thumb">
+                    <img data-vto-model-img alt="Model Orion" loading="lazy" decoding="async">
+                  </span>
+                  <span class="vto-model-label">Model Orion</span>
+                </button>
+                <button type="button" class="vto-model" data-vto-model-button data-model-name="Model Vega" data-model-src="{{ 'vto-model-4.jpg' | asset_url }}">
+                  <span class="vto-model-thumb">
+                    <img data-vto-model-img alt="Model Vega" loading="lazy" decoding="async">
+                  </span>
+                  <span class="vto-model-label">Model Vega</span>
+                </button>
+              </div>
+            </div>
+
+            <input type="file" id="vto-file-input" accept="image/*" data-vto-upload aria-label="Upload photo for virtual try-on" hidden>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="neo-bottom-bar" aria-label="Quick navigation">
+      <div class="neo-bottom-glow"></div>
+      <nav class="neo-bottom-nav">
+        <a href="{{ routes.root_url }}" class="neo-bottom-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <path d="M9 22V12h6v10"/>
+          </svg>
+          <span>Home</span>
+        </a>
+
+        <form method="post" action="/cart/add" class="neo-bottom-form">
+          <input type="hidden" name="id" value="{{ current_product.selected_or_first_available_variant.id }}" data-bottom-variant>
+          {% if is_customizable %}
+            <input type="hidden" name="properties[Method]" value="" data-bottom-method disabled>
+            <input type="hidden" name="properties[Material]" value="" data-bottom-material disabled>
+            <input type="hidden" name="properties[Size]" value="" data-bottom-size disabled>
+            <input type="hidden" name="properties[Design]" value="" data-bottom-design disabled>
+            <input type="hidden" name="properties[Custom text]" value="" data-bottom-text disabled>
+            <input type="hidden" name="properties[Customization add-on]" value="" data-bottom-addon disabled>
+          {% endif %}
+          <input type="hidden" name="properties[Virtual Try-On Used]" value="" data-vto-bottom-used disabled>
+          <input type="hidden" name="properties[Virtual Try-On Mode]" value="" data-vto-bottom-mode disabled>
+          <input type="hidden" name="properties[Virtual Try-On Model]" value="" data-vto-bottom-model disabled>
+          <input type="hidden" name="properties[Virtual Try-On Snapshot]" value="" data-vto-bottom-snapshot disabled>
+          <button type="submit" class="neo-bottom-cta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="8" cy="21" r="1"></circle>
+              <circle cx="19" cy="21" r="1"></circle>
+              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            <span>Add to cart</span>
+            <svg class="neo-cta-zap" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </button>
+        </form>
+
+        <a href="{{ routes.all_products_collection_url }}" class="neo-bottom-link">
+          <span>Shop</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+            <path d="M3 6h18"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </a>
+      </nav>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const root = document.getElementById('teleporter-hub');
+  if (!root) return;
+  document.body.classList.add('o4-hide-theme-header');
+  const enableHeroMotion = false;
+
+  const heroImg = root.querySelector('#hero-img');
+  const heroFrame = root.querySelector('.hero-frame');
+  const heroShell = root.querySelector('.hero-shell');
+  const dots = Array.from(root.querySelectorAll('.dot'));
+  const variantSelect = root.querySelector('.variant-select');
+  const header = root.querySelector('.neo-header');
+  const menuToggle = root.querySelector('.neo-menu-toggle');
+  const menuPanel = root.querySelector('.neo-menu-panel');
+  const minimalToggle = root.querySelector('[data-minimal-toggle]');
+  const customizeToggle = root.querySelector('[data-customize-toggle]');
+  const customizePanel = root.querySelector('[data-customize-panel]');
+  const customizeInputs = customizePanel ? Array.from(customizePanel.querySelectorAll('input, textarea, select')) : [];
+  const customizeMethods = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-method]')) : [];
+  const customizeMaterials = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-material]')) : [];
+  const customizeSizes = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-size]')) : [];
+  const customizeText = customizePanel ? customizePanel.querySelector('[data-customize-text]') : null;
+  const customizeDesigns = customizePanel ? Array.from(customizePanel.querySelectorAll('[data-customize-design]')) : [];
+  const bottomVariantInput = root.querySelector('[data-bottom-variant]');
+  const bottomMethodInput = root.querySelector('[data-bottom-method]');
+  const bottomMaterialInput = root.querySelector('[data-bottom-material]');
+  const bottomSizeInput = root.querySelector('[data-bottom-size]');
+  const bottomDesignInput = root.querySelector('[data-bottom-design]');
+  const bottomTextInput = root.querySelector('[data-bottom-text]');
+  const bottomAddonInput = root.querySelector('[data-bottom-addon]');
+  const ctaMethodInput = root.querySelector('[data-cta-method]');
+  const ctaMaterialInput = root.querySelector('[data-cta-material]');
+  const ctaSizeInput = root.querySelector('[data-cta-size]');
+  const ctaDesignInput = root.querySelector('[data-cta-design]');
+  const ctaTextInput = root.querySelector('[data-cta-text]');
+  const ctaAddonInput = root.querySelector('[data-cta-addon]');
+  const priceDisplays = Array.from(root.querySelectorAll('[data-price-display]'));
+  const feeDisplays = Array.from(root.querySelectorAll('[data-customize-fee]'));
+  const materialBlock = root.querySelector('[data-customize-material-block]');
+  const sizeBlock = root.querySelector('[data-customize-size-block]');
+  const baseHeroSrc = heroImg ? heroImg.src : '';
+  const vtoModal = root.querySelector('[data-vto-modal]');
+  const vtoDialog = root.querySelector('[data-vto-dialog]');
+  const vtoOpeners = Array.from(root.querySelectorAll('[data-vto-open]'));
+  const vtoClosers = Array.from(root.querySelectorAll('[data-vto-close]'));
+  const vtoStage = root.querySelector('[data-vto-stage]');
+  const vtoStageFrame = root.querySelector('[data-vto-stage-frame]');
+  const vtoVideo = root.querySelector('[data-vto-video]');
+  const vtoCanvas = root.querySelector('[data-vto-canvas]');
+  const vtoStatus = root.querySelector('[data-vto-status]');
+  const vtoLoading = root.querySelector('[data-vto-loading]');
+  const vtoEmpty = root.querySelector('[data-vto-empty]');
+  const vtoScaleInput = root.querySelector('[data-vto-scale]');
+  const vtoYInput = root.querySelector('[data-vto-y]');
+  const vtoNudgeButtons = Array.from(root.querySelectorAll('[data-vto-nudge]'));
+  const vtoResetBtn = root.querySelector('[data-vto-reset]');
+  const vtoSnapshotBtn = root.querySelector('[data-vto-snapshot]');
+  const vtoClearSnapshotBtn = root.querySelector('[data-vto-clear-snapshot]');
+  const vtoSnapshotPreview = root.querySelector('[data-vto-snapshot-preview]');
+  const vtoUploadInput = root.querySelector('[data-vto-upload]');
+  const vtoModeButtons = Array.from(root.querySelectorAll('[data-vto-mode]'));
+  const vtoModelButtons = Array.from(root.querySelectorAll('[data-vto-model-button]'));
+  const vtoModeBadge = root.querySelector('[data-vto-mode-badge]');
+  const vtoModelPanel = root.querySelector('[data-vto-model-panel]');
+  const vtoAddCartBtn = root.querySelector('[data-vto-add-cart]');
+  const vtoDataEl = root.querySelector('[data-vto-data]');
+  const vtoPropUsed = root.querySelector('[data-vto-prop-used]');
+  const vtoPropMode = root.querySelector('[data-vto-prop-mode]');
+  const vtoPropModel = root.querySelector('[data-vto-prop-model]');
+  const vtoPropSnapshot = root.querySelector('[data-vto-prop-snapshot]');
+  const vtoBottomUsed = root.querySelector('[data-vto-bottom-used]');
+  const vtoBottomMode = root.querySelector('[data-vto-bottom-mode]');
+  const vtoBottomModel = root.querySelector('[data-vto-bottom-model]');
+  const vtoBottomSnapshot = root.querySelector('[data-vto-bottom-snapshot]');
+  const menuItems = Array.from(root.querySelectorAll('.neo-menu-item-link[data-menu-key]'));
+  const submenuPanels = Array.from(root.querySelectorAll('.neo-submenu-panel'));
+  const submenuBacks = Array.from(root.querySelectorAll('.neo-submenu-back'));
+  const bottomBar = root.querySelector('.neo-bottom-bar');
+  const mq = window.matchMedia('(max-width: 760px)');
+  const basePriceCents = {{ current_product.selected_or_first_available_variant.price | default: current_product.price | default: 0 }};
+  const moneyFormat = {{ shop.money_format | json }};
+  
+  // REPORT FIX: Ensure fallbacks are explicit arrays to prevent iteration crashes
+  const images = {{ gallery_images | json }} || [];
+  const variants = {{ current_product.variants | json | default: '[]' }} || [];
+  const optionNames = {{ current_product.options | json | default: '[]' }} || [];
+
+  let radioGroups = [];
+  let isSyncing = false;
+  let teleTimer;
+  let initialBurstDone = false;
+  const vtoState = {
+    isOpen: false,
+    active: false,
+    mode: '',
+    modelName: '',
+    variantId: variantSelect ? String(variantSelect.value || '') : '',
+    used: false,
+    imgBackground: null,
+    imgOverlay: null,
+    overlaySrc: '',
+    overlayX: 0,
+    overlayY: 0,
+    overlayScale: 1,
+    overlayYOffset: 0,
+    stream: null,
+    uploadUrl: '',
+    snapshot: '',
+    frameId: null,
+    dragActive: false,
+    dragStartX: 0,
+    dragStartY: 0,
+    dragBaseX: 0,
+    dragBaseY: 0,
+    lastFocus: null
+  };
+  let vtoFocusTrapCleanup = null;
+  const vtoCtx = vtoCanvas ? vtoCanvas.getContext('2d') : null;
+  let vtoData = { variants: {} };
+  let vtoResizeObserver = null;
+  let vtoResizeRaf = null;
+  if (vtoDataEl) {
+    try {
+      const parsed = JSON.parse(vtoDataEl.textContent || '{}');
+      if (parsed && typeof parsed === 'object') vtoData = parsed;
+    } catch (err) {
+      vtoData = { variants: {} };
+    }
+  }
+  const allowedVinylTypes = customizePanel?.dataset.allowedVinylTypes
+    ? customizePanel.dataset.allowedVinylTypes.split(',').map(v => v.trim()).filter(Boolean)
+    : [];
+  const allowedPrintSizes = customizePanel?.dataset.allowedPrintSizes
+    ? customizePanel.dataset.allowedPrintSizes.split(',').map(v => v.trim()).filter(Boolean)
+    : [];
+
+  function updateOffsets() {
+    let headerOffset = 90;
+    if (header) {
+      const rect = header.getBoundingClientRect();
+      headerOffset = rect.bottom + 12;
+    } else {
+      const themeHeader = document.querySelector('#shopify-section-header, .shopify-section--header, .site-header');
+      if (themeHeader) {
+        const rect = themeHeader.getBoundingClientRect();
+        headerOffset = rect.bottom + 12;
+      }
+    }
+    root.style.setProperty('--tele-header-offset', headerOffset + 'px');
+
+    let bottomOffset = 180;
+    if (bottomBar) {
+      const rectB = bottomBar.getBoundingClientRect();
+      bottomOffset = rectB.height + 24;
+    }
+    root.style.setProperty('--tele-bottom-offset', bottomOffset + 'px');
+  }
+
+  updateOffsets();
+
+  const resolveSrc = (img) => {
+    if (!img) return '';
+    if (typeof img === 'string') return img;
+    return img.src || img.url || '';
+  };
+
+  const MINIMAL_KEY = 'o4MinimalMode';
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const applyMinimal = (enabled, persist) => {
+    document.body.classList.toggle('mode-minimal', enabled);
+    root.classList.toggle('is-minimal', enabled);
+    if (minimalToggle) {
+      minimalToggle.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    }
+    if (persist) {
+      localStorage.setItem(MINIMAL_KEY, String(enabled));
+    }
+  };
+
+  const storedMinimal = localStorage.getItem(MINIMAL_KEY);
+  const initialMinimal = storedMinimal === null ? prefersReduced.matches : storedMinimal === 'true';
+  applyMinimal(initialMinimal, false);
+
+  if (minimalToggle) {
+    minimalToggle.addEventListener('click', () => {
+      applyMinimal(!root.classList.contains('is-minimal'), true);
+    });
+  }
+
+  if (storedMinimal === null) {
+    prefersReduced.addEventListener('change', (event) => {
+      applyMinimal(event.matches, false);
+    });
+  }
+
+  const normalizeSrc = (src) => {
+    if (!src) return '';
+    const clean = src.split('?')[0];
+    return clean.replace(/(_\d+x\d*|_\d+x|_x\d+)(?=\.[a-z]+$)/i, '');
+  };
+
+  const normalizeVariantId = (id) => {
+    if (id === null || id === undefined) return '';
+    return String(id);
+  };
+
+  function formatMoney(cents) {
+    const safeCents = Number.isFinite(cents) ? cents : parseInt(cents, 10) || 0;
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      try {
+        return window.Shopify.formatMoney(safeCents, moneyFormat);
+      } catch (err) {
+        // Fall back to basic formatting below.
+      }
+    }
+    const amount = (safeCents / 100).toFixed(2);
+    const amountToken = '{% raw %}{{amount}}{% endraw %}';
+    if (!moneyFormat || moneyFormat.indexOf(amountToken) === -1) {
+      return `$${amount}`;
+    }
+    return moneyFormat.replace(amountToken, amount);
+  }
+
+  function getSelectedInput(list) {
+    return Array.isArray(list) ? list.find(input => input.checked) : null;
+  }
+
+  const setVtoInput = (input, value, enabled) => {
+    if (!input) return;
+    input.value = value;
+    input.disabled = !enabled;
+  };
+
+  const updateVtoProperties = () => {
+    const used = vtoState.used;
+    const mode = vtoState.mode || '';
+    const modelName = vtoState.modelName || '';
+    const snapshot = vtoState.snapshot || '';
+
+    setVtoInput(vtoPropUsed, used ? 'Yes' : '', used);
+    setVtoInput(vtoPropMode, mode, used);
+    setVtoInput(vtoPropModel, modelName, used && mode === 'model' && !!modelName);
+    setVtoInput(vtoPropSnapshot, snapshot, used && !!snapshot);
+
+    setVtoInput(vtoBottomUsed, used ? 'Yes' : '', used);
+    setVtoInput(vtoBottomMode, mode, used);
+    setVtoInput(vtoBottomModel, modelName, used && mode === 'model' && !!modelName);
+    setVtoInput(vtoBottomSnapshot, snapshot, used && !!snapshot);
+
+    if (vtoModal) {
+      vtoModal.dataset.vtoHasSnapshot = snapshot ? 'true' : 'false';
+    }
+  };
+
+  const setVtoStatus = (message) => {
+    if (!vtoStatus) return;
+    vtoStatus.textContent = message || '';
+  };
+
+  const setStageState = (state) => {
+    if (!vtoStage) return;
+    vtoStage.classList.toggle('is-loading', state === 'loading');
+    vtoStage.classList.toggle('is-empty', state === 'empty');
+    vtoStage.classList.toggle('has-media', state === 'ready');
+    if (state === 'empty' && vtoCtx && vtoCanvas) {
+      vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
+    }
+  };
+
+  const setVtoMode = (mode) => {
+    const safeMode = mode || '';
+    vtoState.mode = safeMode;
+    if (vtoModal) vtoModal.dataset.vtoMode = safeMode || 'idle';
+    vtoModeButtons.forEach(btn => {
+      const isActive = btn.dataset.vtoMode === safeMode;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+    if (vtoModeBadge) {
+      vtoModeBadge.textContent = safeMode ? `Mode: ${safeMode}` : 'Mode: standby';
+    }
+    if (vtoModelPanel) vtoModelPanel.hidden = safeMode !== 'model';
+  };
+
+  const resizeCanvasToSource = (source) => {
+    if (!vtoCanvas || !source) return false;
+    const container = vtoStageFrame || vtoCanvas.parentElement;
+    if (!container) return false;
+    const rect = container.getBoundingClientRect();
+    const contW = rect.width || container.clientWidth;
+    const contH = rect.height || container.clientHeight;
+    const srcW = source.videoWidth || source.naturalWidth || source.width;
+    const srcH = source.videoHeight || source.naturalHeight || source.height;
+    if (!srcW || !srcH) return false;
+    if (!contW || !contH) return false;
+
+    const ratio = Math.min(contW / srcW, contH / srcH);
+    vtoCanvas.width = srcW;
+    vtoCanvas.height = srcH;
+    vtoCanvas.style.width = `${srcW * ratio}px`;
+    vtoCanvas.style.height = `${srcH * ratio}px`;
+    return true;
+  };
+
+  const getVtoSource = () => {
+    if (vtoState.mode === 'camera') return vtoVideo;
+    return vtoState.imgBackground;
+  };
+
+  const drawVtoFrame = () => {
+    if (!vtoCtx || !vtoCanvas) return;
+    const w = vtoCanvas.width;
+    const h = vtoCanvas.height;
+    if (!w || !h) return;
+
+    vtoCtx.clearRect(0, 0, w, h);
+
+    if (vtoState.mode === 'camera' && vtoVideo && vtoState.stream) {
+      vtoCtx.save();
+      vtoCtx.translate(w, 0);
+      vtoCtx.scale(-1, 1);
+      vtoCtx.drawImage(vtoVideo, 0, 0, w, h);
+      vtoCtx.restore();
+    } else if (vtoState.imgBackground) {
+      vtoCtx.drawImage(vtoState.imgBackground, 0, 0, w, h);
+    }
+
+    if (vtoState.imgOverlay) {
+      const img = vtoState.imgOverlay;
+      const scale = vtoState.overlayScale * (w / 1200);
+      const yOffset = vtoState.overlayYOffset || 0;
+      const drawW = img.naturalWidth * scale;
+      const drawH = img.naturalHeight * scale;
+      vtoCtx.save();
+      vtoCtx.translate(vtoState.overlayX, vtoState.overlayY + yOffset);
+      vtoCtx.globalAlpha = 0.95;
+      vtoCtx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+      vtoCtx.restore();
+    }
+  };
+
+  const startVtoLoop = () => {
+    if (vtoState.frameId) cancelAnimationFrame(vtoState.frameId);
+    const tick = () => {
+      if (vtoState.mode === 'camera' && vtoState.active) {
+        drawVtoFrame();
+        vtoState.frameId = requestAnimationFrame(tick);
+      }
+    };
+    vtoState.frameId = requestAnimationFrame(tick);
+  };
+
+  const stopVtoLoop = () => {
+    if (vtoState.frameId) cancelAnimationFrame(vtoState.frameId);
+    vtoState.frameId = null;
+  };
+
+  const resetVtoOverlay = () => {
+    if (!vtoCanvas || !vtoCanvas.width) return;
+    vtoState.overlayX = vtoCanvas.width / 2;
+    vtoState.overlayY = vtoCanvas.height * 0.4;
+    vtoState.overlayScale = 1;
+    vtoState.overlayYOffset = 0;
+    if (vtoScaleInput) vtoScaleInput.value = '1';
+    if (vtoYInput) vtoYInput.value = '0';
+    drawVtoFrame();
+  };
+
+  const queueVtoResize = (resetOverlay) => {
+    const source = getVtoSource();
+    if (!vtoCanvas || !source) return;
+    if (vtoResizeRaf) cancelAnimationFrame(vtoResizeRaf);
+    vtoResizeRaf = requestAnimationFrame(() => {
+      vtoResizeRaf = null;
+      const prevW = vtoCanvas.width;
+      const prevH = vtoCanvas.height;
+      const didResize = resizeCanvasToSource(source);
+      const nextW = vtoCanvas.width;
+      const nextH = vtoCanvas.height;
+      if (!didResize) {
+        setTimeout(() => {
+          if (vtoState.isOpen) queueVtoResize(resetOverlay);
+        }, 120);
+        return;
+      }
+      if (!resetOverlay && prevW && prevH && (prevW !== nextW || prevH !== nextH)) {
+        const scaleX = nextW / prevW;
+        const scaleY = nextH / prevH;
+        vtoState.overlayX *= scaleX;
+        vtoState.overlayY *= scaleY;
+        vtoState.overlayYOffset *= scaleY;
+      }
+      if (resetOverlay) {
+        resetVtoOverlay();
+      } else {
+        drawVtoFrame();
+      }
+    });
+  };
+
+  const getOverlaySrcForVariant = (variantId) => {
+    const id = variantId ? String(variantId) : '';
+    const record = vtoData && vtoData.variants ? vtoData.variants[id] : null;
+    const overlay = record && record.overlay ? String(record.overlay) : '';
+    if (overlay) return overlay;
+    if (heroImg && heroImg.src) return heroImg.src;
+    return baseHeroSrc || '';
+  };
+
+  const loadVtoOverlay = (variantId) => {
+    const src = getOverlaySrcForVariant(variantId);
+    if (!src) {
+      vtoState.imgOverlay = null;
+      if (vtoState.active) setVtoStatus('Overlay not configured for this variant.');
+      drawVtoFrame();
+      return;
+    }
+    if (vtoState.overlaySrc === src && vtoState.imgOverlay) return;
+    vtoState.overlaySrc = src;
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      vtoState.imgOverlay = img;
+      resetVtoOverlay();
+      drawVtoFrame();
+    };
+    img.onerror = () => {
+      vtoState.imgOverlay = null;
+      if (vtoState.active) setVtoStatus('Overlay failed to load.');
+    };
+    img.src = src;
+  };
+
+  const handleVtoVariantChange = (variantId) => {
+    vtoState.variantId = String(variantId || '');
+    if (vtoState.isOpen) {
+      loadVtoOverlay(vtoState.variantId);
+    }
+  };
+
+  const getCanvasPointer = (event) => {
+    if (!vtoCanvas) return { x: 0, y: 0 };
+    const rect = vtoCanvas.getBoundingClientRect();
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+    const scaleX = rect.width ? vtoCanvas.width / rect.width : 1;
+    const scaleY = rect.height ? vtoCanvas.height / rect.height : 1;
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const stopCamera = () => {
+    if (vtoVideo) {
+      vtoVideo.pause();
+      vtoVideo.srcObject = null;
+    }
+    if (vtoState.stream) {
+      vtoState.stream.getTracks().forEach(track => track.stop());
+      vtoState.stream = null;
+    }
+    stopVtoLoop();
+    vtoState.active = false;
+  };
+
+  const clearUpload = () => {
+    if (vtoState.uploadUrl) {
+      URL.revokeObjectURL(vtoState.uploadUrl);
+      vtoState.uploadUrl = '';
+    }
+    if (vtoUploadInput) vtoUploadInput.value = '';
+    vtoState.imgBackground = null;
+  };
+
+  const markVtoUsed = (mode, modelName) => {
+    vtoState.used = true;
+    vtoState.active = true;
+    vtoState.mode = mode;
+    if (mode === 'model') {
+      vtoState.modelName = modelName || '';
+    } else {
+      vtoState.modelName = '';
+    }
+    updateVtoProperties();
+  };
+
+  const syncVtoModelsFromData = () => {
+    if (!vtoData || !Array.isArray(vtoData.models) || !vtoModelButtons.length) return;
+    vtoModelButtons.forEach((btn, idx) => {
+      const model = vtoData.models[idx];
+      if (!model) {
+        btn.hidden = true;
+        return;
+      }
+      btn.hidden = false;
+      const label = model.label || model.name || model.title || `Model ${idx + 1}`;
+      const src = model.src || model.image || model.url || '';
+      btn.dataset.modelName = label;
+      if (src) btn.dataset.modelSrc = src;
+      const labelEl = btn.querySelector('.vto-model-label');
+      if (labelEl) labelEl.textContent = label;
+      const img = btn.querySelector('[data-vto-model-img]');
+      if (img) {
+        img.removeAttribute('src');
+        img.alt = label;
+      }
+    });
+  };
+
+  const loadModelImages = () => {
+    vtoModelButtons.forEach(btn => {
+      const img = btn.querySelector('[data-vto-model-img]');
+      const src = btn.dataset.modelSrc;
+      if (img && src && !img.getAttribute('src')) {
+        img.setAttribute('src', src);
+      }
+    });
+  };
+
+  const trapVtoFocus = () => {
+    if (!vtoDialog) return;
+    const focusable = Array.from(vtoDialog.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+      .filter(el => !el.hasAttribute('hidden'));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const handleKey = (event) => {
+      if (event.key !== 'Tab') return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    vtoDialog.addEventListener('keydown', handleKey);
+    vtoFocusTrapCleanup = () => vtoDialog.removeEventListener('keydown', handleKey);
+    first.focus();
+  };
+
+  const syncStageFromState = () => {
+    if (vtoState.mode === 'camera' && vtoState.stream) {
+      setStageState('ready');
+      setVtoStatus('Drag to align. Use Fit to scale.');
+      return;
+    }
+    if (vtoState.imgBackground) {
+      setStageState('ready');
+      setVtoStatus('Drag to align. Use Fit to scale.');
+      return;
+    }
+    setStageState('empty');
+    setVtoStatus('Select a mode to begin.');
+  };
+
+  function updateCustomizeActiveLabels() {
+    if (!customizePanel) return;
+    customizePanel.querySelectorAll('.pill').forEach(label => {
+      const input = label.querySelector('input');
+      label.classList.toggle('active', !!input && input.checked);
+    });
+  }
+
+  function updateCustomizationVisibility(panelOpen) {
+    const method = getSelectedInput(customizeMethods)?.value || '';
+    const isVinyl = method === 'Vinyl';
+    if (materialBlock) materialBlock.style.display = isVinyl ? '' : 'none';
+    if (sizeBlock) sizeBlock.style.display = method ? '' : 'none';
+
+    customizeMaterials.forEach(input => {
+      const materialKey = input.dataset.materialKey || '';
+      const allowed = !allowedVinylTypes.length || allowedVinylTypes.includes(materialKey);
+      const label = input.closest('label');
+      if (label) label.style.display = isVinyl && allowed ? '' : 'none';
+      input.disabled = !panelOpen || !isVinyl || !allowed;
+    });
+    if (!isVinyl) {
+      customizeMaterials.forEach(input => {
+        input.checked = false;
+      });
+    } else {
+      const visibleMaterials = customizeMaterials.filter(input => {
+        const materialKey = input.dataset.materialKey || '';
+        return !allowedVinylTypes.length || allowedVinylTypes.includes(materialKey);
+      });
+      if (visibleMaterials.length && !visibleMaterials.some(input => input.checked)) {
+        visibleMaterials[0].checked = true;
+      }
+    }
+
+    customizeSizes.forEach(input => {
+      const allowed = input.dataset.method === method;
+      const sizeKey = input.dataset.sizeKey || '';
+      const sizeAllowed = !allowedPrintSizes.length || allowedPrintSizes.includes(sizeKey);
+      const label = input.closest('label');
+      if (label) label.style.display = allowed && sizeAllowed ? '' : 'none';
+      input.disabled = !panelOpen || !allowed || !sizeAllowed;
+    });
+
+    const visibleSizes = customizeSizes.filter(input => {
+      const sizeKey = input.dataset.sizeKey || '';
+      const sizeAllowed = !allowedPrintSizes.length || allowedPrintSizes.includes(sizeKey);
+      return input.dataset.method === method && sizeAllowed;
+    });
+    if (visibleSizes.length && !visibleSizes.some(input => input.checked)) {
+      visibleSizes[0].checked = true;
+    }
+    updateCustomizeActiveLabels();
+  }
+
+  function getCustomizationAddonCents(panelOpen) {
+    if (!panelOpen) return 0;
+    const method = getSelectedInput(customizeMethods)?.value || '';
+    const sizeKey = getSelectedInput(customizeSizes)?.dataset.sizeKey || '';
+    const materialKey = getSelectedInput(customizeMaterials)?.dataset.materialKey || '';
+
+    if (method === 'Vinyl') {
+      const vinylPricing = {
+        regular: { small: 500, medium: 700, full: 1000 },
+        puff: { small: 800, medium: 1000, full: 1500 },
+        glow: { small: 700, medium: 1000, full: 1800 },
+        'puff-glow': { small: 1000, medium: 1500, full: 2000 }
+      };
+      const pricing = vinylPricing[materialKey];
+      return pricing && pricing[sizeKey] ? pricing[sizeKey] : 0;
+    }
+
+    if (method === 'Sublimation') {
+      const sublimationPricing = { small: 500, full: 1500, large: 2000 };
+      return sublimationPricing[sizeKey] || 0;
+    }
+
+    return 0;
+  }
+
+  function updateCustomizationPricing() {
+    const panelOpen = customizePanel ? customizePanel.classList.contains('is-open') : false;
+    const addonCents = getCustomizationAddonCents(panelOpen);
+    const variant = getCurrentVariant();
+    const baseCents = variant && typeof variant.price === 'number'
+      ? variant.price
+      : (Number.isFinite(basePriceCents) ? basePriceCents : parseInt(basePriceCents, 10) || 0);
+    const totalCents = baseCents + addonCents;
+    const formattedTotal = formatMoney(totalCents);
+
+    priceDisplays.forEach(el => {
+      if (el) el.textContent = formattedTotal;
+    });
+    feeDisplays.forEach(el => {
+      if (!el) return;
+      if (addonCents > 0) {
+        el.textContent = `Customization +${formatMoney(addonCents)}`;
+        el.hidden = false;
+      } else {
+        el.textContent = '';
+        el.hidden = true;
+      }
+    });
+
+    const addonLabel = addonCents > 0 ? `+${formatMoney(addonCents)}` : '';
+    if (ctaAddonInput) ctaAddonInput.value = addonLabel;
+    if (bottomAddonInput) bottomAddonInput.value = addonLabel;
+  }
+
+  const syncCustomizeToBottom = () => {
+    const selectedMethod = getSelectedInput(customizeMethods);
+    const selectedMaterial = getSelectedInput(customizeMaterials);
+    const selectedSize = getSelectedInput(customizeSizes);
+    const selectedDesign = getSelectedInput(customizeDesigns);
+    const methodValue = selectedMethod ? selectedMethod.value : '';
+    const materialValue = selectedMaterial ? selectedMaterial.value : '';
+    const sizeValue = selectedSize ? selectedSize.value : '';
+    const designValue = selectedDesign ? selectedDesign.value : '';
+    const textValue = customizeText ? customizeText.value || '' : '';
+
+    if (bottomMethodInput) bottomMethodInput.value = methodValue;
+    if (bottomMaterialInput) bottomMaterialInput.value = materialValue;
+    if (bottomSizeInput) bottomSizeInput.value = sizeValue;
+    if (bottomDesignInput) bottomDesignInput.value = designValue;
+    if (bottomTextInput) bottomTextInput.value = textValue;
+
+    if (ctaMethodInput) ctaMethodInput.value = methodValue;
+    if (ctaMaterialInput) ctaMaterialInput.value = materialValue;
+    if (ctaSizeInput) ctaSizeInput.value = sizeValue;
+    if (ctaDesignInput) ctaDesignInput.value = designValue;
+    if (ctaTextInput) ctaTextInput.value = textValue;
+    updateCustomizeActiveLabels();
+  };
+
+  const setCustomizeOpen = (open) => {
+    if (!customizePanel || !customizeToggle) return;
+    customizePanel.classList.toggle('is-open', open);
+    customizePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    customizeToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    customizeInputs.forEach(input => {
+      input.disabled = !open;
+    });
+    if (bottomMethodInput) bottomMethodInput.disabled = !customizeMethods.length || !open;
+    if (bottomMaterialInput) bottomMaterialInput.disabled = !customizeMaterials.length || !open;
+    if (bottomSizeInput) bottomSizeInput.disabled = !customizeSizes.length || !open;
+    if (bottomTextInput) bottomTextInput.disabled = !open;
+    if (bottomDesignInput) bottomDesignInput.disabled = !customizeDesigns.length || !open;
+    if (bottomAddonInput) bottomAddonInput.disabled = !open;
+    if (ctaMethodInput) ctaMethodInput.disabled = !customizeMethods.length || !open;
+    if (ctaMaterialInput) ctaMaterialInput.disabled = !customizeMaterials.length || !open;
+    if (ctaSizeInput) ctaSizeInput.disabled = !customizeSizes.length || !open;
+    if (ctaDesignInput) ctaDesignInput.disabled = !customizeDesigns.length || !open;
+    if (ctaTextInput) ctaTextInput.disabled = !open;
+    if (ctaAddonInput) ctaAddonInput.disabled = !open;
+    syncCustomizeToBottom();
+    updateCustomizationVisibility(open);
+    updateCustomizationPricing();
+    if (open) {
+      setHeroFromDesign();
+    } else {
+      resetHeroToVariant();
+    }
+  };
+
+  const syncBottomVariant = () => {
+    if (bottomVariantInput && variantSelect) {
+      bottomVariantInput.value = variantSelect.value;
+    }
+  };
+
+  const setActiveMenu = (key) => {
+    if (!key) return;
+    menuItems.forEach((item) => {
+      item.classList.toggle('active', item.dataset.menuKey === key);
+    });
+    submenuPanels.forEach((panel) => {
+      panel.classList.toggle('is-active', panel.dataset.menuPanel === key);
+    });
+  };
+
+  const closeSubmenu = () => {
+    if (menuPanel) menuPanel.classList.remove('is-submenu-open');
+  };
+
+  const openSubmenu = (key) => {
+    if (!menuPanel) return;
+    setActiveMenu(key);
+    menuPanel.classList.add('is-submenu-open');
+  };
+
+  const updateMenuPosition = () => {
+    if (!header || !menuPanel) return;
+    const rect = header.getBoundingClientRect();
+    const maxWidth = Math.min(560, rect.width);
+    const left = Math.max(rect.left, rect.right - maxWidth);
+    const top = Math.round(rect.bottom + 10);
+    menuPanel.style.setProperty('--neo-menu-left', `${left}px`);
+    menuPanel.style.setProperty('--neo-menu-width', `${Math.round(maxWidth)}px`);
+    menuPanel.style.setProperty('--neo-menu-top', `${top}px`);
+    menuPanel.style.setProperty('--neo-menu-shift', '0px');
+  };
+
+  const setMenuOpen = (open) => {
+    if (!header || !menuToggle || !menuPanel) return;
+    header.classList.toggle('is-menu-open', open);
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuPanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (open) updateMenuPosition();
+    if (!open) closeSubmenu();
+  };
+
+  if (menuToggle && header && menuPanel) {
+    setMenuOpen(false);
+    const initialActive = root.querySelector('.neo-menu-item-link.active[data-menu-key]') || menuItems[0];
+    if (initialActive) setActiveMenu(initialActive.dataset.menuKey);
+    menuToggle.addEventListener('click', () => {
+      const isOpen = header.classList.contains('is-menu-open');
+      setMenuOpen(!isOpen);
+    });
+    window.addEventListener('scroll', () => {
+      if (header.classList.contains('is-menu-open')) updateMenuPosition();
+    }, { passive: true });
+    document.addEventListener('click', (event) => {
+      if (!header.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMenuOpen(false);
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    updateOffsets();
+    if (header && header.classList.contains('is-menu-open')) updateMenuPosition();
+    if (vtoState.isOpen) queueVtoResize(false);
+  });
+
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      updateOffsets();
+      if (vtoState.isOpen) queueVtoResize(false);
+    }, 350);
+  });
+
+  menuItems.forEach((item) => {
+    const key = item.dataset.menuKey;
+    const hasChildren = item.dataset.hasChildren === 'true';
+    item.addEventListener('click', (event) => {
+      if (!menuPanel) return;
+      const href = item.getAttribute('href');
+      const isPlaceholder = !href || href === '#';
+      if (hasChildren) {
+        event.preventDefault();
+        openSubmenu(key);
+        return;
+      }
+      if (isPlaceholder) {
+        event.preventDefault();
+        setActiveMenu(key);
+        closeSubmenu();
+      }
+    });
+  });
+
+  submenuBacks.forEach((btn) => {
+    btn.addEventListener('click', closeSubmenu);
+  });
+
+  if (mq) {
+    mq.addEventListener('change', () => {
+      closeSubmenu();
+    });
+  }
+
+  const parseColor = (value) => {
+    if (!value) return null;
+    const color = value.trim();
+    if (color.startsWith('#')) {
+      let hex = color.slice(1);
+      if (hex.length === 3) {
+        hex = hex.split('').map(ch => ch + ch).join('');
+      }
+      if (hex.length !== 6) return null;
+      const num = parseInt(hex, 16);
+      return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+    }
+    if (color.startsWith('rgb')) {
+      const match = color.match(/rgba?\(([^)]+)\)/i);
+      if (!match) return null;
+      const parts = match[1].split(',').map(part => parseFloat(part.trim()));
+      if (parts.length < 3) return null;
+      return parts.slice(0, 3);
+    }
+    return null;
+  };
+
+  const applyAccent = (value) => {
+    const rgb = parseColor(value);
+    if (!rgb) return;
+    const [r, g, b] = rgb;
+    const brighten = (channel, amt) => Math.round(channel + (255 - channel) * amt);
+    const bright = `rgb(${brighten(r, 0.35)}, ${brighten(g, 0.35)}, ${brighten(b, 0.35)})`;
+    root.style.setProperty('--accent-live', `rgb(${r}, ${g}, ${b})`);
+    root.style.setProperty('--accent-live-soft', `rgba(${r}, ${g}, ${b}, 0.25)`);
+    root.style.setProperty('--accent-live-strong', `rgba(${r}, ${g}, ${b}, 0.65)`);
+    root.style.setProperty('--accent-live-bright', bright);
+  };
+
+  const glowMap = {
+    'color-blue': '--glow-blue',
+    'color-cyan': '--glow-cyan',
+    'color-green': '--glow-green',
+    'color-yellow': '--glow-yellow',
+    'color-magenta': '--glow-magenta'
+  };
+
+  const setGlow = (neonClass) => {
+    const varName = glowMap[neonClass] || '--glow-blue';
+    const color = getComputedStyle(root).getPropertyValue(varName).trim() || '#00aeff';
+    root.style.setProperty('--glow', color);
+    applyAccent(color);
+  };
+
+  const applyAccentFromLabel = (label) => {
+    if (!label) return;
+    const neon = label.dataset.neon;
+    if (neon) {
+      setGlow(neon);
+      return;
+    }
+    const swatch = label.dataset.swatch || getComputedStyle(label).getPropertyValue('--swatch-color');
+    if (swatch) applyAccent(swatch);
+  };
+
+  const findImageIndexByVariant = (variantId) => {
+    const target = normalizeVariantId(variantId);
+    if (!target || !Array.isArray(images)) return -1;
+    return images.findIndex(img => Array.isArray(img.variant_ids) && img.variant_ids.some(id => String(id) === target));
+  };
+
+  const findImageIndexBySrc = (src) => {
+    if (!src || !Array.isArray(images)) return -1;
+    const target = normalizeSrc(src);
+    return images.findIndex(img => normalizeSrc(resolveSrc(img)) === target);
+  };
+
+  const setActiveDot = (index) => {
+    if (!dots.length || index < 0 || index >= dots.length) return;
+    dots.forEach(d => d.classList.remove('active'));
+    dots[index].classList.add('active');
+  };
+
+  const teleporterBurst = () => {
+    if (!heroFrame) return;
+    heroFrame.classList.remove('is-materializing');
+    void heroFrame.offsetWidth;
+    heroFrame.classList.add('is-materializing');
+    const field = heroFrame.querySelector('.teleporter-particles');
+    if (field) {
+      field.innerHTML = '';
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'teleporter-particle';
+        particle.style.left = `${50 + (Math.random() * 30 - 15)}%`;
+        particle.style.animationDelay = `${Math.random() * 0.6}s`;
+        field.appendChild(particle);
+      }
+    }
+    if (teleTimer) clearTimeout(teleTimer);
+    teleTimer = setTimeout(() => heroFrame.classList.remove('is-materializing'), 1000);
+  };
+
+  const setHeroImage = (src, variantId, preferredIndex) => {
+    if (!heroImg || !src) return;
+    heroImg.src = src;
+    if (vtoState.isOpen) {
+      const vtoVariant = variantId || (variantSelect ? variantSelect.value : '');
+      if (vtoVariant) handleVtoVariantChange(vtoVariant);
+    }
+    let index = -1;
+    if (variantId) index = findImageIndexByVariant(variantId);
+    if (index < 0 && Number.isInteger(preferredIndex)) index = preferredIndex;
+    if (index < 0) index = findImageIndexBySrc(src);
+    if (index >= 0) setActiveDot(index);
+    teleporterBurst();
+  };
+
+  const updateActiveLabels = () => {
+    root.querySelectorAll('.pill, .color-chip').forEach(label => label.classList.remove('active'));
+    radioGroups.forEach(r2 => {
+      if (r2.checked) {
+        const label = r2.closest('label');
+        if (label) label.classList.add('active');
+      }
+    });
+    const activeColor = root.querySelector('.color-chip.active');
+    if (activeColor) applyAccentFromLabel(activeColor);
+  };
+
+  const syncOptionRadios = (variant) => {
+    if (!variant || !Array.isArray(variant.options) || !radioGroups.length) return;
+    isSyncing = true;
+    radioGroups.forEach(r => {
+      const optionName = r.name.replace('options[','').replace(']','');
+      const optionIndex = optionNames.indexOf(optionName);
+      if (optionIndex >= 0 && variant.options[optionIndex] === r.value) {
+        r.checked = true;
+      }
+    });
+    isSyncing = false;
+    updateActiveLabels();
+  };
+
+  const applyVariantById = (variantId) => {
+    const target = normalizeVariantId(variantId);
+    if (!target) return null;
+    const variant = Array.isArray(variants)
+      ? variants.find(v => normalizeVariantId(v.id) === target)
+      : null;
+    if (variant && variantSelect) {
+      variantSelect.value = variant.id;
+      syncOptionRadios(variant);
+      syncBottomVariant();
+      updateCustomizationPricing();
+      handleVtoVariantChange(variant.id);
+    }
+    return variant;
+  };
+
+  const getVariantImage = (variant) => {
+    if (!variant) return '';
+    if (variant.featured_media) {
+      const media = variant.featured_media.preview_image || variant.featured_media;
+      const mediaSrc = resolveSrc(media);
+      if (mediaSrc) return mediaSrc;
+    }
+    if (variant.featured_image) {
+      const imageSrc = resolveSrc(variant.featured_image);
+      if (imageSrc) return imageSrc;
+    }
+    const linkedIndex = findImageIndexByVariant(variant.id);
+    if (linkedIndex >= 0 && images[linkedIndex]) {
+      return resolveSrc(images[linkedIndex]);
+    }
+    return '';
+  };
+
+  function getCurrentVariant() {
+    const id = variantSelect ? normalizeVariantId(variantSelect.value) : '';
+    if (!id || !Array.isArray(variants)) return null;
+    return variants.find(v => normalizeVariantId(v.id) === id) || null;
+  }
+
+  function resetHeroToVariant() {
+    const variant = getCurrentVariant();
+    const heroSrc = getVariantImage(variant) || baseHeroSrc || (heroImg ? heroImg.src : '');
+    if (heroSrc) setHeroImage(heroSrc, variant ? variant.id : null);
+  }
+
+  function setHeroFromDesign() {
+    if (!customizePanel || !customizeDesigns.length) return;
+    const panelOpen = customizePanel.classList.contains('is-open');
+    if (!panelOpen) {
+      resetHeroToVariant();
+      return;
+    }
+    const chosen = customizeDesigns.find(input => input.checked && !input.disabled);
+    if (!chosen) {
+      resetHeroToVariant();
+      return;
+    }
+    let heroSrc = chosen.dataset.designHero || '';
+    if (!heroSrc) {
+      const label = (chosen.value || '').toLowerCase().trim();
+      const match = Array.isArray(images) ? images.find(img => {
+        const alt = (img && (img.alt || img.alt_text || '')).toLowerCase();
+        const src = resolveSrc(img).toLowerCase();
+        return (alt && alt.includes(label)) || (src && src.includes(label));
+      }) : null;
+      if (match) heroSrc = resolveSrc(match);
+    }
+    if (heroSrc) {
+      setHeroImage(heroSrc, null);
+    } else {
+      resetHeroToVariant();
+    }
+  }
+
+  const waitForVideoReady = () => {
+    if (!vtoVideo) return Promise.resolve();
+    if (vtoVideo.readyState >= 1 && vtoVideo.videoWidth) return Promise.resolve();
+    return new Promise((resolve) => {
+      let settled = false;
+      const finalize = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      vtoVideo.addEventListener('loadedmetadata', finalize, { once: true });
+      setTimeout(finalize, 700);
+    });
+  };
+
+  const startVtoCamera = async () => {
+    if (!vtoVideo || !vtoCanvas) return;
+    setVtoMode('camera');
+    stopCamera();
+    clearUpload();
+    clearVtoSnapshot();
+    vtoState.active = true;
+    setStageState('loading');
+    setVtoStatus('Accessing camera...');
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setStageState('empty');
+      setVtoStatus('Camera not supported. Use upload instead.');
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false
+      });
+      vtoState.stream = stream;
+      vtoVideo.srcObject = stream;
+      await vtoVideo.play();
+      await waitForVideoReady();
+      resizeCanvasToSource(vtoVideo);
+      loadVtoOverlay(vtoState.variantId);
+      setStageState('ready');
+      resetVtoOverlay();
+      markVtoUsed('camera');
+      setVtoStatus('Drag to align. Use Fit to scale.');
+      startVtoLoop();
+      queueVtoResize(true);
+    } catch (err) {
+      const name = err && err.name ? err.name : '';
+      stopCamera();
+      setStageState('empty');
+      if (name === 'NotAllowedError' || name === 'SecurityError') {
+        setVtoStatus('Camera blocked. Use upload instead.');
+      } else if (name === 'NotFoundError' || name === 'OverconstrainedError') {
+        setVtoStatus('No camera found. Use upload instead.');
+      } else {
+        setVtoStatus('Camera unavailable. Use upload instead.');
+      }
+    }
+  };
+
+  const handleVtoUpload = (file) => {
+    if (!file) return;
+    setVtoMode('upload');
+    stopCamera();
+    clearUpload();
+    clearVtoSnapshot();
+    vtoState.active = true;
+    setStageState('loading');
+    setVtoStatus('Processing image...');
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        vtoState.imgBackground = img;
+        resizeCanvasToSource(img);
+        loadVtoOverlay(vtoState.variantId);
+        setStageState('ready');
+        resetVtoOverlay();
+        drawVtoFrame();
+        setVtoStatus('Drag to align. Use Fit to scale.');
+        markVtoUsed('upload');
+        queueVtoResize(true);
+      };
+      img.onerror = () => {
+        setStageState('empty');
+        setVtoStatus('Photo failed to load.');
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const selectVtoModel = (button) => {
+    if (!button) return;
+    setVtoMode('model');
+    stopCamera();
+    clearUpload();
+    clearVtoSnapshot();
+    vtoState.active = true;
+    vtoModelButtons.forEach(btn => btn.classList.toggle('is-active', btn === button));
+    const src = button.dataset.modelSrc || '';
+    const name = button.dataset.modelName || '';
+    if (!src) {
+      setStageState('empty');
+      setVtoStatus('Model image missing. Add VTO model assets.');
+      return;
+    }
+    setStageState('loading');
+    setVtoStatus('Loading model...');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      vtoState.imgBackground = img;
+      resizeCanvasToSource(img);
+      loadVtoOverlay(vtoState.variantId);
+      setStageState('ready');
+      resetVtoOverlay();
+      drawVtoFrame();
+      setVtoStatus('Drag to align. Use Fit to scale.');
+      markVtoUsed('model', name);
+      queueVtoResize(true);
+    };
+    img.onerror = () => {
+      setStageState('empty');
+      setVtoStatus('Model failed to load.');
+    };
+    img.src = src;
+  };
+
+  const captureVtoSnapshot = () => {
+    if (!vtoCanvas || !vtoStage || !vtoStage.classList.contains('has-media')) {
+      setVtoStatus('Start a mode before saving a snapshot.');
+      return;
+    }
+    const dataUrl = vtoCanvas.toDataURL('image/png');
+    vtoState.snapshot = dataUrl;
+    if (vtoSnapshotPreview) {
+      vtoSnapshotPreview.src = dataUrl;
+      vtoSnapshotPreview.hidden = false;
+    }
+    if (vtoClearSnapshotBtn) vtoClearSnapshotBtn.hidden = false;
+    updateVtoProperties();
+    setVtoStatus('Snapshot saved locally.');
+  };
+
+  const clearVtoSnapshot = () => {
+    vtoState.snapshot = '';
+    if (vtoSnapshotPreview) {
+      vtoSnapshotPreview.src = '';
+      vtoSnapshotPreview.hidden = true;
+    }
+    if (vtoClearSnapshotBtn) vtoClearSnapshotBtn.hidden = true;
+    updateVtoProperties();
+  };
+
+  const initVtoResizeObserver = () => {
+    if (!vtoStageFrame || typeof ResizeObserver === 'undefined') return;
+    if (vtoResizeObserver) return;
+    vtoResizeObserver = new ResizeObserver(() => {
+      if (!vtoState.isOpen) return;
+      queueVtoResize(false);
+    });
+    vtoResizeObserver.observe(vtoStageFrame);
+  };
+
+  const teardownVtoResizeObserver = () => {
+    if (!vtoResizeObserver) return;
+    vtoResizeObserver.disconnect();
+    vtoResizeObserver = null;
+  };
+
+  const openVto = () => {
+    if (!vtoModal) return;
+    if (vtoState.isOpen) return;
+    vtoState.isOpen = true;
+    vtoState.lastFocus = document.activeElement;
+    vtoModal.classList.add('is-open');
+    vtoModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    vtoState.variantId = variantSelect ? String(variantSelect.value || '') : vtoState.variantId;
+    syncVtoModelsFromData();
+    loadVtoOverlay(vtoState.variantId);
+    setVtoMode(vtoState.mode || '');
+    if (!vtoState.used) resetVtoOverlay();
+    syncStageFromState();
+    loadModelImages();
+    drawVtoFrame();
+    initVtoResizeObserver();
+    queueVtoResize(false);
+    trapVtoFocus();
+  };
+
+  const closeVto = () => {
+    if (!vtoModal) return;
+    vtoModal.classList.remove('is-open');
+    vtoModal.setAttribute('aria-hidden', 'true');
+    vtoState.isOpen = false;
+    vtoState.active = false;
+    stopCamera();
+    if (vtoFocusTrapCleanup) {
+      vtoFocusTrapCleanup();
+      vtoFocusTrapCleanup = null;
+    }
+    teardownVtoResizeObserver();
+    if (vtoResizeRaf) {
+      cancelAnimationFrame(vtoResizeRaf);
+      vtoResizeRaf = null;
+    }
+    document.body.style.overflow = '';
+    if (vtoState.lastFocus && typeof vtoState.lastFocus.focus === 'function') {
+      vtoState.lastFocus.focus();
+    }
+  };
+
+  if (vtoOpeners.length) {
+    vtoOpeners.forEach(btn => btn.addEventListener('click', openVto));
+  }
+
+  if (vtoClosers.length) {
+    vtoClosers.forEach(btn => btn.addEventListener('click', closeVto));
+  }
+
+  if (vtoModeButtons.length) {
+    vtoModeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.vtoMode;
+        if (mode === 'camera') {
+          startVtoCamera();
+        } else if (mode === 'upload') {
+          setVtoMode('upload');
+          setStageState('empty');
+          setVtoStatus('Select a photo to begin.');
+          stopCamera();
+          clearUpload();
+          vtoState.active = false;
+          if (vtoUploadInput) {
+            vtoUploadInput.value = '';
+            vtoUploadInput.click();
+          }
+        } else if (mode === 'model') {
+          setVtoMode('model');
+          setStageState('empty');
+          setVtoStatus('Pick a model to begin.');
+          stopCamera();
+          clearUpload();
+          vtoState.active = false;
+        }
+      });
+    });
+  }
+
+  if (vtoUploadInput) {
+    vtoUploadInput.addEventListener('change', () => {
+      const file = vtoUploadInput.files && vtoUploadInput.files[0];
+      if (file) handleVtoUpload(file);
+    });
+  }
+
+  if (vtoModelButtons.length) {
+    vtoModelButtons.forEach(btn => {
+      btn.addEventListener('click', () => selectVtoModel(btn));
+    });
+  }
+
+  if (vtoScaleInput) {
+    vtoScaleInput.addEventListener('input', () => {
+      const value = parseFloat(vtoScaleInput.value || '1');
+      vtoState.overlayScale = Number.isFinite(value) ? value : 1;
+      drawVtoFrame();
+    });
+  }
+
+  if (vtoYInput) {
+    vtoYInput.addEventListener('input', () => {
+      const value = parseFloat(vtoYInput.value || '0');
+      vtoState.overlayYOffset = Number.isFinite(value) ? value : 0;
+      drawVtoFrame();
+    });
+  }
+
+  if (vtoNudgeButtons.length) {
+    vtoNudgeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!vtoStage || !vtoStage.classList.contains('has-media')) return;
+        if (!vtoState.imgOverlay) return;
+        const dir = btn.dataset.vtoNudge;
+        const step = 8;
+        if (dir === 'up') vtoState.overlayY -= step;
+        if (dir === 'down') vtoState.overlayY += step;
+        if (dir === 'left') vtoState.overlayX -= step;
+        if (dir === 'right') vtoState.overlayX += step;
+        drawVtoFrame();
+      });
+    });
+  }
+
+  if (vtoResetBtn) {
+    vtoResetBtn.addEventListener('click', () => {
+      resetVtoOverlay();
+    });
+  }
+
+  if (vtoSnapshotBtn) {
+    vtoSnapshotBtn.addEventListener('click', captureVtoSnapshot);
+  }
+
+  if (vtoClearSnapshotBtn) {
+    vtoClearSnapshotBtn.addEventListener('click', clearVtoSnapshot);
+  }
+
+  if (vtoAddCartBtn) {
+    vtoAddCartBtn.addEventListener('click', () => {
+      const form = root.querySelector('.cta-panel');
+      if (!form) return;
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit();
+      } else {
+        form.submit();
+      }
+    });
+  }
+
+  if (vtoStageFrame) {
+    vtoStageFrame.addEventListener('pointerdown', (event) => {
+      if (!vtoStage || !vtoStage.classList.contains('has-media')) return;
+      if (!vtoState.imgOverlay) return;
+      event.preventDefault();
+      vtoState.dragActive = true;
+      const pos = getCanvasPointer(event);
+      vtoState.dragStartX = pos.x;
+      vtoState.dragStartY = pos.y;
+      vtoState.dragBaseX = vtoState.overlayX;
+      vtoState.dragBaseY = vtoState.overlayY;
+      vtoStageFrame.setPointerCapture(event.pointerId);
+    });
+    vtoStageFrame.addEventListener('pointermove', (event) => {
+      if (!vtoState.dragActive) return;
+      event.preventDefault();
+      const pos = getCanvasPointer(event);
+      const dx = pos.x - vtoState.dragStartX;
+      const dy = pos.y - vtoState.dragStartY;
+      vtoState.overlayX = vtoState.dragBaseX + dx;
+      vtoState.overlayY = vtoState.dragBaseY + dy;
+      drawVtoFrame();
+    });
+    const endDrag = (event) => {
+      if (!vtoState.dragActive) return;
+      vtoState.dragActive = false;
+      if (event && vtoStageFrame.hasPointerCapture(event.pointerId)) {
+        vtoStageFrame.releasePointerCapture(event.pointerId);
+      }
+    };
+    vtoStageFrame.addEventListener('pointerup', endDrag);
+    vtoStageFrame.addEventListener('pointercancel', endDrag);
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && vtoState.isOpen) {
+      closeVto();
+    }
+  });
+
+  if (customizeToggle && customizePanel) {
+    setCustomizeOpen(false);
+    customizeToggle.addEventListener('click', () => {
+      const isOpen = customizePanel.classList.contains('is-open');
+      setCustomizeOpen(!isOpen);
+    });
+  }
+
+  if (customizeText) {
+    customizeText.addEventListener('input', () => {
+      syncCustomizeToBottom();
+      updateCustomizationPricing();
+    });
+  }
+
+  customizeMethods.forEach(input => {
+    input.addEventListener('change', () => {
+      syncCustomizeToBottom();
+      updateCustomizationVisibility(true);
+      updateCustomizationPricing();
+    });
+  });
+
+  customizeMaterials.forEach(input => {
+    input.addEventListener('change', () => {
+      syncCustomizeToBottom();
+      updateCustomizationPricing();
+    });
+  });
+
+  customizeSizes.forEach(input => {
+    input.addEventListener('change', () => {
+      syncCustomizeToBottom();
+      updateCustomizationPricing();
+    });
+  });
+
+  customizeDesigns.forEach(input => {
+    input.addEventListener('change', () => {
+      syncCustomizeToBottom();
+      setHeroFromDesign();
+      updateCustomizationPricing();
+    });
+  });
+
+  if (customizeDesigns.length) {
+    setHeroFromDesign();
+  }
+  updateCustomizeActiveLabels();
+  updateCustomizationVisibility(false);
+
+  dots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      const image = images[idx];
+      const src = image ? resolveSrc(image) : (heroImg ? heroImg.src : '');
+      let variantId = null;
+      if (image && Array.isArray(image.variant_ids) && image.variant_ids.length) {
+        variantId = image.variant_ids[0];
+        applyVariantById(variantId);
+      }
+      
+      if (!variantId && image) {
+        // REPORT FIX: Handle Null values and White Space (Section 3.3 & 4.2)
+        // We trim() the string to ensure "Blue " matches "Blue"
+        const altText = (image.alt || image.alt_text || '').toLowerCase().trim();
+        
+        if (altText) {
+          const chips = Array.from(root.querySelectorAll('.color-chip'));
+          const matchChip = chips.find(chip => {
+            // Normalize the chip value as well
+            const value = (chip.dataset.colorValue || '').toLowerCase().trim();
+            
+            // Use includes for SEO conflict resolution (Section 3.2), allows "Blue" to match "Blue Silk Shirt"
+            return value && altText.includes(value);
+          });
+          if (matchChip) {
+            const input = matchChip.querySelector('input[type="radio"]');
+            if (input) input.checked = true;
+            updateActiveLabels();
+          }
+        }
+      }
+
+      if (src) {
+        setHeroImage(src, variantId, idx);
+      }
+    });
+  });
+
+  const qtyInput = root.querySelector('.qty-input');
+  root.querySelectorAll('[data-qty-inc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = Math.max(1, parseInt(qtyInput.value || '1', 10) + 1);
+      qtyInput.value = val;
+    });
+  });
+  root.querySelectorAll('[data-qty-dec]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = Math.max(1, parseInt(qtyInput.value || '1', 10) - 1);
+      qtyInput.value = val;
+    });
+  });
+
+  if (enableHeroMotion && heroShell && heroFrame) {
+    let rafId;
+    const resetHalo = () => {
+      heroShell.style.setProperty('--halo-x', '50%');
+      heroShell.style.setProperty('--halo-y', '56%');
+      heroShell.style.setProperty('--tilt-x', '-2deg');
+      heroShell.style.setProperty('--tilt-y', '2deg');
+    };
+    const handleMove = (event) => {
+      const rect = heroFrame.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      const tiltX = ((y - 50) / 50) * -6;
+      const tiltY = ((x - 50) / 50) * 6;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        heroShell.style.setProperty('--halo-x', `${Math.max(0, Math.min(100, x))}%`);
+        heroShell.style.setProperty('--halo-y', `${Math.max(0, Math.min(100, y))}%`);
+        heroShell.style.setProperty('--tilt-x', `${Math.max(-6, Math.min(6, tiltX))}deg`);
+        heroShell.style.setProperty('--tilt-y', `${Math.max(-6, Math.min(6, tiltY))}deg`);
+      });
+    };
+    heroFrame.addEventListener('pointermove', handleMove);
+    heroFrame.addEventListener('pointerleave', resetHalo);
+  }
+
+  if (variantSelect) {
+    radioGroups = Array.from(root.querySelectorAll('.options-panel input[type="radio"]'));
+    radioGroups.forEach(r => {
+      r.addEventListener('change', () => {
+        if (isSyncing) return;
+        const selections = {};
+        radioGroups.forEach(r2 => {
+          if (r2.checked) selections[r2.name.replace('options[','').replace(']','')] = r2.value;
+        });
+        updateActiveLabels();
+        const match = Array.isArray(variants) ? variants.find(v => {
+          if (!v || !v.options) return false;
+          return v.options.every((opt, i) => {
+            const key = optionNames[i];
+            return selections[key] === opt;
+          });
+        }) : null;
+        let heroSource = '';
+        let variantId = '';
+        let preferredIndex = null;
+        if (match) {
+          variantId = normalizeVariantId(match.id);
+          variantSelect.value = match.id;
+          heroSource = getVariantImage(match);
+          syncBottomVariant();
+        }
+
+        const label = r.closest('.color-chip');
+        if (!heroSource && label) {
+          const heroSrc = label.dataset.heroSrc;
+          const galleryIndex = parseInt(label.dataset.galleryIndex || '-1', 10);
+          const colorValue = label.dataset.colorValue || '';
+          const labelVariantId = normalizeVariantId(label.dataset.variantId);
+          if (!variantId && labelVariantId) variantId = labelVariantId;
+
+          const imageMatch = Array.isArray(images) ? images.find(img => {
+            const alt = (img && (img.alt || img.alt_text || '')).toLowerCase();
+            const src = resolveSrc(img).toLowerCase();
+            return colorValue && (alt.includes(colorValue) || src.includes(colorValue));
+          }) : null;
+
+          if (heroSrc) {
+            heroSource = heroSrc;
+          } else if (imageMatch) {
+            heroSource = resolveSrc(imageMatch);
+          } else if (!Number.isNaN(galleryIndex) && images[galleryIndex]) {
+            heroSource = resolveSrc(images[galleryIndex]);
+          }
+          if (!Number.isNaN(galleryIndex)) preferredIndex = galleryIndex;
+        }
+
+        if (heroSource) {
+          setHeroImage(heroSource, variantId, Number.isInteger(preferredIndex) ? preferredIndex : undefined);
+        }
+        setHeroFromDesign();
+        updateCustomizationPricing();
+        if (variantSelect) handleVtoVariantChange(variantSelect.value);
+      });
+    });
+  }
+
+  const initialColor = root.querySelector('.color-chip.active') || root.querySelector('.color-chip input:checked')?.closest('label');
+  if (initialColor) applyAccentFromLabel(initialColor);
+  syncBottomVariant();
+  if (variantSelect) handleVtoVariantChange(variantSelect.value);
+  updateVtoProperties();
+
+  const tabsRoot = root.querySelector('[data-tabs]');
+  if (tabsRoot) {
+    const tabButtons = Array.from(tabsRoot.querySelectorAll('[data-tab]'));
+    const tabPanels = Array.from(tabsRoot.querySelectorAll('[data-tab-panel]'));
+    const setTabsCollapsed = () => {
+      const hasActive = tabButtons.some(btn => btn.classList.contains('active'));
+      tabsRoot.classList.toggle('is-collapsed', !hasActive);
+    };
+    setTabsCollapsed();
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        tabButtons.forEach(b => {
+          const isActive = b === btn;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-selected', String(isActive));
+        });
+        tabPanels.forEach(panel => {
+          panel.classList.toggle('active', panel.dataset.tabPanel === target);
+        });
+        setTabsCollapsed();
+        if (target === 'reviews') {
+          if (window.SPR && typeof window.SPR.initDomEls === 'function') {
+            window.SPR.initDomEls();
+            if (typeof window.SPR.loadBadges === 'function') window.SPR.loadBadges();
+            if (typeof window.SPR.loadProducts === 'function') window.SPR.loadProducts();
+          }
+          if (window.jdgm && typeof window.jdgm.renderWidgets === 'function') {
+            window.jdgm.renderWidgets();
+          }
+        }
+      });
+    });
+  }
+
+  if (heroImg) {
+    const handleInitialBurst = () => {
+      if (initialBurstDone) return;
+      initialBurstDone = true;
+      teleporterBurst();
+    };
+    if (heroImg.complete) {
+      handleInitialBurst();
+    } else {
+      heroImg.addEventListener('load', handleInitialBurst, { once: true });
+    }
+  }
+
+  if (customizeDesigns.length) {
+    customizeDesigns.forEach(input => {
+      input.addEventListener('change', setHeroFromDesign);
+    });
+    setHeroFromDesign();
+  }
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "Teletransport Product",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Fallback product (optional)" },
+    { "type": "link_list", "id": "shop_menu", "label": "Shop menu (header links)" },
+    { "type": "link_list", "id": "menu", "label": "Header menu fallback" },
+    { "type": "checkbox", "id": "customization_toggle", "label": "Enable customization toggle", "default": true, "info": "When off, the Customize button appears only for products tagged 'customizable', 'personalized', or 'custom'." },
+    { "type": "textarea", "id": "custom_product_types", "label": "Customizable product types (comma separated)", "info": "Overrides tags when set. Example: Shirts, Hoodies, Accessories" },
+    { "type": "textarea", "id": "custom_designs", "label": "Design options (comma separated)", "info": "Used when the product metafield custom.designs is blank." },
+    { "type": "text", "id": "custom_text_label", "label": "Custom text label", "default": "Custom text" },
+    { "type": "text", "id": "custom_text_placeholder", "label": "Custom text placeholder", "default": "Your text" },
+    { "type": "range", "id": "custom_text_max", "label": "Custom text max characters", "min": 1, "max": 24, "step": 1, "default": 8 }
+  ],
+  "presets": [
+    { "name": "Teletransport Product" }
+  ]
+}
+{% endschema %}
+
+
+
+

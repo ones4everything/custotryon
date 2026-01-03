@@ -1,0 +1,584 @@
+{% comment %}
+VTO Glasses overlay (MediaPipe Face Landmarker + Three.js) and 3D/AR preview (model-viewer).
+OFF by default. Enable by passing vto_glasses_enabled: true when rendering.
+
+Suggested usage if you move this into snippets/:
+  {% render 'VTOglasses',
+     vto_glasses_enabled: true,
+     vto_glasses_glb: product.metafields.custom.vto_glasses_glb,
+     vto_glasses_usdz: product.metafields.custom.vto_glasses_usdz,
+     vto_glasses_face_glb: product.metafields.custom.vto_face_glb %}
+
+Notes:
+- Live try-on needs camera permission and HTTPS.
+- Host the MediaPipe model/WASM and GLB/USDZ files for production.
+{% endcomment %}
+
+{% assign vto_glasses_enabled = vto_glasses_enabled | default: false %}
+{% assign vto_product = product | default: current_product %}
+{% assign vto_glb = vto_glasses_glb | default: '' %}
+{% assign vto_usdz = vto_glasses_usdz | default: '' %}
+{% assign vto_face_glb = vto_glasses_face_glb | default: '' %}
+
+{% if vto_product %}
+  {% if vto_glb == blank %}
+    {% assign vto_glb = vto_product.metafields.custom.vto_glasses_glb | default: vto_product.metafields.custom.glasses_glb %}
+  {% endif %}
+  {% if vto_usdz == blank %}
+    {% assign vto_usdz = vto_product.metafields.custom.vto_glasses_usdz | default: vto_product.metafields.custom.glasses_usdz %}
+  {% endif %}
+  {% if vto_face_glb == blank %}
+    {% assign vto_face_glb = vto_product.metafields.custom.vto_face_glb %}
+  {% endif %}
+{% endif %}
+
+{% if vto_glasses_enabled %}
+  <div class="vto-glasses-root"
+       data-vto-glasses
+       data-vto-glb="{{ vto_glb | escape }}"
+       data-vto-usdz="{{ vto_usdz | escape }}"
+       data-vto-face-model="{{ vto_face_glb | escape }}">
+    <button class="vto-glasses-fab" type="button" data-vto-open aria-haspopup="dialog">
+      Try Glasses
+    </button>
+
+    <div class="vto-glasses-modal" data-vto-modal aria-hidden="true">
+      <div class="vto-glasses-backdrop" data-vto-close></div>
+      <div class="vto-glasses-dialog" role="dialog" aria-modal="true" aria-labelledby="vto-glasses-title">
+        <button class="vto-glasses-close" type="button" data-vto-close aria-label="Close try-on">X</button>
+        <div class="vto-glasses-header">
+          <div class="vto-glasses-kicker">Try-On Lab</div>
+          <div class="vto-glasses-title" id="vto-glasses-title">VTO Glasses</div>
+          <div class="vto-glasses-subtitle">Live try-on or 3D/AR preview</div>
+        </div>
+        <div class="vto-glasses-tabs" role="tablist">
+          <button type="button" class="vto-glasses-tab is-active" data-vto-tab="live" aria-pressed="true">Live Try-On</button>
+          <button type="button" class="vto-glasses-tab" data-vto-tab="ar" aria-pressed="false">3D / AR Preview</button>
+        </div>
+        <div class="vto-glasses-body">
+          <div class="vto-glasses-pane" data-vto-pane="live">
+            <div class="vto-glasses-stage" data-vto-live-stage>
+              <video data-vto-video playsinline muted autoplay></video>
+              <canvas data-vto-three></canvas>
+              <div class="vto-glasses-hud" data-vto-hud>Camera idle</div>
+            </div>
+            <div class="vto-glasses-controls">
+              <button type="button" class="vto-glasses-btn" data-vto-start>Start camera</button>
+              <button type="button" class="vto-glasses-btn" data-vto-stop>Stop camera</button>
+            </div>
+          </div>
+          <div class="vto-glasses-pane" data-vto-pane="ar" hidden>
+            <div class="vto-glasses-model-wrap" data-vto-model-wrap>
+              <div class="vto-glasses-empty" data-vto-model-empty>
+                Add GLB (and optional USDZ) to enable 3D/AR preview.
+              </div>
+              <model-viewer data-vto-model-viewer hidden
+                ar
+                ar-modes="webxr scene-viewer quick-look"
+                camera-controls
+                auto-rotate
+                shadow-intensity="1"
+                exposure="1.0">
+              </model-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .vto-glasses-root {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 7000;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .vto-glasses-fab {
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(34, 211, 238, 0.6);
+      background: linear-gradient(120deg, rgba(0, 230, 255, 0.28), rgba(124, 144, 255, 0.2));
+      color: #ecfeff;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.62rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+    }
+
+    .vto-glasses-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .vto-glasses-modal.is-open {
+      display: flex;
+    }
+
+    .vto-glasses-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 12, 24, 0.82);
+      backdrop-filter: blur(10px);
+    }
+
+    .vto-glasses-dialog {
+      position: relative;
+      width: min(900px, 94vw);
+      max-height: 92vh;
+      max-height: 92dvh;
+      background: rgba(6, 10, 22, 0.92);
+      border-radius: 20px;
+      border: 1px solid rgba(126, 234, 255, 0.25);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .vto-glasses-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid rgba(126, 234, 255, 0.3);
+      background: rgba(6, 10, 22, 0.85);
+      color: #e8fbff;
+      cursor: pointer;
+    }
+
+    .vto-glasses-header {
+      padding: 18px 48px 10px 18px;
+      border-bottom: 1px solid rgba(126, 234, 255, 0.18);
+    }
+
+    .vto-glasses-kicker {
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(198, 244, 255, 0.7);
+    }
+
+    .vto-glasses-title {
+      font-size: 1.1rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      margin-top: 6px;
+      color: #f3fdff;
+    }
+
+    .vto-glasses-subtitle {
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      color: rgba(198, 244, 255, 0.7);
+      margin-top: 4px;
+    }
+
+    .vto-glasses-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 18px;
+    }
+
+    .vto-glasses-tab {
+      border-radius: 12px;
+      border: 1px solid rgba(126, 234, 255, 0.2);
+      background: rgba(6, 10, 22, 0.75);
+      color: rgba(210, 244, 255, 0.8);
+      padding: 10px;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .vto-glasses-tab.is-active {
+      border-color: rgba(34, 211, 238, 0.7);
+      color: #ecfeff;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.35);
+    }
+
+    .vto-glasses-body {
+      padding: 16px 18px 18px;
+      overflow-y: auto;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .vto-glasses-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      border: 1px solid rgba(126, 234, 255, 0.2);
+      background: rgba(5, 10, 18, 0.8);
+      overflow: hidden;
+    }
+
+    .vto-glasses-stage video,
+    .vto-glasses-stage canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+    }
+
+    .vto-glasses-stage canvas {
+      pointer-events: none;
+    }
+
+    .vto-glasses-hud {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(210, 244, 255, 0.8);
+      background: rgba(6, 10, 22, 0.6);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(126, 234, 255, 0.2);
+    }
+
+    .vto-glasses-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .vto-glasses-btn {
+      border-radius: 10px;
+      border: 1px solid rgba(126, 234, 255, 0.2);
+      background: rgba(6, 10, 22, 0.8);
+      color: #e8fbff;
+      padding: 8px 12px;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .vto-glasses-model-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      border: 1px solid rgba(126, 234, 255, 0.2);
+      background: rgba(5, 10, 18, 0.8);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    .vto-glasses-model-wrap model-viewer {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    .vto-glasses-empty {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(210, 244, 255, 0.7);
+      text-align: center;
+      padding: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .vto-glasses-root { right: 12px; bottom: 12px; }
+      .vto-glasses-modal { padding: 0; align-items: flex-end; }
+      .vto-glasses-dialog {
+        width: 100%;
+        max-height: 100vh;
+        max-height: 100dvh;
+        height: 100vh;
+        height: 100dvh;
+        border-radius: 18px 18px 0 0;
+      }
+      .vto-glasses-body { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+    }
+  </style>
+
+  <script type="module">
+    (() => {
+      const root = document.querySelector('[data-vto-glasses]');
+      if (!root) return;
+
+      const openBtn = root.querySelector('[data-vto-open]');
+      const modal = root.querySelector('[data-vto-modal]');
+      const closeBtns = root.querySelectorAll('[data-vto-close]');
+      const tabButtons = Array.from(root.querySelectorAll('[data-vto-tab]'));
+      const panes = {
+        live: root.querySelector('[data-vto-pane="live"]'),
+        ar: root.querySelector('[data-vto-pane="ar"]')
+      };
+      const video = root.querySelector('[data-vto-video]');
+      const canvas = root.querySelector('[data-vto-three]');
+      const hud = root.querySelector('[data-vto-hud]');
+      const startBtn = root.querySelector('[data-vto-start]');
+      const stopBtn = root.querySelector('[data-vto-stop]');
+      const stage = root.querySelector('[data-vto-live-stage]');
+      const modelWrap = root.querySelector('[data-vto-model-wrap]');
+      const modelViewer = root.querySelector('[data-vto-model-viewer]');
+      const modelEmpty = root.querySelector('[data-vto-model-empty]');
+
+      const glbSrc = root.dataset.vtoGlb || '';
+      const usdzSrc = root.dataset.vtoUsdz || '';
+      const faceModelSrc = root.dataset.vtoFaceModel || '';
+
+      const state = {
+        open: false,
+        mode: 'live',
+        rafId: null,
+        stream: null,
+        three: null,
+        scene: null,
+        camera: null,
+        renderer: null,
+        faceAnchor: null,
+        landmarker: null,
+        resizeObserver: null
+      };
+
+      const setHud = (text) => {
+        if (hud) hud.textContent = text || '';
+      };
+
+      const setTab = (mode) => {
+        state.mode = mode;
+        tabButtons.forEach(btn => {
+          const active = btn.dataset.vtoTab === mode;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        if (panes.live) panes.live.hidden = mode !== 'live';
+        if (panes.ar) panes.ar.hidden = mode !== 'ar';
+        if (mode !== 'live') stopCamera();
+        if (mode === 'ar') initModelViewer();
+      };
+
+      const openModal = () => {
+        if (!modal || state.open) return;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        state.open = true;
+        setTab(state.mode || 'live');
+      };
+
+      const closeModal = () => {
+        if (!modal || !state.open) return;
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        state.open = false;
+        stopCamera();
+      };
+
+      const initResizeObserver = () => {
+        if (!stage || typeof ResizeObserver === 'undefined') return;
+        if (state.resizeObserver) return;
+        state.resizeObserver = new ResizeObserver(() => resizeThree());
+        state.resizeObserver.observe(stage);
+      };
+
+      const teardownResizeObserver = () => {
+        if (!state.resizeObserver) return;
+        state.resizeObserver.disconnect();
+        state.resizeObserver = null;
+      };
+
+      const ensureThree = async () => {
+        if (state.three) return state.three;
+        const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+        state.three = THREE;
+
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+        camera.position.set(0, 0, 1);
+
+        const light = new THREE.DirectionalLight(0xffffff, 1.0);
+        light.position.set(0.5, 1, 1);
+        scene.add(light);
+
+        const faceAnchor = new THREE.Group();
+        scene.add(faceAnchor);
+
+        const placeholder = new THREE.Mesh(
+          new THREE.BoxGeometry(0.18, 0.06, 0.08),
+          new THREE.MeshStandardMaterial({ color: 0x00ffcc, metalness: 0.2, roughness: 0.4 })
+        );
+        faceAnchor.add(placeholder);
+
+        if (faceModelSrc) {
+          try {
+            const { GLTFLoader } = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js');
+            const loader = new GLTFLoader();
+            loader.load(faceModelSrc, (gltf) => {
+              faceAnchor.clear();
+              faceAnchor.add(gltf.scene);
+            });
+          } catch (err) {
+            // Keep placeholder if model load fails.
+          }
+        }
+
+        state.renderer = renderer;
+        state.scene = scene;
+        state.camera = camera;
+        state.faceAnchor = faceAnchor;
+        return THREE;
+      };
+
+      const ensureLandmarker = async () => {
+        if (state.landmarker) return state.landmarker;
+        const vision = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/vision_bundle.mjs');
+        const fileset = await vision.FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm'
+        );
+        state.landmarker = await vision.FaceLandmarker.createFromOptions(fileset, {
+          baseOptions: {
+            modelAssetPath:
+              'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+          },
+          outputFaceBlendshapes: false,
+          outputFacialTransformationMatrixes: true,
+          runningMode: 'VIDEO',
+          numFaces: 1
+        });
+        return state.landmarker;
+      };
+
+      const resizeThree = () => {
+        if (!stage || !state.renderer || !state.camera) return;
+        const rect = stage.getBoundingClientRect();
+        const width = rect.width || stage.clientWidth;
+        const height = rect.height || stage.clientHeight;
+        if (!width || !height) return;
+        state.renderer.setSize(width, height, false);
+        state.camera.aspect = width / height;
+        state.camera.updateProjectionMatrix();
+      };
+
+      const applyFaceMatrix = (result) => {
+        const THREE = state.three;
+        if (!THREE || !state.faceAnchor) return false;
+        const m = result && result.facialTransformationMatrixes && result.facialTransformationMatrixes[0]
+          ? result.facialTransformationMatrixes[0].data
+          : null;
+        if (!m) return false;
+        const mat = new THREE.Matrix4().fromArray(Array.from(m));
+        const scale = 0.35;
+        const zOffset = 0.15;
+        mat.multiply(new THREE.Matrix4().makeScale(scale, scale, scale));
+        mat.multiply(new THREE.Matrix4().makeTranslation(0, 0, zOffset));
+        state.faceAnchor.matrixAutoUpdate = false;
+        state.faceAnchor.matrix.copy(mat);
+        return true;
+      };
+
+      const renderLoop = () => {
+        if (!state.renderer || !state.scene || !state.camera || !state.landmarker || !video) return;
+        const now = performance.now();
+        const result = state.landmarker.detectForVideo(video, now);
+        const ok = applyFaceMatrix(result);
+        setHud(ok ? 'Face tracked' : 'No face');
+        state.renderer.render(state.scene, state.camera);
+        state.rafId = requestAnimationFrame(renderLoop);
+      };
+
+      const startCamera = async () => {
+        if (!video || !canvas) return;
+        try {
+          setHud('Starting camera...');
+          await ensureThree();
+          await ensureLandmarker();
+          initResizeObserver();
+          resizeThree();
+          state.stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: false
+          });
+          video.srcObject = state.stream;
+          await video.play();
+          if (state.rafId) cancelAnimationFrame(state.rafId);
+          renderLoop();
+        } catch (err) {
+          setHud('Camera unavailable');
+        }
+      };
+
+      const stopCamera = () => {
+        if (state.rafId) {
+          cancelAnimationFrame(state.rafId);
+          state.rafId = null;
+        }
+        if (video) {
+          video.pause();
+          video.srcObject = null;
+        }
+        if (state.stream) {
+          state.stream.getTracks().forEach(track => track.stop());
+          state.stream = null;
+        }
+        teardownResizeObserver();
+        setHud('Camera idle');
+      };
+
+      const initModelViewer = async () => {
+        if (!modelWrap || !modelViewer) return;
+        if (!glbSrc) {
+          if (modelEmpty) modelEmpty.style.display = 'block';
+          modelViewer.hidden = true;
+          return;
+        }
+        if (modelEmpty) modelEmpty.style.display = 'none';
+        modelViewer.hidden = false;
+        if (!customElements.get('model-viewer')) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = 'https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error('model-viewer failed'));
+            document.head.appendChild(script);
+          });
+        }
+        modelViewer.setAttribute('src', glbSrc);
+        if (usdzSrc) {
+          modelViewer.setAttribute('ios-src', usdzSrc);
+        }
+      };
+
+      if (openBtn) openBtn.addEventListener('click', openModal);
+      closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => setTab(btn.dataset.vtoTab));
+      });
+      if (startBtn) startBtn.addEventListener('click', startCamera);
+      if (stopBtn) stopBtn.addEventListener('click', stopCamera);
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && state.open) closeModal();
+      });
+    })();
+  </script>
+{% endif %}

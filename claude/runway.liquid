@@ -1,0 +1,500 @@
+
+
+{%- comment -%}
+  The inline style attribute was added here to apply the new padding settings.
+{%- endcomment -%}
+<div class="shopify-section-3d-carousel" id="carousel-root-{{ section.id }}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="text-center mb-6">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white">{{ section.settings.title }}</h1>
+    <p class="text-lg text-gray-400 mt-2">{{ section.settings.subtitle }}</p>
+  </div>
+
+  <div class="stage-container">
+    <div class="ribbon-container" aria-hidden="true">
+      <div class="ribbon-strand"></div>
+      <div class="ribbon-strand"></div>
+      <div class="ribbon-strand"></div>
+    </div>
+
+    <div class="scene">
+      <div class="carousel" id="carousel-{{ section.id }}" role="region" aria-label="3D product carousel">
+        <!-- Product panels injected by JS -->
+      </div>
+    </div>
+
+    <div class="reflection-floor" aria-hidden="true"></div>
+  </div>
+
+  <div class="nav-button-container" aria-controls="carousel-{{ section.id }}">
+    <button class="nav-button prev-button" id="prev-button-{{ section.id }}" type="button" aria-label="Previous">
+      <span aria-hidden="true">&#8249;</span>
+    </button>
+    <button class="nav-button next-button" id="next-button-{{ section.id }}" type="button" aria-label="Next">
+      <span aria-hidden="true">&#8250;</span>
+    </button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const MINIMAL_KEY = 'o4MinimalMode';
+  const stored = localStorage.getItem(MINIMAL_KEY);
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const enabled = stored !== null ? stored === 'true' : prefersReduced;
+  document.body.classList.toggle('mode-minimal', enabled);
+
+const init = () => {
+  const sectionId = '{{ section.id }}';
+  const rootSel = `#carousel-root-${sectionId}`;
+  const rootEl  = document.getElementById(`carousel-root-${sectionId}`);
+  if (!rootEl) return;
+
+  /* =========================
+     1) Inject CSS (no external file needed)
+     ========================= */
+  const css = `
+  /* Vars */
+  ${rootSel}{
+    --panel-width: 320px;
+    --panel-height: 460px;
+    --gap-width: 90px;
+    --anim-dur: 1.25s;
+    --fade-dur: .9s;
+    --safe-inset: 18%;
+  }
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  /* The padding property was removed from this rule to allow the inline style to control spacing. */
+  .shopify-section-3d-carousel{font-family:'Inter',sans-serif;background-color:#0a0a1a;color:#e0e0e0;overflow:hidden;position:relative}
+  .stage-container{position:relative;padding-top:20px;width:100%;display:flex;flex-direction:column;align-items:center}
+
+  .scene{position:relative;width:calc(var(--panel-width)*2 + var(--gap-width));height:var(--panel-height);margin:0 auto;perspective:2000px;z-index:10}
+  .carousel{width:100%;height:100%;position:relative;transform-style:preserve-3d;display:flex;justify-content:center;align-items:center}
+
+  .carousel-panel{position:absolute;width:var(--panel-width);height:var(--panel-height);backface-visibility:hidden;background:transparent;transition:transform var(--anim-dur) cubic-bezier(0.65,0,0.35,1),opacity var(--fade-dur) ease-in-out,filter var(--fade-dur) ease;opacity:0;pointer-events:none;filter:drop-shadow(0 0 0 rgba(170,120,255,0));display:block}
+
+  /* LAYER ORDER: frame (0) -> flash (2) -> product (3) */
+  .panel-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0;pointer-events:none}
+
+  .panel-content{position:relative;z-index:1;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:3rem 2rem;overflow:hidden}
+  .panel-content .product-image{
+    position:absolute;top:var(--safe-inset);right:var(--safe-inset);bottom:var(--safe-inset);left:var(--safe-inset);
+    width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;object-position:center;z-index:3
+  }
+
+  .product-title{
+    position:absolute;left:50%;bottom:10px;transform:translateX(-50%);max-width:90%;padding:6px 10px;
+    background:rgba(10,10,26,.55);border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:10px;backdrop-filter:blur(6px);
+    font-size:.9rem;line-height:1.1;font-weight:600;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 10px rgba(0,0,0,.25)
+  }
+
+  .panel-left{transform:translateX(20%) scale(.7) rotateY(90deg)}
+  .panel-left.is-active{transform:translateX(calc(-50% - (var(--gap-width)/2))) scale(1) rotateY(0);opacity:1;pointer-events:auto;z-index:10}
+  .panel-left.is-exiting{transform:translateX(20%) scale(.7) rotateY(360deg) rotateX(15deg);opacity:0;z-index:5;filter:brightness(1.1) blur(.5px)}
+
+  .panel-right{transform:translateX(-20%) scale(.7) rotateY(-90deg)}
+  .panel-right.is-active{transform:translateX(calc(50% + (var(--gap-width)/2))) scale(1) rotateY(0);opacity:1;pointer-events:auto;z-index:10}
+  .panel-right.is-exiting{transform:translateX(-20%) scale(.7) rotateY(-360deg) rotateX(15deg);opacity:0;z-index:5;filter:brightness(1.1) blur(.5px)}
+
+  .carousel-panel.is-active{filter:drop-shadow(0 0 20px rgba(170,120,255,.7)) drop-shadow(0 0 35px rgba(80,190,255,.5));transition-duration:.25s}
+
+  /* Camera Flash layer (between product and frame) */
+  .flash-layer{
+    position:absolute; inset:var(--safe-inset); z-index:2; pointer-events:none; mix-blend-mode:screen; opacity:0;
+    background:
+      radial-gradient(40% 40% at 70% 30%, rgba(255,255,255,.08), rgba(255,255,255,0) 60%),
+      radial-gradient(35% 35% at 30% 70%, rgba(160,210,255,.06), rgba(160,210,255,0) 65%);
+    filter: blur(.2px) drop-shadow(0 0 8px rgba(170,120,255,.25));
+    transition: opacity .25s ease;
+  }
+  .flash-layer.play{
+    animation: flash-pop var(--flash-duration, .9s) cubic-bezier(.25,.9,.25,1) 1,
+               flash-strobe .9s ease-out 1;
+    opacity:1;
+  }
+  .carousel-panel.is-active .flash-layer{animation: flash-ambient 4.5s ease-in-out infinite;opacity:.35}
+  .carousel-panel.is-active:hover .flash-layer{
+    animation: flash-pop .8s cubic-bezier(.25,.9,.25,1) 1,
+               flash-ambient 4.5s ease-in-out 1.2s infinite;
+    opacity:.85;
+  }
+
+  @keyframes flash-pop{
+    0%{
+      opacity:0;
+      background:
+        radial-gradient(12% 12% at 50% 50%, rgba(255,255,255,.95), rgba(255,255,255,0) 40%),
+        radial-gradient(20% 20% at 20% 80%, rgba(160,210,255,.8), rgba(160,210,255,0) 55%),
+        radial-gradient(18% 18% at 80% 20%, rgba(255,200,255,.7), rgba(255,200,255,0) 60%);
+      filter:blur(1.5px) drop-shadow(0 0 18px rgba(255,255,255,.25));
+      transform:scale(1);
+    }
+    35%{
+      opacity:1;
+      background:
+        radial-gradient(28% 28% at 50% 50%, rgba(255,255,255,.95), rgba(255,255,255,0) 60%),
+        radial-gradient(26% 26% at 18% 78%, rgba(160,210,255,.9), rgba(160,210,255,0) 70%),
+        radial-gradient(24% 24% at 82% 22%, rgba(255,200,255,.85), rgba(255,200,255,0) 70%);
+      filter:blur(.6px) drop-shadow(0 0 26px rgba(170,120,255,.45));
+      transform:scale(1.015);
+    }
+    100%{
+      opacity:.15;
+      background:
+        radial-gradient(0% 0% at 50% 50%, rgba(255,255,255,0), rgba(255,255,255,0) 0%),
+        radial-gradient(0% 0% at 20% 80%, rgba(160,210,255,0), rgba(160,210,255,0) 0%),
+        radial-gradient(0% 0% at 80% 20%, rgba(255,200,255,0), rgba(255,200,255,0) 0%);
+      filter:blur(0) drop-shadow(0 0 12px rgba(80,190,255,.25));
+      transform:scale(1);
+    }
+  }
+  @keyframes flash-strobe{
+    0%{ box-shadow:0 0 0 rgba(255,255,255,0), inset 0 0 0 rgba(255,255,255,0) }
+    15%{ box-shadow:0 0 45px rgba(255,255,255,.35), inset 0 0 55px rgba(255,255,255,.25) }
+    40%{ box-shadow:0 0 22px rgba(170,120,255,.3), inset 0 0 30px rgba(80,190,255,.25) }
+    100%{ box-shadow:0 0 0 rgba(255,255,255,0), inset 0 0 0 rgba(255,255,255,0) }
+  }
+  @keyframes flash-ambient{
+    0%,100%{ filter:drop-shadow(0 0 12px rgba(170,120,255,.3)); opacity:.25 }
+    50%{ filter:drop-shadow(0 0 20px rgba(80,190,255,.4)); opacity:.45 }
+  }
+
+  .reflection-floor{position:relative;width:140%;height:120px;margin:-25px auto 0;background:linear-gradient(to bottom,rgba(10,10,26,.7),rgba(10,10,26,1) 70%);transform:perspective(150px) rotateX(45deg);overflow:hidden;z-index:1}
+  .reflection-floor::before{content:'';position:absolute;inset:0;width:40%;background:linear-gradient(to right,transparent 0%,rgba(170,120,255,.25) 40%,rgba(80,190,255,.3) 50%,rgba(170,120,255,.25) 60%,transparent 100%);animation:shine 5s linear infinite}
+  @keyframes shine{0%{transform:translateX(-100%) skewX(-30deg)}100%{transform:translateX(350%) skewX(-30deg)}}
+
+  .nav-button-container{position:relative;width:100%;max-width:calc(var(--panel-width)*2 + var(--gap-width) + 200px);height:50px;margin:2rem auto 0;z-index:20}
+  .nav-button{position:absolute;top:0;width:50px;height:50px;background-color:rgba(255,255,255,.1);border-radius:50%;border:1px solid rgba(255,255,255,.2);color:#fff;cursor:pointer;z-index:20;display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .25s ease}
+  .nav-button:hover{background-color:rgba(170,120,255,.8);box-shadow:0 0 15px rgba(170,120,255,.7)}
+  .prev-button{left:0}.next-button{right:0}
+
+  .ribbon-container{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .ribbon-strand{position:absolute;height:60px;background:linear-gradient(90deg,rgba(255,255,255,.8),rgba(0,100,255,.9),rgba(255,255,255,.8));border-radius:30px;filter:blur(10px) drop-shadow(0 0 15px rgba(0,150,255,.7));opacity:0}
+  .ribbon-strand:nth-child(1){top:20%;width:150%;animation:flow 12s linear infinite;animation-delay:-2s}
+  .ribbon-strand:nth-child(2){top:40%;width:120%;height:40px;animation:flow 15s linear infinite;animation-delay:-8s}
+  .ribbon-strand:nth-child(3){top:65%;width:180%;animation:flow 10s linear infinite;animation-delay:-5s}
+  @keyframes flow{0%{transform:translateX(-100%) rotate(-10deg) scaleY(1);opacity:0}20%{opacity:.25}80%{opacity:.25}100%{transform:translateX(100%) rotate(10deg) scaleY(1.2);opacity:0}}
+
+  @media (max-width:768px){
+    ${rootSel}{ --panel-width: 200px; --panel-height: 320px; --gap-width: 24px; }
+    ${rootSel} h1{font-size:2rem}
+    .nav-button-container{max-width:calc(var(--panel-width)*2 + var(--gap-width) + 20px)}
+    .panel-content{padding:2rem 1.2rem}
+    .product-title{font-size:.8rem;bottom:8px;max-width:92%}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    ${rootSel}{--anim-dur:.01ms;--fade-dur:.01ms}
+    .ribbon-strand,.reflection-floor::before{animation:none!important}
+    .flash-layer{animation:none!important}
+  }
+
+  body.mode-minimal ${rootSel}{
+    --anim-dur: .01ms !important;
+    --fade-dur: .01ms !important;
+    background-color: #0b111a;
+  }
+  body.mode-minimal ${rootSel} h1{
+    font-size: clamp(2.6rem, 6vw, 3.6rem);
+    letter-spacing: .02em;
+  }
+  body.mode-minimal ${rootSel} .text-lg{
+    font-size: 1.15rem;
+    line-height: 1.6;
+  }
+  body.mode-minimal ${rootSel} .carousel-panel,
+  body.mode-minimal ${rootSel} .carousel-panel.is-active{
+    filter: none;
+  }
+  body.mode-minimal ${rootSel} .flash-layer,
+  body.mode-minimal ${rootSel} .carousel-panel.is-active .flash-layer{
+    animation: none !important;
+    opacity: 0;
+  }
+  body.mode-minimal ${rootSel} .product-title{
+    font-size: 1.05rem;
+    line-height: 1.3;
+    background: rgba(10,10,20,.92);
+    border-color: rgba(255,255,255,.2);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  body.mode-minimal ${rootSel} .nav-button{
+    background-color: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.2);
+    box-shadow: none;
+  }
+  body.mode-minimal ${rootSel} .nav-button:hover{
+    background-color: rgba(255,255,255,.12);
+    box-shadow: none;
+  }
+  body.mode-minimal ${rootSel} .ribbon-strand{
+    display: none;
+  }
+  body.mode-minimal ${rootSel} .reflection-floor{
+    opacity: .3;
+  }
+  body.mode-minimal ${rootSel} .reflection-floor::before{
+    display: none;
+  }
+
+  @media (max-width:768px){
+    body.mode-minimal ${rootSel} .text-lg{ font-size: 1.05rem; }
+    body.mode-minimal ${rootSel} .product-title{ font-size: 0.95rem; }
+  }
+  `;
+
+  const styleId = `carousel-styles-${sectionId}`;
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  /* =========================
+     2) Settings from Theme Editor
+     ========================= */
+  const autoplayEnabled   = {{ section.settings.autoplay | json }};
+  const speedSetting      = {{ section.settings.animation_speed | json }}; // "slow" | "normal" | "fast"
+  const intervalOverrideSec = {{ section.settings.autoplay_interval | default: 0 | json }};
+  const showTitle         = {{ section.settings.show_title | json }};
+  const safeInsetSetting  = {{ section.settings.safe_inset | default: 18 | json }};
+
+  const SPEEDS = {
+    slow:   { cssSec: '1.8s',  ms: 1800, interval: 6500 },
+    normal: { cssSec: '1.25s', ms: 1250, interval: 5000 },
+    fast:   { cssSec: '0.8s',  ms: 800,  interval: 3800 }
+  };
+  const chosen = SPEEDS[speedSetting] || SPEEDS.normal;
+
+  // Apply custom properties to this instance
+  rootEl.style.setProperty('--anim-dur', chosen.cssSec);
+  rootEl.style.setProperty('--fade-dur', (parseFloat(chosen.cssSec) * 0.72) + 's');
+  rootEl.style.setProperty('--safe-inset', safeInsetSetting + '%');
+
+  /* =========================
+     3) Data (Products + Frame)
+     ========================= */
+  const products = [
+    {%- for product in section.settings.featured_collection.products limit: 8 -%}
+      {
+        name: {{ product.title | json }},
+        imgSrc: {{ product.featured_image | image_url: width: 600 | json }},
+        url: {{ product.url | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ];
+
+  const frameImageURL = {{ section.settings.frame_image
+    | image_url
+    | default: 'https://placehold.co/320x460/0a0a1a/a855f7?text=Upload+Frame'
+    | json }};
+
+  if (!products || products.length === 0) return;
+
+  const carouselContainer = document.getElementById(`carousel-${sectionId}`);
+  if (!carouselContainer) return;
+  const prevButton = document.getElementById(`prev-button-${sectionId}`);
+  const nextButton = document.getElementById(`next-button-${sectionId}`);
+
+  function createPanelHTML(product) {
+    return `
+      <a href="${product.url}" class="carousel-panel" role="group" aria-label="${product.name}">
+        <img src="${frameImageURL}" alt="" class="panel-frame" loading="lazy" decoding="async" width="320" height="460" aria-hidden="true">
+        <div class="panel-content">
+          <img src="${product.imgSrc}" alt="${product.name}" class="product-image" loading="lazy" decoding="async" width="600" height="600">
+          <div class="flash-layer" aria-hidden="true"></div>
+          ${showTitle ? `<div class="product-title" title="${product.name}">${product.name}</div>` : `<span class="sr-only">${product.name}</span>`}
+        </div>
+      </a>
+    `;
+  }
+
+  carouselContainer.innerHTML = products.map(createPanelHTML).join('');
+
+  const panels = Array.from(carouselContainer.children);
+  const panelCount = panels.length;
+
+  panels.forEach((panel, i) => {
+    panel.classList.add(i % 2 === 0 ? 'panel-left' : 'panel-right');
+  });
+
+  const pairIndices = [];
+  for (let i = 0; i < panelCount; i += 2) pairIndices.push(i);
+
+  if (pairIndices.length <= 1) {
+    if (prevButton) prevButton.style.display = 'none';
+    if (nextButton) nextButton.style.display = 'none';
+  }
+
+  let currentPairArrayIndex = 0;
+  let isAnimating = false;
+
+  /* Flash helpers */
+  function triggerFlash(panel){
+    const layer = panel?.querySelector('.flash-layer');
+    if(!layer) return;
+    layer.classList.remove('play');
+    void layer.offsetWidth; // reflow to restart animation
+    layer.classList.add('play');
+  }
+
+  function updateActivePair() {
+    const selectedPairIndex = pairIndices[currentPairArrayIndex];
+    if (selectedPairIndex === undefined) return;
+    const panel1 = panels[selectedPairIndex];
+    const panel2 = panels[selectedPairIndex + 1];
+    if (panel1) { panel1.classList.add('is-active'); triggerFlash(panel1); }
+    if (panel2) { panel2.classList.add('is-active'); triggerFlash(panel2); }
+  }
+
+  function clearActivePair(oldPairIndex) {
+    const p1 = panels[oldPairIndex];
+    const p2 = panels[oldPairIndex + 1];
+    if (p1) { p1.classList.remove('is-active'); p1.classList.add('is-exiting'); }
+    if (p2) { p2.classList.remove('is-active'); p2.classList.add('is-exiting'); }
+    setTimeout(() => {
+      if (p1) p1.classList.remove('is-exiting');
+      if (p2) p2.classList.remove('is-exiting');
+      isAnimating = false;
+    }, chosen.ms + 100);
+  }
+
+  function showNext() {
+    if (isAnimating || pairIndices.length <= 1) return;
+    isAnimating = true;
+    const oldPairIndex = pairIndices[currentPairArrayIndex];
+    clearActivePair(oldPairIndex);
+    currentPairArrayIndex = (currentPairArrayIndex + 1) % pairIndices.length;
+    updateActivePair();
+  }
+
+  function showPrev() {
+    if (isAnimating || pairIndices.length <= 1) return;
+    isAnimating = true;
+    const oldPairIndex = pairIndices[currentPairArrayIndex];
+    clearActivePair(oldPairIndex);
+    currentPairArrayIndex = (currentPairArrayIndex - 1 + pairIndices.length) % pairIndices.length;
+    updateActivePair();
+  }
+
+  if (prevButton) prevButton.addEventListener('click', showPrev);
+  if (nextButton) nextButton.addEventListener('click', showNext);
+
+  // Keyboard navigation
+  carouselContainer.setAttribute('tabindex', '0');
+  carouselContainer.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') showPrev();
+    if (e.key === 'ArrowRight') showNext();
+  });
+
+  // Hover-trigger flash for active panels
+  panels.forEach(p => {
+    p.addEventListener('mouseenter', () => {
+      if (p.classList.contains('is-active')) triggerFlash(p);
+    });
+  });
+
+  // Autoplay with reduced motion respect
+  let autoPlayInterval = null;
+  const shouldReduceMotion = () => {
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return prefersReduced || document.body.classList.contains('mode-minimal');
+  };
+  const intervalMs = (intervalOverrideSec && intervalOverrideSec > 0) ? intervalOverrideSec * 1000 : chosen.interval;
+
+  function startAutoplay() {
+    if (autoplayEnabled && !shouldReduceMotion() && !autoPlayInterval) {
+      autoPlayInterval = setInterval(showNext, intervalMs);
+    }
+  }
+  function stopAutoplay() {
+    if (autoPlayInterval) {
+      clearInterval(autoPlayInterval);
+      autoPlayInterval = null;
+    }
+  }
+
+  startAutoplay();
+  carouselContainer.addEventListener('mouseenter', stopAutoplay);
+  carouselContainer.addEventListener('mouseleave', startAutoplay);
+  carouselContainer.addEventListener('focusin', stopAutoplay);
+  carouselContainer.addEventListener('focusout', startAutoplay);
+
+  if ('MutationObserver' in window) {
+    const observer = new MutationObserver(() => {
+      if (document.body.classList.contains('mode-minimal')) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  updateActivePair();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init, { once: true });
+} else {
+  init();
+}
+})();
+</script>
+
+{% schema %}
+{
+  "name": "3D Carousel",
+  "class": "shopify-section-3d-carousel-wrapper",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Featured Products" },
+    { "type": "text", "id": "subtitle", "label": "Subheading", "default": "Explore our latest collection in 3D" },
+    { "type": "collection", "id": "featured_collection", "label": "Collection" },
+    { "type": "image_picker", "id": "frame_image", "label": "Frame Image" },
+
+    { "type": "checkbox", "id": "autoplay", "label": "Enable autoplay", "default": true },
+    {
+      "type": "select",
+      "id": "animation_speed",
+      "label": "Animation speed",
+      "options": [
+        { "value": "slow", "label": "Slow" },
+        { "value": "normal", "label": "Normal" },
+        { "value": "fast", "label": "Fast" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "label": "Autoplay interval (seconds)",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show product title under frame",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "safe_inset",
+      "label": "Frame inner padding (%)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 18
+    },
+    { "type": "header", "content": "Section Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top Padding", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom Padding", "min": 0, "max": 200, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "presets": [{ "name": "3D Carousel" }]
+}
+{% endschema %}

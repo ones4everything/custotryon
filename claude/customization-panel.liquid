@@ -1,0 +1,744 @@
+{%- comment -%}
+  Customization Panel
+  Add as a section and place on product templates.
+{%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+{% assign current_product = product %}
+{% if current_product == blank and section.settings.product != blank %}
+  {% assign current_product = section.settings.product %}
+{% endif %}
+
+<section class="o4-custom-panel" data-o4-custom-panel data-default-method="{{ section.settings.default_method | default: 'sublimation' }}">
+  <style>
+    .o4-custom-panel {
+      --o4-custom-ink: #e8f6ff;
+      --o4-custom-ink-soft: rgba(200, 224, 255, 0.72);
+      --o4-custom-accent: #43e7ff;
+      --o4-custom-line: rgba(140, 210, 255, 0.24);
+      --o4-custom-panel-bg: rgba(7, 12, 24, 0.86);
+      --o4-custom-panel-soft: rgba(9, 16, 28, 0.72);
+      color: var(--o4-custom-ink);
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 48px auto;
+    }
+
+    .o4-custom-panel__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: grid;
+      gap: 24px;
+    }
+
+    .o4-custom-panel__head {
+      display: grid;
+      gap: 8px;
+    }
+
+    .o4-custom-panel__eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 0.7rem;
+      color: var(--o4-custom-accent);
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+    }
+
+    .o4-custom-panel__title {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .o4-custom-panel__lead {
+      margin: 0;
+      color: var(--o4-custom-ink-soft);
+      line-height: 1.7;
+      max-width: 720px;
+    }
+
+    .o4-custom-panel__grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      align-items: start;
+    }
+
+    .o4-custom-panel__block {
+      border-radius: 18px;
+      border: 1px solid var(--o4-custom-line);
+      background: var(--o4-custom-panel-bg);
+      padding: 16px 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .o4-custom-panel__block h3 {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--o4-custom-accent);
+    }
+
+    .o4-custom-panel__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: var(--o4-custom-ink-soft);
+    }
+
+    .o4-custom-panel__row strong {
+      color: var(--o4-custom-ink);
+    }
+
+    .o4-custom-panel__methods {
+      display: grid;
+      gap: 8px;
+    }
+
+    .o4-custom-panel__method {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--o4-custom-panel-soft);
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .o4-custom-panel__method input {
+      accent-color: var(--o4-custom-accent);
+    }
+
+    .o4-custom-panel__method.is-active {
+      border-color: rgba(67, 231, 255, 0.5);
+      box-shadow: 0 0 16px rgba(67, 231, 255, 0.22);
+    }
+
+    .o4-custom-panel__options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .o4-custom-panel__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 14, 26, 0.8);
+    }
+
+    .o4-custom-panel__option label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--o4-custom-ink);
+    }
+
+    .o4-custom-panel__option input {
+      accent-color: var(--o4-custom-accent);
+    }
+
+    .o4-custom-panel__price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--o4-custom-accent);
+      white-space: nowrap;
+    }
+
+    .o4-custom-panel__group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .o4-custom-panel__group-label {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.65rem;
+      color: var(--o4-custom-ink-soft);
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .o4-custom-panel__pillset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .o4-custom-panel__pill {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(8, 14, 26, 0.7);
+      color: var(--o4-custom-ink);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .o4-custom-panel__pill.is-active {
+      border-color: rgba(67, 231, 255, 0.6);
+      box-shadow: 0 0 14px rgba(67, 231, 255, 0.3);
+    }
+
+    .o4-custom-panel__timeline {
+      display: none;
+      gap: 8px;
+      color: var(--o4-custom-ink-soft);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .o4-custom-panel__timeline.is-active {
+      display: grid;
+    }
+
+    .o4-custom-panel__summary {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(8, 14, 24, 0.9);
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .o4-custom-panel__summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+
+    .o4-custom-panel__summary-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--o4-custom-accent);
+    }
+
+    .o4-custom-panel__note {
+      font-size: 0.8rem;
+      color: var(--o4-custom-ink-soft);
+    }
+
+    .o4-custom-panel__fallback {
+      margin-top: 16px;
+      display: none;
+    }
+
+    .o4-custom-panel__cta {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid rgba(67, 231, 255, 0.45);
+      background: rgba(67, 231, 255, 0.2);
+      color: var(--o4-custom-ink);
+      padding: 12px 20px;
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    body.mode-minimal .o4-custom-panel__block,
+    body.mode-minimal .o4-custom-panel__summary {
+      background: rgba(10, 14, 22, 0.96);
+      box-shadow: none;
+    }
+
+    @media (max-width: 720px) {
+      .o4-custom-panel {
+        margin: 32px auto;
+      }
+    }
+  </style>
+
+  <div class="o4-custom-panel__inner">
+    <header class="o4-custom-panel__head">
+      <p class="o4-custom-panel__eyebrow">{{ section.settings.eyebrow | default: 'Customization' }}</p>
+      <h2 class="o4-custom-panel__title">{{ section.settings.panel_title | default: 'Customization panel' }}</h2>
+      <p class="o4-custom-panel__lead">{{ section.settings.panel_subtitle | default: 'Choose a method, pick placements, and review the timeline before checkout.' }}</p>
+    </header>
+
+    {% if current_product %}
+      <div class="o4-custom-panel__grid">
+        <div class="o4-custom-panel__block">
+          <h3>Base price</h3>
+          <div class="o4-custom-panel__row">
+            <span>Base product</span>
+            <strong data-o4-base-price></strong>
+          </div>
+        </div>
+
+        <div class="o4-custom-panel__block">
+          <h3>Customization method</h3>
+          <div class="o4-custom-panel__methods">
+            <label class="o4-custom-panel__method" data-o4-method-item>
+              <span>None</span>
+              <input type="radio" name="o4-method-{{ section.id }}" value="none" data-o4-method>
+            </label>
+            <label class="o4-custom-panel__method" data-o4-method-item>
+              <span>Sublimation</span>
+              <input type="radio" name="o4-method-{{ section.id }}" value="sublimation" data-o4-method>
+            </label>
+            <label class="o4-custom-panel__method" data-o4-method-item>
+              <span>Vinyl</span>
+              <input type="radio" name="o4-method-{{ section.id }}" value="vinyl" data-o4-method>
+            </label>
+          </div>
+        </div>
+
+        <div class="o4-custom-panel__block" data-o4-method-panel="sublimation">
+          <h3>Sublimation options</h3>
+          <div class="o4-custom-panel__options">
+            <div class="o4-custom-panel__option">
+              <label>
+                <input type="checkbox" data-o4-sub-option data-label="{{ section.settings.sub_front_label | default: 'Front panel' }}" data-price="{{ section.settings.sub_front_price | default: '10' }}">
+                {{ section.settings.sub_front_label | default: 'Front panel' }}
+              </label>
+              <span class="o4-custom-panel__price">+ ${{ section.settings.sub_front_price | default: '10' }}</span>
+            </div>
+            <div class="o4-custom-panel__option">
+              <label>
+                <input type="checkbox" data-o4-sub-option data-label="{{ section.settings.sub_back_label | default: 'Back panel' }}" data-price="{{ section.settings.sub_back_price | default: '10' }}">
+                {{ section.settings.sub_back_label | default: 'Back panel' }}
+              </label>
+              <span class="o4-custom-panel__price">+ ${{ section.settings.sub_back_price | default: '10' }}</span>
+            </div>
+            <div class="o4-custom-panel__option">
+              <label>
+                <input type="checkbox" data-o4-sub-option data-label="{{ section.settings.sub_sleeve_label | default: 'Sleeves (pair)' }}" data-price="{{ section.settings.sub_sleeve_price | default: '8' }}">
+                {{ section.settings.sub_sleeve_label | default: 'Sleeves (pair)' }}
+              </label>
+              <span class="o4-custom-panel__price">+ ${{ section.settings.sub_sleeve_price | default: '8' }}</span>
+            </div>
+            <div class="o4-custom-panel__option">
+              <label>
+                <input type="checkbox" data-o4-sub-option data-label="{{ section.settings.sub_allover_label | default: 'All-over wrap' }}" data-price="{{ section.settings.sub_allover_price | default: '18' }}">
+                {{ section.settings.sub_allover_label | default: 'All-over wrap' }}
+              </label>
+              <span class="o4-custom-panel__price">+ ${{ section.settings.sub_allover_price | default: '18' }}</span>
+            </div>
+          </div>
+          <p class="o4-custom-panel__note">{{ section.settings.sub_note | default: 'Unlimited color sublimation. Proof required before production.' }}</p>
+        </div>
+
+        <div class="o4-custom-panel__block" data-o4-method-panel="vinyl">
+          <h3>Vinyl options</h3>
+          <div class="o4-custom-panel__group">
+            <div class="o4-custom-panel__group-label">Placement</div>
+            <div class="o4-custom-panel__options">
+              <div class="o4-custom-panel__option">
+                <label>
+                  <input type="radio" name="o4-vinyl-placement-{{ section.id }}" data-o4-vinyl-placement data-label="{{ section.settings.vinyl_front_label | default: 'Front chest' }}" data-price="{{ section.settings.vinyl_front_price | default: '6' }}">
+                  {{ section.settings.vinyl_front_label | default: 'Front chest' }}
+                </label>
+                <span class="o4-custom-panel__price">+ ${{ section.settings.vinyl_front_price | default: '6' }}</span>
+              </div>
+              <div class="o4-custom-panel__option">
+                <label>
+                  <input type="radio" name="o4-vinyl-placement-{{ section.id }}" data-o4-vinyl-placement data-label="{{ section.settings.vinyl_back_label | default: 'Back' }}" data-price="{{ section.settings.vinyl_back_price | default: '7' }}">
+                  {{ section.settings.vinyl_back_label | default: 'Back' }}
+                </label>
+                <span class="o4-custom-panel__price">+ ${{ section.settings.vinyl_back_price | default: '7' }}</span>
+              </div>
+              <div class="o4-custom-panel__option">
+                <label>
+                  <input type="radio" name="o4-vinyl-placement-{{ section.id }}" data-o4-vinyl-placement data-label="{{ section.settings.vinyl_sleeve_label | default: 'Sleeve' }}" data-price="{{ section.settings.vinyl_sleeve_price | default: '5' }}">
+                  {{ section.settings.vinyl_sleeve_label | default: 'Sleeve' }}
+                </label>
+                <span class="o4-custom-panel__price">+ ${{ section.settings.vinyl_sleeve_price | default: '5' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="o4-custom-panel__group">
+            <div class="o4-custom-panel__group-label">Colors</div>
+            <div class="o4-custom-panel__pillset" data-o4-vinyl-colors>
+              <button type="button" class="o4-custom-panel__pill" data-colors="1">1</button>
+              <button type="button" class="o4-custom-panel__pill" data-colors="2">2</button>
+              <button type="button" class="o4-custom-panel__pill" data-colors="3">3</button>
+              <button type="button" class="o4-custom-panel__pill" data-colors="4">4+</button>
+            </div>
+            <p class="o4-custom-panel__note">Additional color price: + ${{ section.settings.vinyl_color_increment | default: '2' }} per color</p>
+          </div>
+
+          <div class="o4-custom-panel__group">
+            <div class="o4-custom-panel__group-label">Add-ons</div>
+            <div class="o4-custom-panel__options">
+              <div class="o4-custom-panel__option">
+                <label>
+                  <input type="checkbox" data-o4-vinyl-addon data-label="Metallic" data-price="{{ section.settings.vinyl_metallic_price | default: '3' }}">
+                  Metallic finish
+                </label>
+                <span class="o4-custom-panel__price">+ ${{ section.settings.vinyl_metallic_price | default: '3' }}</span>
+              </div>
+              <div class="o4-custom-panel__option">
+                <label>
+                  <input type="checkbox" data-o4-vinyl-addon data-label="Reflective" data-price="{{ section.settings.vinyl_reflective_price | default: '4' }}">
+                  Reflective finish
+                </label>
+                <span class="o4-custom-panel__price">+ ${{ section.settings.vinyl_reflective_price | default: '4' }}</span>
+              </div>
+            </div>
+          </div>
+          <p class="o4-custom-panel__note">{{ section.settings.vinyl_note | default: 'Vinyl is best for logos, text, and simple graphics.' }}</p>
+        </div>
+
+        <div class="o4-custom-panel__block">
+          <h3>Customization timeline</h3>
+          <div class="o4-custom-panel__timeline" data-o4-timeline="sublimation">
+            <div>Cutoff: {{ section.settings.sub_cutoff | default: 'Submit 48-72 hours before production' }}</div>
+            <div>Proof: {{ section.settings.sub_proof | default: 'Proofs in 24-48 hours' }}</div>
+            <div>Production: {{ section.settings.sub_production | default: '5-7 business days after approval' }}</div>
+            <div>Ships: {{ section.settings.sub_ship | default: 'Estimated ship 3-5 days after production' }}</div>
+          </div>
+          <div class="o4-custom-panel__timeline" data-o4-timeline="vinyl">
+            <div>Cutoff: {{ section.settings.vinyl_cutoff | default: 'Submit 24 hours before production' }}</div>
+            <div>Proof: {{ section.settings.vinyl_proof | default: 'Proof optional for simple designs' }}</div>
+            <div>Production: {{ section.settings.vinyl_production | default: '2-4 business days' }}</div>
+            <div>Ships: {{ section.settings.vinyl_ship | default: 'Estimated ship 1-2 days after production' }}</div>
+          </div>
+          <p class="o4-custom-panel__note">Cutoff time shown in your timezone.</p>
+        </div>
+
+        <div class="o4-custom-panel__summary">
+          <div class="o4-custom-panel__summary-row">
+            <span>Base product</span>
+            <span data-o4-summary-base></span>
+          </div>
+          <div class="o4-custom-panel__summary-row">
+            <span>Customizations</span>
+            <span data-o4-summary-custom></span>
+          </div>
+          <div class="o4-custom-panel__summary-total">
+            <span>Total</span>
+            <span data-o4-summary-total></span>
+          </div>
+          <p class="o4-custom-panel__note">Pricing shown as add-on estimates.</p>
+        </div>
+      </div>
+
+      <div class="o4-custom-panel__fallback" data-o4-fallback hidden>
+        {% form 'product', current_product, id: 'o4-custom-form-' | append: section.id %}
+          <input type="hidden" name="id" value="{{ current_product.selected_or_first_available_variant.id }}">
+          <button class="o4-custom-panel__cta" type="submit">{{ section.settings.fallback_label | default: 'Add to cart' }}</button>
+        {% endform %}
+      </div>
+
+      <input type="hidden" name="properties[Customization Method]" data-o4-custom-input data-o4-prop="method">
+      <input type="hidden" name="properties[Sublimation Placements]" data-o4-custom-input data-o4-prop="sub_placements">
+      <input type="hidden" name="properties[Vinyl Placement]" data-o4-custom-input data-o4-prop="vinyl_placement">
+      <input type="hidden" name="properties[Vinyl Colors]" data-o4-custom-input data-o4-prop="vinyl_colors">
+      <input type="hidden" name="properties[Vinyl Add-ons]" data-o4-custom-input data-o4-prop="vinyl_addons">
+      <input type="hidden" name="properties[Customization Total]" data-o4-custom-input data-o4-prop="custom_total">
+      <input type="hidden" name="properties[Production Timeline]" data-o4-custom-input data-o4-prop="timeline">
+
+    {% else %}
+      <div class="o4-custom-panel__block">
+        <h3>Select a product</h3>
+        <p class="o4-custom-panel__lead">Add this section to a product template or choose a fallback product in settings.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if current_product %}
+<script>
+(() => {
+  const panel = document.querySelector('[data-o4-custom-panel]');
+  if (!panel) return;
+
+  const basePriceCents = {{ current_product.price | default: 0 | json }};
+  const moneyFormat = {{ shop.money_format | json }};
+  const methodInputs = Array.from(panel.querySelectorAll('[data-o4-method]'));
+  const methodItems = Array.from(panel.querySelectorAll('[data-o4-method-item]'));
+  const methodPanels = Array.from(panel.querySelectorAll('[data-o4-method-panel]'));
+  const timelines = Array.from(panel.querySelectorAll('[data-o4-timeline]'));
+  const subOptions = Array.from(panel.querySelectorAll('[data-o4-sub-option]'));
+  const vinylPlacements = Array.from(panel.querySelectorAll('[data-o4-vinyl-placement]'));
+  const vinylAddons = Array.from(panel.querySelectorAll('[data-o4-vinyl-addon]'));
+  const colorButtons = Array.from(panel.querySelectorAll('[data-o4-vinyl-colors] .o4-custom-panel__pill'));
+  const basePriceEls = panel.querySelectorAll('[data-o4-base-price], [data-o4-summary-base]');
+  const summaryCustom = panel.querySelector('[data-o4-summary-custom]');
+  const summaryTotal = panel.querySelector('[data-o4-summary-total]');
+  const inputs = Array.from(panel.querySelectorAll('[data-o4-custom-input]'));
+  const fallback = panel.querySelector('[data-o4-fallback]');
+  const colorIncrement = parsePrice('{{ section.settings.vinyl_color_increment | default: "2" }}');
+
+  function parsePrice(value) {
+    const num = parseFloat(String(value).replace(/[^\d.-]/g, ''));
+    if (Number.isNaN(num)) return 0;
+    return Math.round(num * 100);
+  }
+
+  function formatMoney(cents) {
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      return window.Shopify.formatMoney(cents, moneyFormat);
+    }
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  function getTargetForm() {
+    const manualId = '{{ section.settings.target_form_id | escape }}';
+    if (manualId) {
+      const manual = document.getElementById(manualId);
+      if (manual) return manual;
+    }
+    return document.querySelector('form.cta-panel[id]')
+      || document.querySelector('form[action^="/cart/add"][id]')
+      || document.querySelector('form[action^="/cart/add"]');
+  }
+
+  function attachInputs(form) {
+    if (!form) return;
+    if (!form.id) {
+      form.id = 'o4-custom-form-target-' + Math.random().toString(36).slice(2, 8);
+    }
+    inputs.forEach((input) => {
+      input.setAttribute('form', form.id);
+    });
+  }
+
+  function setMethod(value) {
+    methodInputs.forEach((input) => {
+      input.checked = input.value === value;
+    });
+    methodItems.forEach((item) => {
+      const input = item.querySelector('[data-o4-method]');
+      item.classList.toggle('is-active', input && input.checked);
+    });
+    methodPanels.forEach((panelEl) => {
+      panelEl.style.display = panelEl.dataset.o4MethodPanel === value ? 'grid' : 'none';
+    });
+    timelines.forEach((timeline) => {
+      timeline.classList.toggle('is-active', timeline.dataset.o4Timeline === value);
+    });
+  }
+
+  function getSelectedMethod() {
+    const selected = methodInputs.find(input => input.checked);
+    return selected ? selected.value : 'none';
+  }
+
+  function setVinylColors(value) {
+    colorButtons.forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.colors === value);
+    });
+    colorButtons.forEach((btn) => {
+      btn.setAttribute('aria-pressed', btn.dataset.colors === value ? 'true' : 'false');
+    });
+  }
+
+  function getVinylColors() {
+    const active = colorButtons.find(btn => btn.classList.contains('is-active'));
+    return active ? parseInt(active.dataset.colors, 10) : 1;
+  }
+
+  function gatherSelections() {
+    const method = getSelectedMethod();
+    let customCents = 0;
+    let subPlacements = [];
+    let vinylPlacement = '';
+    let vinylColors = '';
+    let vinylAddonList = [];
+
+    if (method === 'sublimation') {
+      subOptions.forEach((option) => {
+        if (option.checked) {
+          subPlacements.push(option.dataset.label || option.value || 'Placement');
+          customCents += parsePrice(option.dataset.price);
+        }
+      });
+    }
+
+    if (method === 'vinyl') {
+      const placement = vinylPlacements.find(option => option.checked);
+      if (placement) {
+        vinylPlacement = placement.dataset.label || placement.value || 'Placement';
+        customCents += parsePrice(placement.dataset.price);
+      }
+      const colors = getVinylColors();
+      vinylColors = colors + ' color' + (colors > 1 ? 's' : '');
+      customCents += Math.max(0, (colors - 1)) * colorIncrement;
+      vinylAddons.forEach((addon) => {
+        if (addon.checked) {
+          vinylAddonList.push(addon.dataset.label || 'Addon');
+          customCents += parsePrice(addon.dataset.price);
+        }
+      });
+    }
+
+    return {
+      method,
+      customCents,
+      subPlacements,
+      vinylPlacement,
+      vinylColors,
+      vinylAddons: vinylAddonList
+    };
+  }
+
+  function updateSummary() {
+    const selections = gatherSelections();
+    basePriceEls.forEach((el) => {
+      el.textContent = formatMoney(basePriceCents);
+    });
+    if (summaryCustom) summaryCustom.textContent = formatMoney(selections.customCents);
+    if (summaryTotal) summaryTotal.textContent = formatMoney(basePriceCents + selections.customCents);
+
+    inputs.forEach((input) => {
+      switch (input.dataset.o4Prop) {
+        case 'method':
+          input.value = selections.method;
+          break;
+        case 'sub_placements':
+          input.value = selections.subPlacements.join(', ');
+          break;
+        case 'vinyl_placement':
+          input.value = selections.vinylPlacement;
+          break;
+        case 'vinyl_colors':
+          input.value = selections.vinylColors;
+          break;
+        case 'vinyl_addons':
+          input.value = selections.vinylAddons.join(', ');
+          break;
+        case 'custom_total':
+          input.value = formatMoney(selections.customCents);
+          break;
+        case 'timeline':
+          input.value = selections.method === 'sublimation'
+            ? 'Sublimation timeline'
+            : selections.method === 'vinyl'
+              ? 'Vinyl timeline'
+              : 'None';
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  const defaultMethod = panel.dataset.defaultMethod || 'sublimation';
+  setMethod(defaultMethod);
+  setVinylColors('1');
+
+  methodInputs.forEach((input) => {
+    input.addEventListener('change', () => {
+      setMethod(input.value);
+      updateSummary();
+    });
+  });
+  subOptions.forEach((option) => option.addEventListener('change', updateSummary));
+  vinylPlacements.forEach((option) => option.addEventListener('change', updateSummary));
+  vinylAddons.forEach((addon) => addon.addEventListener('change', updateSummary));
+  colorButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setVinylColors(btn.dataset.colors);
+      updateSummary();
+    });
+  });
+
+  const targetForm = getTargetForm();
+  if (targetForm) {
+    attachInputs(targetForm);
+    if (fallback) fallback.hidden = true;
+  } else {
+    if (fallback) fallback.hidden = false;
+    const fallbackForm = fallback ? fallback.querySelector('form') : null;
+    if (fallbackForm) attachInputs(fallbackForm);
+  }
+
+  updateSummary();
+})();
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Customization Panel",
+  "tag": "section",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Fallback product (optional)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Customization" },
+    { "type": "text", "id": "panel_title", "label": "Title", "default": "Customization panel" },
+    { "type": "text", "id": "panel_subtitle", "label": "Subtitle", "default": "Choose a method, pick placements, and review the timeline before checkout." },
+    {
+      "type": "select",
+      "id": "default_method",
+      "label": "Default method",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "sublimation", "label": "Sublimation" },
+        { "value": "vinyl", "label": "Vinyl" }
+      ],
+      "default": "sublimation"
+    },
+    { "type": "text", "id": "target_form_id", "label": "Attach to form ID (optional)", "default": "" },
+
+    { "type": "header", "content": "Sublimation pricing" },
+    { "type": "text", "id": "sub_front_label", "label": "Front label", "default": "Front panel" },
+    { "type": "text", "id": "sub_front_price", "label": "Front price", "default": "10" },
+    { "type": "text", "id": "sub_back_label", "label": "Back label", "default": "Back panel" },
+    { "type": "text", "id": "sub_back_price", "label": "Back price", "default": "10" },
+    { "type": "text", "id": "sub_sleeve_label", "label": "Sleeve label", "default": "Sleeves (pair)" },
+    { "type": "text", "id": "sub_sleeve_price", "label": "Sleeve price", "default": "8" },
+    { "type": "text", "id": "sub_allover_label", "label": "All-over label", "default": "All-over wrap" },
+    { "type": "text", "id": "sub_allover_price", "label": "All-over price", "default": "18" },
+    { "type": "text", "id": "sub_note", "label": "Sublimation note", "default": "Unlimited color sublimation. Proof required before production." },
+
+    { "type": "header", "content": "Vinyl pricing" },
+    { "type": "text", "id": "vinyl_front_label", "label": "Front placement label", "default": "Front chest" },
+    { "type": "text", "id": "vinyl_front_price", "label": "Front placement price", "default": "6" },
+    { "type": "text", "id": "vinyl_back_label", "label": "Back placement label", "default": "Back" },
+    { "type": "text", "id": "vinyl_back_price", "label": "Back placement price", "default": "7" },
+    { "type": "text", "id": "vinyl_sleeve_label", "label": "Sleeve placement label", "default": "Sleeve" },
+    { "type": "text", "id": "vinyl_sleeve_price", "label": "Sleeve placement price", "default": "5" },
+    { "type": "text", "id": "vinyl_color_increment", "label": "Additional color price", "default": "2" },
+    { "type": "text", "id": "vinyl_metallic_price", "label": "Metallic add-on price", "default": "3" },
+    { "type": "text", "id": "vinyl_reflective_price", "label": "Reflective add-on price", "default": "4" },
+    { "type": "text", "id": "vinyl_note", "label": "Vinyl note", "default": "Vinyl is best for logos, text, and simple graphics." },
+
+    { "type": "header", "content": "Timeline - Sublimation" },
+    { "type": "text", "id": "sub_cutoff", "label": "Cutoff", "default": "Submit 48-72 hours before production" },
+    { "type": "text", "id": "sub_proof", "label": "Proof", "default": "Proofs in 24-48 hours" },
+    { "type": "text", "id": "sub_production", "label": "Production", "default": "5-7 business days after approval" },
+    { "type": "text", "id": "sub_ship", "label": "Shipping", "default": "Estimated ship 3-5 days after production" },
+
+    { "type": "header", "content": "Timeline - Vinyl" },
+    { "type": "text", "id": "vinyl_cutoff", "label": "Cutoff", "default": "Submit 24 hours before production" },
+    { "type": "text", "id": "vinyl_proof", "label": "Proof", "default": "Proof optional for simple designs" },
+    { "type": "text", "id": "vinyl_production", "label": "Production", "default": "2-4 business days" },
+    { "type": "text", "id": "vinyl_ship", "label": "Shipping", "default": "Estimated ship 1-2 days after production" },
+
+    { "type": "text", "id": "fallback_label", "label": "Fallback button label", "default": "Add to cart" }
+  ],
+  "presets": [
+    { "name": "Customization Panel" }
+  ]
+}
+{% endschema %}

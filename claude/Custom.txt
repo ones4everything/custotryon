@@ -1,0 +1,8 @@
+1. Hamburger Menu Examples
+Starting with the most popular one, the hamburger menu is top-level mobile navigation that can accommodate a larger number of items and save you some precious space. The pattern allows you to hide your navigation beyond the left edge and reveal it by triggering the hamburger menu icon.
+
+Strengths: It gives you an entire screen to put your main categories instead of keeping those categories in the main design.
+
+v1vXmgWZHoDkjEFJ
+ones4everything_db_user
+mongodb+srv://ones4everything_db_user:v1vXmgWZHoDkjEFJ@cluster0.jnhjqnk.mongodb.net/?appName=Cluster0

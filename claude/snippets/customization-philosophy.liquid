@@ -1,0 +1,315 @@
+{%- comment -%}
+  Customization Philosophy
+  Render with: {% render 'customization-philosophy' %}
+{%- endcomment -%}
+<section class="o4-customization-philosophy" aria-label="Customization philosophy">
+  <style>
+    .o4-customization-philosophy {
+      --o4-custom-ink: #e8f6ff;
+      --o4-custom-ink-soft: rgba(200, 224, 255, 0.72);
+      --o4-custom-accent: #43e7ff;
+      --o4-custom-line: rgba(140, 210, 255, 0.24);
+      --o4-custom-panel: rgba(7, 12, 24, 0.8);
+      color: var(--o4-custom-ink);
+      font-family: 'Space Grotesk', sans-serif;
+      padding: 0;
+      margin: 48px auto;
+    }
+
+    .o4-customization-philosophy__inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: grid;
+      gap: 22px;
+    }
+
+    .o4-customization-philosophy__head {
+      display: grid;
+      gap: 10px;
+      text-align: left;
+    }
+
+    .o4-customization-philosophy__eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 0.7rem;
+      color: var(--o4-custom-accent);
+      font-family: 'Orbitron', sans-serif;
+      margin: 0;
+    }
+
+    .o4-customization-philosophy__title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+      margin: 0;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .o4-customization-philosophy__lead {
+      margin: 0;
+      color: var(--o4-custom-ink-soft);
+      line-height: 1.7;
+      max-width: 820px;
+    }
+
+    .o4-customization-philosophy__grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .o4-customization-philosophy__card {
+      background: var(--o4-custom-panel);
+      border: 1px solid var(--o4-custom-line);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+      line-height: 1.6;
+    }
+
+    .o4-customization-philosophy__card h3 {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--o4-custom-accent);
+    }
+
+    .o4-customization-philosophy__card h4 {
+      margin: 0;
+      font-size: 0.88rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(232, 246, 255, 0.85);
+    }
+
+    .o4-customization-philosophy__card ul,
+    .o4-customization-philosophy__card ol {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--o4-custom-ink-soft);
+    }
+
+    .o4-customization-philosophy__card li {
+      margin: 0.25rem 0;
+    }
+
+    .o4-customization-philosophy__callout {
+      background: rgba(10, 16, 28, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+      color: rgba(230, 250, 255, 0.88);
+      text-align: center;
+    }
+
+    .o4-customization-philosophy__table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      background: var(--o4-custom-panel);
+      border: 1px solid var(--o4-custom-line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .o4-customization-philosophy__table th,
+    .o4-customization-philosophy__table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--o4-custom-ink-soft);
+    }
+
+    .o4-customization-philosophy__table th {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+      color: var(--o4-custom-accent);
+      background: rgba(8, 14, 26, 0.75);
+    }
+
+    .o4-customization-philosophy__table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .o4-customization-philosophy__footer {
+      background: rgba(8, 12, 22, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+      line-height: 1.6;
+    }
+
+    .o4-customization-philosophy__footer h3 {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--o4-custom-accent);
+    }
+
+    .o4-customization-philosophy__footer ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--o4-custom-ink-soft);
+    }
+
+    body.mode-minimal .o4-customization-philosophy__card,
+    body.mode-minimal .o4-customization-philosophy__table,
+    body.mode-minimal .o4-customization-philosophy__footer,
+    body.mode-minimal .o4-customization-philosophy__callout {
+      background: rgba(10, 14, 22, 0.96);
+      box-shadow: none;
+    }
+
+    @media (max-width: 720px) {
+      .o4-customization-philosophy {
+        margin: 32px auto;
+      }
+      .o4-customization-philosophy__table th,
+      .o4-customization-philosophy__table td {
+        padding: 10px 12px;
+      }
+    }
+  </style>
+
+  <div class="o4-customization-philosophy__inner">
+    <div class="o4-customization-philosophy__head">
+      <p class="o4-customization-philosophy__eyebrow">Customization philosophy</p>
+      <h2 class="o4-customization-philosophy__title">Use one product page in most cases</h2>
+      <p class="o4-customization-philosophy__lead">
+        Default recommendation: one product page with a Customization Method selector (None / Sublimation / Vinyl).
+        The long answer below explains when to keep one page vs when to split, and how it works operationally.
+      </p>
+    </div>
+
+    <div class="o4-customization-philosophy__grid">
+      <article class="o4-customization-philosophy__card">
+        <h3>Why this is usually correct</h3>
+        <ul>
+          <li>It is the same base product (SKU, fit, material, use case).</li>
+          <li>Customers compare methods while deciding, not before.</li>
+          <li>Better SEO (one strong page instead of diluted traffic).</li>
+          <li>Less catalog and inventory complexity.</li>
+          <li>Easier upsells and mixed-method orders.</li>
+        </ul>
+      </article>
+
+      <article class="o4-customization-philosophy__card">
+        <h3>How the same page behaves</h3>
+        <ol>
+          <li>Customer lands on product page.</li>
+          <li>Selects size and color (base product).</li>
+          <li>Selects Customization Method.</li>
+          <li>Sublimation -> shows sublimation-only options and timeline.</li>
+          <li>Vinyl -> shows vinyl-only options and timeline.</li>
+          <li>Price and delivery estimate update dynamically.</li>
+        </ol>
+        <h4>Cart receives</h4>
+        <ul>
+          <li>Base SKU.</li>
+          <li>Customization method(s).</li>
+          <li>Placement(s).</li>
+          <li>Artwork files.</li>
+          <li>Production rules.</li>
+        </ul>
+      </article>
+
+      <article class="o4-customization-philosophy__card">
+        <h3>When to use separate pages</h3>
+        <ol>
+          <li>The finished product is meaningfully different (all-over vs logo-only).</li>
+          <li>Pricing logic is fundamentally different and too complex for one UI.</li>
+          <li>Marketing or SEO demands method-specific funnels.</li>
+        </ol>
+      </article>
+
+      <article class="o4-customization-philosophy__card">
+        <h3>Hybrid best practice</h3>
+        <ul>
+          <li>Main page: /products/custom-shirt</li>
+          <li>Method entries: /products/custom-shirt?method=sublimation</li>
+          <li>Method entries: /products/custom-shirt?method=vinyl</li>
+          <li>Preselect method and update hero copy, same backend logic.</li>
+          <li>Clean UX, clean ops, strong SEO.</li>
+        </ul>
+      </article>
+
+      <article class="o4-customization-philosophy__card">
+        <h3>Backend and operational model</h3>
+        <ul>
+          <li>Base product: SKU SHIRT-BASE-001.</li>
+          <li>Customization line items: SUB-FRONT, SUB-BACK, VINYL-1C-FRONT, VINYL-2C-SLEEVE.</li>
+          <li>Production flags: proof required, additional days, mixed-method indicator.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="o4-customization-philosophy__callout">
+      From the customer's point of view: "Same product, different ways to customize."
+    </div>
+
+    <div>
+      <h3 class="o4-customization-philosophy__eyebrow">Decision table (quick)</h3>
+      <table class="o4-customization-philosophy__table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>One page</th>
+            <th>Separate pages</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Same garment</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Different visual result</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Same SKU</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Different buyer intent</td>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <td>Complex pricing but manageable</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>SEO-driven campaigns</td>
+            <td>Hybrid</td>
+            <td>Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="o4-customization-philosophy__footer">
+      <h3>Final recommendation for sublimation and vinyl</h3>
+      <ul>
+        <li>Start with one product page using a Customization Method selector.</li>
+        <li>Use dynamic pricing and a dynamic production timeline.</li>
+        <li>Move to separate pages only after you see user confusion or need targeted marketing funnels.</li>
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,311 @@
+﻿<style>
+  .footer-section-wrapper {
+    --glow: #7eeaff;
+    --glow-2: #ffc2ff;
+    --ink-strong: #f5f9ff;
+    --ink-soft: #b8c7e7;
+    --panel: rgba(255,255,255,.08);
+    --panel-strong: rgba(255,255,255,.16);
+    --noise: radial-gradient(circle at 18% 20%, rgba(255,255,255,.05) 0 10%, transparent 16%), radial-gradient(circle at 78% 28%, rgba(255,255,255,.04) 0 9%, transparent 16%), radial-gradient(circle at 48% 72%, rgba(255,255,255,.03) 0 9%, transparent 16%);
+    position: relative;
+    overflow: hidden;
+    color: var(--ink-strong);
+    font-family: 'Space Grotesk','Sora','Inter','Orbitron',sans-serif;
+    background:
+      radial-gradient(80% 70% at 15% 20%, rgba(126,234,255,.14), transparent 55%),
+      radial-gradient(80% 70% at 85% 18%, rgba(255,169,255,.12), transparent 60%),
+      radial-gradient(80% 90% at 50% 90%, rgba(110,146,255,.12), transparent 60%),
+      linear-gradient(140deg, #05070f 0%, #060813 45%, #04060d 100%);
+    padding: 74px 20px 64px;
+    margin-top: 0;
+  }
+  .footer-section-wrapper::before,
+  .footer-section-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: -12%;
+    pointer-events: none;
+  }
+  .footer-section-wrapper::before {
+    background:
+      radial-gradient(60% 60% at 30% 40%, rgba(255,255,255,.08), transparent 60%),
+      radial-gradient(70% 70% at 70% 50%, rgba(0,255,255,.08), transparent 60%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0, rgba(255,255,255,0) 5px, transparent 10px);
+    opacity: .7;
+    filter: blur(12px);
+    z-index: 0;
+  }
+  .footer-section-wrapper::after {
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.06), transparent 55%), linear-gradient(120deg, rgba(255,255,255,.05), transparent 50%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1;
+  }
+
+  .footer-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 22px;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .footer-grid > div:not(.footer-copyright) {
+    background:
+      linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.03)),
+      var(--noise);
+    background-blend-mode: screen, normal;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 22px;
+    padding: 20px 18px;
+    box-shadow: -12px -12px 24px rgba(255,255,255,.02), 16px 18px 42px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 12px rgba(0,0,0,.32);
+    backdrop-filter: blur(14px) saturate(150%);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+  }
+
+  @media (min-width: 768px) {
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .footer-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .footer-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.18em;
+    background: linear-gradient(120deg, #f7fbff, var(--glow), var(--glow-2));
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 10px 22px rgba(0,0,0,.45), 0 0 22px rgba(255,255,255,.12);
+  }
+
+  .newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(140deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 18px;
+    padding: 8px 8px 8px 14px;
+    box-shadow: -8px -8px 18px rgba(255,255,255,.02), 12px 14px 30px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 10px rgba(0,0,0,.28);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+  }
+  .newsletter-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    padding: 0.9rem 0.6rem;
+    font-family: 'Space Grotesk','Sora','Inter','Orbitron',sans-serif;
+    color: var(--ink-strong);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+  }
+  .newsletter-input:focus { outline: none; }
+
+  .newsletter-submit {
+    background: linear-gradient(130deg, var(--glow), var(--glow-2));
+    border: 1px solid rgba(255,255,255,.16);
+    color: #041017;
+    padding: 0.75rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.28s ease;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.45), 0 0 30px rgba(126,234,255,.6);
+    letter-spacing: 0.14em;
+  }
+  .newsletter-submit:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(0,0,0,.52), 0 0 40px rgba(126,234,255,.75); }
+  .newsletter-submit:focus-visible { outline: 2px solid var(--glow); outline-offset: 2px; }
+
+  .footer-link-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .footer-link {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.25s ease;
+    letter-spacing: 0.05em;
+  }
+  .footer-link:hover {
+    color: var(--ink-strong);
+    text-shadow: 0 0 18px var(--glow);
+    transform: translateX(2px);
+  }
+
+  .payment-methods-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .payment-icon {
+    background: linear-gradient(140deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+    border-radius: 12px;
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: -6px -6px 12px rgba(255,255,255,.02), 10px 12px 22px rgba(0,0,0,.48);
+    backdrop-filter: blur(8px) saturate(140%);
+  }
+  .payment-icon svg { display: block; }
+
+  .footer-copyright {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.12);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .footer-copyright a { color: var(--glow); text-decoration: none; }
+  .footer-copyright a:hover { text-decoration: underline; }
+</style>
+
+<footer class="footer-section-wrapper">
+    <div class="footer-grid">
+        
+        <!-- Newsletter -->
+        <div>
+            <h3 class="footer-title">{{ section.settings.newsletter_title }}</h3>
+            {%- form 'customer', class: 'newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <input
+                    id="NewsletterForm--{{ section.id }}"
+                    type="email"
+                    name="contact[email]"
+                    class="newsletter-input"
+                    value="{{ form.email }}"
+                    aria-required="true"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    autocomplete="email"
+                    placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                    required
+                >
+                <button type="submit" class="newsletter-submit" name="commit" id="Subscribe" aria-label="{{ 'general.newsletter_form.submit' | t }}">
+                    &#10148;
+                </button>
+            {%- endform -%}
+        </div>
+
+        <!-- Social Links -->
+        {%- if section.settings.social_menu != blank -%}
+            <div>
+                <h3 class="footer-title">{{ section.settings.social_title }}</h3>
+                <ul class="footer-link-list">
+                    {%- for link in section.settings.social_menu.links -%}
+                        <li>
+                            <a href="{{ link.url }}" class="footer-link">
+                                {{ link.title }}
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif -%}
+
+        <!-- Policy Links -->
+        {%- if section.settings.policy_menu != blank -%}
+            <div>
+                <h3 class="footer-title">{{ section.settings.policy_title }}</h3>
+                <ul class="footer-link-list">
+                    {%- for link in section.settings.policy_menu.links -%}
+                        <li>
+                            <a href="{{ link.url }}" class="footer-link">
+                                {{ link.title }}
+                            </a>
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif -%}
+        
+        <!-- Payment Methods -->
+        {%- if section.settings.show_payment_icons -%}
+            <div>
+                <h3 class="footer-title">{{ 'sections.footer.payment' | t }}</h3>
+                <ul class="payment-methods-list">
+                    {%- for type in shop.enabled_payment_types -%}
+                        <li class="payment-icon">
+                            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                        </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {%- endif -%}
+
+        <!-- Copyright -->
+        <div class="footer-copyright">
+            <small>&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: routes.root_url }}</small><br>
+            <small>{{ powered_by_link }}</small>
+        </div>
+
+    </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Futuristic Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Let's keep in touch"
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Social Links Title",
+      "default": "Follow Us"
+    },
+    {
+      "type": "link_list",
+      "id": "social_menu",
+      "label": "Social Links Menu",
+      "info": "Select a menu to display social media links."
+    },
+    {
+      "type": "text",
+      "id": "policy_title",
+      "label": "Policy Links Title",
+      "default": "Information"
+    },
+    {
+      "type": "link_list",
+      "id": "policy_menu",
+      "label": "Policy Links Menu",
+      "info": "Select a menu for privacy policy, terms of service, etc."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Futuristic Footer"
+    }
+  ]
+}
+{% endschema %}
