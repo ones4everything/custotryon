@@ -1,0 +1,372 @@
+Spark / GitHub Prompt — Full Home Page Design
+
+Title: Design & Implement Full Homepage (Hero3D-Driven)
+
+Request:
+Please design and implement the full homepage using the provided images/video as visual and stylistic references. The homepage should be modern, premium, and performance-optimized, with a strong focus on a Hero3D experience.
+
+🧱 Homepage Structure
+1. Navigation Bar
+
+Left: Menu icon
+
+Center: ONES4 logo
+
+Right of logo: Search bar with microphone icon
+
+Right side: Profile icon and Cart icon
+
+Dark theme, minimal, clean spacing
+
+2. Hero Section (Primary Focus)
+
+Large Hero3D embedded scene
+
+3D model centered at world origin, full 360° viewing
+
+No background or environment unless shown in references
+
+Cinematic lighting, realistic materials
+
+Subtle interaction (mouse hover rotation / idle animation)
+
+Optimized for web (fast load, low draw calls)
+
+3. Feature / Value Section
+
+Minimal cards or panels
+
+Clear typography
+
+Subtle glow or depth (3D / glass / soft shadow style)
+
+4. Product / Content Section (Optional if applicable)
+
+Clean grid layout
+
+Hover effects
+
+Dark UI consistency
+
+5. Footer
+
+Minimal links
+
+Dark theme
+
+Clean spacing
+
+🎨 Design Style
+
+Dark UI
+
+Futuristic / premium
+
+Subtle 3D depth (not noisy)
+
+Clean typography
+
+Consistent spacing and alignment
+
+🛠 Technical Requirements
+
+Prefer React + Vite
+
+Three.js or React Three Fiber for Hero3D
+
+Fully responsive (desktop, tablet, mobile)
+
+Web-optimized assets
+
+Clean, maintainable component structure
+
+📦 Deliverables
+
+Full homepage layout and styling
+
+Embedded Hero3D scene
+
+Reusable components
+
+Production-ready code
+
+References:
+(Attach images / video here)
+
+🔥 Optional Enhancements (Add Only If Needed)
+
+Seasonal or lighting-based visual states driven only by light sources
+
+Scroll-based subtle camera movement
+
+Micro-interactions (hover, focus, transitions)
+DESIGN SYSTEM SPEC — ONES4 HOMEPAGE
+1. Design Principles
+
+Dark-first UI
+
+Premium / futuristic
+
+Minimal but dimensional
+
+Performance-aware
+
+3D as a hero, not decoration
+
+2. Color System
+Core Colors
+Background / Base
+- Black:        #000000
+- Deep Navy:    #020617
+- Dark Blue:    #0b1220
+
+Primary Accent
+- Cyan Blue:    #22d3ee
+- Electric Teal:#06b6d4
+
+Text
+- Primary:      #ffffff
+- Secondary:    rgba(255,255,255,0.7)
+- Muted:        rgba(255,255,255,0.5)
+
+Status
+- Success:      #22c55e
+- Warning:      #facc15
+- Error:        #ef4444
+
+3. Typography
+Font Stack
+Primary: Inter / System UI / Roboto / sans-serif
+
+Type Scale
+H1 (Hero):      48–64px / Bold
+H2:             32–40px / Semibold
+H3:             24–28px / Semibold
+Body:           14–16px / Regular
+Caption:        12px / Medium
+
+4. Spacing System
+
+Use 4px base scale:
+
+4, 8, 12, 16, 24, 32, 48, 64
+
+5. Component Specifications
+5.1 Navigation Bar
+
+Layout
+
+Left: Hamburger menu
+
+Center: ONES4 logo
+
+Right of logo: Search bar with microphone
+
+Right side: Profile icon, Cart icon
+
+Style
+
+Height: 64px
+
+Background: transparent or deep navy
+
+Icons: white with accent hover
+
+Sticky on scroll
+
+5.2 Search Bar
+
+Style
+
+Rounded pill
+
+Neon / cyan glow
+
+Microphone icon inside right end
+
+Placeholder: “Search…”
+
+Interaction
+
+Glow on focus
+
+Subtle hover depth
+
+5.3 Hero3D Section (Core Component)
+
+Purpose
+Primary visual anchor of homepage.
+
+Requirements
+
+Single 3D subject
+
+Centered at world origin
+
+Full 360° viewing
+
+No background or environment
+
+Realistic materials
+
+Cinematic lighting
+
+Subtle idle motion
+
+Optional mouse-hover rotation
+
+Tech
+
+Three.js or React Three Fiber
+
+WebGL optimized
+
+Low draw calls
+
+Lazy-loaded
+
+5.4 Buttons (e.g., Size Guide, Menu)
+
+Style
+
+Rounded corners
+
+3D / embossed look
+
+Neon edge or inset highlight
+
+States
+
+Default
+
+Hover (lift / glow)
+
+Active (press)
+
+5.5 Cards / Feature Blocks
+
+Dark background
+
+Soft glow or depth
+
+Minimal copy
+
+Hover elevation
+
+5.6 Footer
+
+Minimal links
+
+Muted text
+
+Dark background
+
+No visual noise
+
+6. Interaction & Motion
+
+Ease-in-out transitions (150–250ms)
+
+No aggressive animation
+
+Cinematic feel
+
+Motion supports clarity, not distraction
+
+7. Technical Stack
+
+React + Vite
+
+Three.js / React Three Fiber
+
+Responsive (desktop, tablet, mobile)
+
+Modular components
+
+Production-ready structure
+
+🐙 GITHUB ISSUE / README TASK
+📌 Title
+
+Design & Implement Full Homepage Design System (Hero3D-Driven)
+
+📝 Description
+
+Create a complete homepage design system and implementation for ONES4, centered around a Hero3D experience, following a premium dark UI aesthetic.
+
+✅ Scope of Work
+1. Navigation Bar
+
+Menu icon (left)
+
+ONES4 logo (center)
+
+Search bar with microphone (next to logo)
+
+Profile + Cart icons (right)
+
+Dark, minimal style
+
+2. Hero Section
+
+Embedded Hero3D scene
+
+Single 3D subject
+
+Centered at world origin
+
+No background/environment
+
+Cinematic lighting
+
+Subtle interaction (hover / idle)
+
+Optimized for web
+
+3. UI Components
+
+3D-style buttons (Menu, Size Guide)
+
+Cards / feature blocks
+
+Search bar with glow
+
+Consistent spacing & typography
+
+4. Design System
+
+Color palette
+
+Typography scale
+
+Spacing system
+
+Component variants
+
+Interaction states
+
+🛠 Technical Requirements
+
+React + Vite
+
+Three.js or React Three Fiber
+
+Web-optimized assets
+
+Fully responsive
+
+Clean, reusable components
+
+📦 Deliverables
+
+Full homepage implementation
+
+Embedded Hero3D scene
+
+Design system documentation
+
+Production-ready code
+
+🔗 References
+
+(Attach images / videos / links here)
