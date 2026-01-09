@@ -1,0 +1,1383 @@
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --glow: #6ee9ff;
+  --glow-2: #b7f7ff;
+  --accent: #00e6ff;
+  --accent-2: #7ef0c5;
+  --accent-3: #ff62e5;
+  --accent-4: #7c90ff;
+  --surface: #05070d;
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-strong: rgba(255, 255, 255, 0.12);
+  --ink-strong: #f5fbff;
+  --ink-soft: #9fb6d8;
+  --danger: #ff4d8c;
+  --safe: #5bffb5;
+  --panel: rgba(7, 11, 22, 0.78);
+  --line: rgba(130, 200, 255, 0.2);
+  --line-strong: rgba(126, 234, 255, 0.48);
+  --neon: #57f6ff;
+  --neon-green: #72ff9a;
+  --neo-teal: #23f0ff;
+  --neo-teal-strong: #11c8ff;
+  --neo-teal-soft: rgba(35, 240, 255, 0.3);
+  --neo-teal-shadow: 0 0 26px rgba(35, 240, 255, 0.55), 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(255, 255, 255, 0.18);
+  --discount-color: #00ffa3;
+  --star-color: #ffd700;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: #03040a;
+}
+
+#teleporter-hub {
+  position: relative;
+  font-family: 'Space Grotesk', 'Orbitron', system-ui, sans-serif;
+  background: #03040a;
+  color: var(--ink-strong);
+  min-height: 100vh;
+  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 12px 160px;
+}
+
+/* ZOOM/PAN MEDIA */
+.zoom-pan-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.zoom-pan-wrapper.zoomed {
+  cursor: grabbing;
+}
+
+/* VOICE SEARCH */
+.search-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  background: rgba(6, 10, 22, 0.7);
+  transition: all 0.3s ease;
+}
+
+.search-bar-row.listening {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(126, 234, 255, 0.4);
+}
+
+.search-input-v2 {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--ink-strong);
+  outline: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.mic-btn-v2 {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mic-btn-v2:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mic-btn-v2.active {
+  background: rgba(126, 234, 255, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 12px rgba(126, 234, 255, 0.3);
+}
+
+/* VIRTUAL TRY-ON NEON BUTTON */
+.vto-neon-btn-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.vto-neon-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.6);
+  background: linear-gradient(135deg, rgba(126, 234, 255, 0.1), rgba(35, 240, 255, 0.05));
+  color: var(--neon);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.vto-neon-btn:hover {
+  border-color: var(--neon);
+  box-shadow: 0 0 24px rgba(126, 234, 255, 0.5), inset 0 0 20px rgba(126, 234, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.vto-neon-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.vto-spin-ring {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.vto-shine {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* VIRTUAL TRY-ON MODAL */
+.vto-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 5000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.vto-overlay:not([aria-hidden="true"]) {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vto-modal {
+  width: min(95vw, 900px);
+  max-height: 85vh;
+  background: linear-gradient(135deg, rgba(8, 16, 30, 0.98), rgba(5, 10, 22, 0.96));
+  border: 1px solid var(--line-strong);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), 0 0 80px rgba(126, 234, 255, 0.2);
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.vto-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(126, 234, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.vto-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.vto-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(126, 234, 255, 0.4), transparent);
+}
+
+.vto-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: transparent;
+  color: var(--ink-strong);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.vto-close:hover {
+  border-color: var(--accent);
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.vto-content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.vto-preview-stage {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+  background: #000;
+  border: 1px solid rgba(126, 234, 255, 0.25);
+  overflow: hidden;
+}
+
+.vto-camera-view,
+.vto-upload-view,
+.vto-model-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vto-video,
+.vto-user-img,
+.vto-model-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.vto-ar-overlay {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.vto-error-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.vto-error-content {
+  text-align: center;
+  color: var(--danger);
+}
+
+.vto-icon-alert {
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.vto-error-msg {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.vto-error-sub {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+
+.vto-error-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.vto-alt-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.3);
+  background: rgba(6, 10, 22, 0.8);
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.vto-alt-btn:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px rgba(126, 234, 255, 0.2);
+}
+
+.vto-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.vto-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vto-options-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.vto-card-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.18);
+  background: rgba(6, 10, 22, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.vto-card-opt:hover {
+  border-color: var(--accent);
+  background: rgba(6, 10, 22, 0.8);
+}
+
+.vto-card-opt.active {
+  border-color: var(--accent-live-bright);
+  background: rgba(0, 174, 255, 0.1);
+  box-shadow: 0 0 20px rgba(126, 234, 255, 0.2);
+}
+
+.vto-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--neon);
+  flex-shrink: 0;
+}
+
+.vto-opt-text h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-strong);
+  margin: 0;
+}
+
+.vto-opt-text span {
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  display: block;
+  margin-top: 4px;
+}
+
+.vto-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.vto-divider .dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(126, 234, 255, 0.5);
+}
+
+.vto-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vto-carousel-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 22, 0.7);
+  color: var(--ink-soft);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.vto-carousel-arrow:hover {
+  border-color: var(--accent);
+  background: rgba(0, 255, 255, 0.1);
+  color: var(--accent);
+}
+
+.vto-model-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  flex: 1;
+  padding: 4px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.vto-model-strip::-webkit-scrollbar {
+  height: 4px;
+}
+
+.vto-model-strip::-webkit-scrollbar-thumb {
+  background: rgba(126, 234, 255, 0.3);
+  border-radius: 2px;
+}
+
+.vto-model-thumb {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 110px;
+  border-radius: 10px;
+  border: 2px solid rgba(126, 234, 255, 0.18);
+  background: #000;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  scroll-snap-align: center;
+}
+
+.vto-model-thumb:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 16px rgba(126, 234, 255, 0.2);
+}
+
+.vto-model-thumb.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgba(126, 234, 255, 0.4);
+}
+
+.vto-model-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vto-privacy {
+  font-size: 0.7rem;
+  color: var(--ink-soft);
+  text-align: center;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(0, 174, 255, 0.06);
+  margin: 0;
+}
+
+.vto-cta-btn {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.3);
+  background: linear-gradient(135deg, #0bf3ff 0%, #04c7ff 50%, #00b8d4 100%);
+  color: #012028;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 24px rgba(11, 243, 255, 0.35);
+}
+
+.vto-cta-btn:hover {
+  box-shadow: 0 12px 32px rgba(11, 243, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.vto-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* MAIN LAYOUT */
+.neo-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+.neo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+  width: 100%;
+}
+
+.gallery-section {
+  width: 100%;
+  min-width: 0;
+}
+
+.hero-frame-wrap {
+  position: relative;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.hero-frame {
+  position: relative;
+  border-radius: 20px;
+  padding: 14px;
+  background: linear-gradient(160deg, rgba(12, 20, 35, 0.88), rgba(6, 10, 20, 0.95));
+  border: 1px solid var(--neon);
+  box-shadow: 0 0 40px rgba(126, 234, 255, 0.15), inset 0 0 30px rgba(0, 0, 0, 0.45);
+}
+
+.hero-media {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: #03060f;
+  width: 100%;
+}
+
+.gallery-buy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.gallery-buy h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin: 0;
+  color: var(--ink-strong);
+  text-shadow: 0 0 20px rgba(0, 174, 255, 0.4);
+  word-break: break-word;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+  color: var(--star-color);
+  flex-shrink: 0;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: var(--ink-strong);
+}
+
+.review-count {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.price-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 15px rgba(0, 230, 255, 0.4);
+}
+
+.price-compare {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+  font-size: 1rem;
+}
+
+.options-panel {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.option-block {
+  display: grid;
+  gap: 10px;
+}
+
+.option-title {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.color-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0.92), rgba(4, 8, 16, 0.96));
+  color: var(--ink-strong);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  min-height: 44px;
+}
+
+.color-chip span {
+  text-align: center;
+}
+
+.color-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.color-chip:hover {
+  transform: translateY(-2px) scale(1.02);
+  border-color: var(--accent);
+}
+
+.color-chip.active {
+  border-color: var(--neon);
+  box-shadow: 0 0 30px var(--neon);
+}
+
+.size-pills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 6px;
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 20, 0.7);
+  color: var(--ink-strong);
+  font-weight: 600;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  min-height: 44px;
+}
+
+.pill span {
+  text-align: center;
+}
+
+.pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.pill.active {
+  border-color: var(--neon);
+  box-shadow: 0 0 22px var(--neon);
+  background: rgba(0, 174, 255, 0.1);
+}
+
+.qty-block {
+  display: grid;
+  gap: 10px;
+}
+
+.qty-block input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(126, 234, 255, 0.2);
+  background: rgba(6, 10, 20, 0.7);
+  color: var(--ink-strong);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.btn {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 234, 255, 0.22);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.88rem;
+  font-family: 'Orbitron', sans-serif;
+  min-height: 44px;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0bf3ff 0%, #04c7ff 50%, #00b8d4 100%);
+  color: #012028;
+  border-color: rgba(11, 243, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(11, 243, 255, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(11, 243, 255, 0.55);
+}
+
+.trust-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(126, 234, 255, 0.15);
+  background: rgba(6, 10, 22, 0.5);
+  font-size: 0.8rem;
+}
+
+.trust-badge-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.trust-badge-label {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-strong);
+}
+
+.trust-badge-text {
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .neo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .neo-shell {
+    padding: 16px;
+  }
+
+  .gallery-buy h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .neo-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .neo-shell {
+    padding: 16px;
+  }
+
+  .gallery-buy h1 {
+    font-size: 1.6rem;
+  }
+
+  .price {
+    font-size: 1.5rem;
+  }
+
+  .hero-media {
+    aspect-ratio: 3/4;
+  }
+}
+
+@media (max-width: 768px) {
+  .vto-modal {
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+  .vto-content {
+    grid-template-columns: 1fr;
+  }
+
+  .vto-sidebar {
+    order: -1;
+  }
+}
+</style>
+
+{% comment %} LIQUID SETUP {% endcomment %}
+{% assign current_product = product %}
+{% if current_product == blank and section.settings.product != blank %}
+  {% assign current_product = section.settings.product %}
+{% endif %}
+
+{% assign variant = current_product.selected_or_first_available_variant %}
+{% assign inventory_qty = variant.inventory_quantity | default: 0 %}
+{% assign inventory_tracked = variant.inventory_management %}
+
+{% assign avg_rating = current_product.metafields.reviews.rating.value.rating | default: 4.8 %}
+{% assign rating_count = current_product.metafields.reviews.rating_count | default: 247 %}
+
+{% assign gallery_images = current_product.images %}
+{% if gallery_images == blank and product %}
+  {% assign gallery_images = product.images %}
+{% endif %}
+{% assign main_image = gallery_images.first %}
+
+<section id="teleporter-hub" data-fx="on">
+  <div class="neo-shell">
+    <!-- SEARCH BAR WITH VOICE -->
+    <div class="search-bar-row" data-search-bar>
+      <input 
+        type="text" 
+        name="q"
+        id="site-search"
+        placeholder="SEARCH DATABASE..." 
+        class="search-input-v2"
+        data-voice-input
+      >
+      <button 
+        class="mic-btn-v2" 
+        type="button"
+        data-voice-toggle
+        aria-label="Voice search"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="neo-grid">
+      <!-- LEFT: MEDIA -->
+      <div class="gallery-section">
+        <div class="hero-frame-wrap">
+          <div class="hero-frame">
+            <div class="hero-media relative">
+              <div class="zoom-pan-wrapper" data-zoom-pan>
+                {% if main_image %}
+                  <img id="hero-img" src="{{ main_image | image_url: width: 1400 }}" alt="{{ current_product.title }}" loading="eager">
+                {% endif %}
+              </div>
+              
+              <!-- VIRTUAL TRY-ON BUTTON (NEON STYLE) -->
+              <div class="vto-neon-btn-container" data-vto-open>
+                <button class="vto-neon-btn" type="button" aria-label="Open Virtual Try-On">
+                  <span class="vto-neon-text">VIRTUAL TRY ON</span>
+                  <div class="vto-neon-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z"></path>
+                      <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                    <svg class="vto-spin-ring" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+                    </svg>
+                  </div>
+                  <div class="vto-shine"></div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: BUY PANEL -->
+      <div class="gallery-buy">
+        <h1>{{ current_product.title | default: 'CAMO TANK TOP' }}</h1>
+        
+        <!-- RATING -->
+        <div class="rating-stars">
+          <div class="stars">
+            {% for i in (1..5) %}
+              {% assign star_threshold = i | minus: 0.5 %}
+              {% if i <= avg_rating %}
+                <svg class="star filled" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+              {% elsif star_threshold <= avg_rating %}
+                <svg class="star half" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" opacity="0.6"></path></svg>
+              {% else %}
+                <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" opacity="0.2"></path></svg>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <span class="rating-value">({{ avg_rating }})</span>
+          <span class="review-count">{{ rating_count }} reviews</span>
+        </div>
+
+        <!-- PRICE -->
+        <div class="price-block">
+          <div class="price">{{ current_product.price | money }}</div>
+          {% if current_product.compare_at_price > current_product.price %}
+            <div class="price-compare">{{ current_product.compare_at_price | money }}</div>
+          {% endif %}
+        </div>
+
+        <!-- COLORS -->
+        {% for option in current_product.options_with_values %}
+          {% if option.name == 'Color' or option.name == 'color' %}
+            <div class="option-block">
+              <div class="option-title">{{ option.name }}</div>
+              <div class="color-options">
+                {% for value in option.values %}
+                  <label class="color-chip {% if option.selected_value == value %}active{% endif %}">
+                    <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        <!-- SIZE -->
+        {% for option in current_product.options_with_values %}
+          {% if option.name == 'Size' or option.name == 'size' %}
+            <div class="option-block">
+              <div class="option-title">{{ option.name }}</div>
+              <div class="size-pills">
+                {% for value in option.values %}
+                  <label class="pill {% if option.selected_value == value %}active{% endif %}">
+                    <input type="radio" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        <!-- ADD TO CART -->
+        {% form 'product', current_product %}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <div class="qty-block">
+            <label class="option-title">Quantity</label>
+            <input type="number" name="quantity" value="1" min="1">
+          </div>
+          <button type="submit" class="btn btn-primary">ADD TO CART</button>
+        {% endform %}
+
+        <!-- TRUST BADGES -->
+        <div class="trust-badges">
+          <div class="trust-badge">
+            <div class="trust-badge-icon">🛡️</div>
+            <div><div class="trust-badge-label">Secure</div><div class="trust-badge-text">256-bit encryption</div></div>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">🚚</div>
+            <div><div class="trust-badge-label">Fast Shipping</div><div class="trust-badge-text">24 hour dispatch</div></div>
+          </div>
+          <div class="trust-badge">
+            <div class="trust-badge-icon">↩️</div>
+            <div><div class="trust-badge-label">Easy Returns</div><div class="trust-badge-text">30-day policy</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIRTUAL TRY-ON MODAL -->
+  <div class="vto-overlay" data-vto-overlay aria-hidden="true">
+    <div class="vto-modal" role="dialog" aria-modal="true" aria-labelledby="vto-title">
+      <div class="vto-header">
+        <div class="vto-title-wrap">
+          <div class="vto-line left"></div>
+          <h2 id="vto-title" style="color: var(--neon); margin: 0; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; letter-spacing: 0.2em; text-transform: uppercase;">VIRTUAL TRY-ON</h2>
+          <div class="vto-line right"></div>
+        </div>
+        <button class="vto-close" type="button" data-vto-close aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="vto-content">
+        <!-- PREVIEW STAGE -->
+        <div class="vto-preview-stage">
+          <div class="zoom-pan-wrapper" data-vto-preview>
+            <div data-vto-placeholder style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ink-soft); gap: 16px;">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <p>Select a mode to begin</p>
+            </div>
+            <video data-vto-video style="display: none; width: 100%; height: 100%; object-fit: cover;"></video>
+            <img data-vto-upload-preview style="display: none; width: 100%; height: 100%; object-fit: contain;">
+            <img data-vto-model-preview style="display: none; width: 100%; height: 100%; object-fit: contain;">
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="vto-sidebar">
+          <div class="vto-options-grid">
+            <button class="vto-card-opt" type="button" data-vto-mode="camera" aria-pressed="false">
+              <div class="vto-icon">📷</div>
+              <div class="vto-opt-text">
+                <h3>Live Camera</h3>
+                <span>Start live try-on</span>
+              </div>
+            </button>
+            <button class="vto-card-opt" type="button" data-vto-mode="upload" aria-pressed="false">
+              <div class="vto-icon">📤</div>
+              <div class="vto-opt-text">
+                <h3>Upload Photo</h3>
+                <span>Upload a photo</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="vto-divider">
+            <span class="dot"></span>
+            <span class="text">or try a model</span>
+            <span class="dot"></span>
+          </div>
+
+          <!-- MODELS CAROUSEL -->
+          <div class="vto-carousel-container">
+            <button class="vto-carousel-arrow left" type="button" data-carousel-left aria-label="Previous model">‹</button>
+            <div class="vto-model-strip" data-model-carousel>
+              {% for i in (1..3) %}
+                {% capture model_setting %}tryon_model_{{ i }}{% endcapture %}
+                {% if section.settings[model_setting] != blank %}
+                  <button class="vto-model-thumb" type="button" data-model-index="{{ i }}" aria-pressed="false">
+                    <img src="{{ section.settings[model_setting] | image_url: width: 200 }}" alt="Model {{ i }}" loading="lazy">
+                  </button>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <button class="vto-carousel-arrow right" type="button" data-carousel-right aria-label="Next model">›</button>
+          </div>
+
+          <p class="vto-privacy">🔒 Photos are processed and never stored.</p>
+          <button class="vto-cta-btn" type="button" data-vto-add-to-cart>ADD TO CART</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
+
+function initApp() {
+  try {
+    const root = document.getElementById('teleporter-hub');
+    if (!root) return;
+
+    // --- VOICE SEARCH ---
+    (function() {
+      const voiceToggle = root.querySelector('[data-voice-toggle]');
+      const voiceInput = root.querySelector('[data-voice-input]');
+      if (!voiceToggle || !voiceInput) return;
+
+      let isListening = false;
+
+      voiceToggle.onclick = function(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        if (isListening) return;
+
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) return;
+
+        try {
+          const recognition = new SR();
+          recognition.lang = 'en-US';
+          recognition.onstart = function() {
+            isListening = true;
+            voiceToggle.classList.add('active');
+          };
+          recognition.onend = function() {
+            isListening = false;
+            voiceToggle.classList.remove('active');
+          };
+          recognition.onresult = function(evt) {
+            if (evt.results && evt.results[0]) {
+              voiceInput.value = evt.results[0][0].transcript;
+            }
+          };
+          recognition.onerror = function() {
+            isListening = false;
+            voiceToggle.classList.remove('active');
+          };
+          recognition.start();
+        } catch (err) {
+          console.log('Voice unavailable');
+        }
+      };
+    })();
+
+    // --- VIRTUAL TRY-ON MODAL ---
+    (function() {
+      const vtoOverlay = root.querySelector('[data-vto-overlay]');
+      const vtoOpen = root.querySelector('[data-vto-open]');
+      const vtoClose = root.querySelector('[data-vto-close]');
+      const vtoModeButtons = root.querySelectorAll('[data-vto-mode]');
+      const vtoVideo = root.querySelector('[data-vto-video]');
+      const vtoPlaceholder = root.querySelector('[data-vto-placeholder]');
+      const modelCarousel = root.querySelector('[data-model-carousel]');
+      const modelThumbs = root.querySelectorAll('[data-model-index]');
+      const carouselLeft = root.querySelector('[data-carousel-left]');
+      const carouselRight = root.querySelector('[data-carousel-right]');
+
+      if (!vtoOverlay) return;
+
+      let vtoStream = null;
+
+      function openVTO(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        vtoOverlay.removeAttribute('aria-hidden');
+      }
+
+      function closeVTO(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        try {
+          if (vtoStream) {
+            vtoStream.getTracks().forEach(function(t) { t.stop(); });
+            vtoStream = null;
+          }
+        } catch (ex) {}
+        vtoOverlay.setAttribute('aria-hidden', 'true');
+        if (vtoVideo) vtoVideo.style.display = 'none';
+        if (vtoPlaceholder) vtoPlaceholder.style.display = 'flex';
+      }
+
+      if (vtoOpen) vtoOpen.onclick = openVTO;
+      if (vtoClose) vtoClose.onclick = closeVTO;
+
+      // Mode buttons
+      vtoModeButtons.forEach(function(btn) {
+        btn.onclick = function(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          const mode = btn.dataset.vtoMode;
+          
+          vtoModeButtons.forEach(function(b) {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+            b.classList.toggle('active', b === btn);
+          });
+
+          if (mode === 'camera' && navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({
+              video: { facingMode: 'user' },
+              audio: false
+            }).then(function(stream) {
+              vtoStream = stream;
+              if (vtoVideo) {
+                vtoVideo.srcObject = stream;
+                vtoVideo.style.display = 'block';
+                vtoVideo.play();
+              }
+              if (vtoPlaceholder) vtoPlaceholder.style.display = 'none';
+            }).catch(function(err) {
+              console.log('Camera error:', err);
+            });
+          }
+        };
+      });
+
+      // Model selection
+      modelThumbs.forEach(function(thumb, i) {
+        thumb.onclick = function(e) {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          modelThumbs.forEach(function(t, idx) {
+            t.classList.toggle('active', idx === i);
+            t.setAttribute('aria-pressed', idx === i ? 'true' : 'false');
+          });
+        };
+      });
+
+      // Carousel controls
+      if (carouselLeft && modelCarousel) {
+        carouselLeft.onclick = function(e) {
+          if (e) e.preventDefault();
+          modelCarousel.scrollBy({ left: -150, behavior: 'smooth' });
+        };
+      }
+
+      if (carouselRight && modelCarousel) {
+        carouselRight.onclick = function(e) {
+          if (e) e.preventDefault();
+          modelCarousel.scrollBy({ left: 150, behavior: 'smooth' });
+        };
+      }
+
+      // Close on background click
+      vtoOverlay.onclick = function(e) {
+        if (e.target === vtoOverlay) closeVTO();
+      };
+
+    })();
+
+  } catch (e) {
+    console.error('Init error:', e);
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "Teletransport Combined",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "Virtual Try-On Models"
+    },
+    {
+      "type": "image_picker",
+      "id": "tryon_model_1",
+      "label": "Model 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "tryon_model_2",
+      "label": "Model 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "tryon_model_3",
+      "label": "Model 3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Teletransport Combined"
+    }
+  ]
+}
+{% endschema %}
