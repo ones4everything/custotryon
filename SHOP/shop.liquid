@@ -1,0 +1,2174 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@300..800&family=Outfit:wght@400..900&display=swap" rel="stylesheet">
+
+<style>
+#o4-premium-{{ section.id }} {
+  --font-heading: "Outfit", sans-serif;
+  --font-body: "Manrope", sans-serif;
+  --bg-dark: #070a14;
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-2: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  --accent: #00b4ff;
+  --text: rgba(223, 246, 255, 1);
+  --muted: rgba(159, 182, 195, 1);
+  --menu-bg: rgba(8, 12, 28, 0.64);
+  --menu-line: rgba(255, 255, 255, 0.1);
+  --menu-glass: rgba(255, 255, 255, 0.06);
+  --menu-glass-soft: rgba(255, 255, 255, 0.035);
+  --menu-text: rgba(255, 255, 255, 0.92);
+  --menu-muted: rgba(255, 255, 255, 0.6);
+  --menu-teal: #2fe4d4;
+  --menu-violet: #6a3cf0;
+  --cyan-glow: var(--menu-teal);
+  --purple-glow: var(--menu-violet);
+  position: relative;
+  background-color: var(--bg-dark);
+  font-family: var(--font-body);
+  padding: 60px 0 140px;
+  overflow: visible;
+  color: #fff;
+}
+
+.o4-hide-theme-header #shopify-section-header,
+.o4-hide-theme-header #shopify-section-announcement-bar,
+.o4-hide-theme-header .shopify-section--header,
+.o4-hide-theme-header .site-header,
+.o4-hide-theme-header .header-wrapper,
+.o4-hide-theme-header .announcement-bar,
+.o4-hide-theme-header [data-section-type="header"],
+.o4-hide-theme-header [id^="FuturisticHeader-"] {
+  display: none !important;
+}
+
+#o4-premium-{{ section.id }} * {
+  box-sizing: border-box;
+}
+
+#o4-premium-{{ section.id }} .o4-bg-radial {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 520px at 20% 45%, rgba(47, 228, 212, 0.3), transparent 55%),
+    radial-gradient(900px 520px at 78% 48%, rgba(106, 60, 240, 0.35), transparent 58%),
+    linear-gradient(180deg, #070a14, #0b1020);
+  z-index: 0;
+}
+
+#o4-premium-{{ section.id }} .o4-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 5;
+}
+
+/* --- RESPONSIVE FLEX LAYOUT --- */
+#o4-premium-{{ section.id }} .o4-main-layout {
+  display: block;
+}
+
+/* --- CASCADE DRAWER MENU --- */
+#o4-premium-{{ section.id }} .cdm {
+  position: relative;
+  z-index: 30;
+}
+
+body.cdm-open {
+  overflow: hidden;
+}
+
+#o4-premium-{{ section.id }} .cdm__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 16, 0.78);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 30;
+}
+
+#o4-premium-{{ section.id }}.cdm-open .cdm__scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#o4-premium-{{ section.id }} .cdm__drawer {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  bottom: 18px;
+  width: min(640px, 55vw);
+  border-radius: 22px;
+  padding: 1px;
+  background: linear-gradient(90deg, rgba(47, 228, 212, 0.08), rgba(106, 60, 240, 0.1));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 40;
+  touch-action: pan-y;
+}
+
+#o4-premium-{{ section.id }} .cdm__drawer::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, rgba(47, 228, 212, 0.55), rgba(106, 60, 240, 0.55));
+  opacity: 0.2;
+  filter: blur(14px);
+  z-index: 0;
+}
+
+#o4-premium-{{ section.id }}.cdm-open .cdm__drawer {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+#o4-premium-{{ section.id }} .cdm__frame {
+  position: relative;
+  z-index: 1;
+  border-radius: 22px;
+  background: var(--menu-bg);
+  border: 1px solid var(--menu-line);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+}
+
+#o4-premium-{{ section.id }} .cdm__header {
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: linear-gradient(90deg, rgba(47, 228, 212, 0.07), rgba(106, 60, 240, 0.06));
+}
+
+#o4-premium-{{ section.id }} .cdm__title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  color: rgba(210, 245, 255, 0.92);
+  text-shadow: 0 0 18px rgba(47, 228, 212, 0.25);
+}
+
+#o4-premium-{{ section.id }} .cdm__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#o4-premium-{{ section.id }} .cdm__icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  color: var(--menu-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+#o4-premium-{{ section.id }} .cdm__icon-btn:hover,
+#o4-premium-{{ section.id }} .cdm__icon-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(47, 228, 212, 0.4);
+  box-shadow: 0 0 16px rgba(47, 228, 212, 0.3);
+}
+
+#o4-premium-{{ section.id }} .cdm__close {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--menu-text);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__close:hover,
+#o4-premium-{{ section.id }} .cdm__close:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(47, 228, 212, 0.4);
+  box-shadow: 0 0 16px rgba(47, 228, 212, 0.3);
+}
+
+#o4-premium-{{ section.id }} .cdm__close svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+#o4-premium-{{ section.id }} .cdm__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 16px 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  backdrop-filter: blur(8px);
+  position: relative;
+}
+
+#o4-premium-{{ section.id }} .cdm__search-icon {
+  display: inline-flex;
+  color: rgba(195, 226, 255, 0.6);
+}
+
+#o4-premium-{{ section.id }} .cdm__search-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+#o4-premium-{{ section.id }} .cdm__search-input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--menu-text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  outline: none;
+}
+
+#o4-premium-{{ section.id }} .cdm__search-input::placeholder {
+  color: rgba(195, 226, 255, 0.5);
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  color: var(--menu-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-btn:hover,
+#o4-premium-{{ section.id }} .cdm__voice-btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(47, 228, 212, 0.4);
+  box-shadow: 0 0 16px rgba(47, 228, 212, 0.3);
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-btn.is-listening {
+  border-color: rgba(47, 228, 212, 0.6);
+  box-shadow: 0 0 18px rgba(47, 228, 212, 0.45);
+  color: #ffffff;
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#o4-premium-{{ section.id }} .cdm__voice-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs {
+  margin: 0 16px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 228, 212, 0.22);
+  background: rgba(8, 12, 28, 0.65);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs-inner {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(214, 243, 255, 0.85);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs-inner::-webkit-scrollbar {
+  display: none;
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs-link {
+  color: #f5fbff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs-link:hover {
+  text-decoration: underline;
+}
+
+#o4-premium-{{ section.id }} .cdm__crumbs-sep {
+  opacity: 0.6;
+  color: rgba(214, 243, 255, 0.55);
+}
+
+#o4-premium-{{ section.id }} .cdm__panels {
+  position: relative;
+  flex: 1;
+  padding: 6px 16px 16px;
+  overflow: hidden;
+}
+
+#o4-premium-{{ section.id }} .cdm__panel {
+  position: absolute;
+  inset: 0;
+  padding: 4px 0 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+#o4-premium-{{ section.id }} .cdm__panel.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+#o4-premium-{{ section.id }} .cdm__panel[data-cdm-panel="root"] {
+  min-height: 0;
+}
+
+@media (min-width: 960px) {
+  #o4-premium-{{ section.id }} .cdm__panels {
+    display: grid;
+    grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+    gap: 12px;
+    min-height: 0;
+  }
+
+  #o4-premium-{{ section.id }} .cdm__panel {
+    position: relative;
+    inset: auto;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+    height: 100%;
+    min-height: 0;
+  }
+
+  #o4-premium-{{ section.id }} .cdm__panel[data-cdm-panel="root"] {
+    display: block;
+    padding-right: 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  #o4-premium-{{ section.id }} .cdm__panel:not([data-cdm-panel="root"]) {
+    display: none;
+  }
+
+  #o4-premium-{{ section.id }} .cdm__panel.is-active:not([data-cdm-panel="root"]) {
+    display: block;
+  }
+
+  #o4-premium-{{ section.id }} .cdm__back {
+    display: none;
+  }
+}
+
+#o4-premium-{{ section.id }} .cdm__panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(120deg, rgba(9, 15, 28, 0.88), rgba(4, 7, 16, 0.92));
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: rgba(214, 245, 255, 0.85);
+  text-shadow: 0 0 14px rgba(0, 255, 255, 0.25);
+}
+
+#o4-premium-{{ section.id }} .cdm__panel-title {
+  line-height: 1;
+}
+
+#o4-premium-{{ section.id }} .cdm__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+#o4-premium-{{ section.id }} .cdm__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+#o4-premium-{{ section.id }} .cdm__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass-soft);
+  color: var(--menu-muted);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__label {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#o4-premium-{{ section.id }} .cdm__row-icon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: rgba(190, 245, 255, 0.9);
+  flex: 0 0 auto;
+}
+
+#o4-premium-{{ section.id }} .cdm__row-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#o4-premium-{{ section.id }} .cdm__row-chevron {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+#o4-premium-{{ section.id }} .cdm__row-chevron svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__row:hover,
+#o4-premium-{{ section.id }} .cdm__row:focus-visible {
+  color: var(--menu-text);
+  border-color: rgba(47, 228, 212, 0.22);
+  background: linear-gradient(90deg, rgba(47, 228, 212, 0.14), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 0 1px rgba(47, 228, 212, 0.12) inset, 0 10px 24px rgba(0, 0, 0, 0.35), 0 0 26px rgba(47, 228, 212, 0.14);
+  transform: translateY(-1px);
+}
+
+#o4-premium-{{ section.id }} .cdm__row:hover .cdm__row-chevron svg,
+#o4-premium-{{ section.id }} .cdm__row:focus-visible .cdm__row-chevron svg {
+  opacity: 0.9;
+  transform: translateX(2px);
+}
+
+#o4-premium-{{ section.id }} .cdm__row.is-active,
+#o4-premium-{{ section.id }} .cdm__row[aria-expanded="true"] {
+  color: var(--menu-text);
+  border-color: rgba(47, 228, 212, 0.35);
+  background: linear-gradient(90deg, rgba(47, 228, 212, 0.22), rgba(106, 60, 240, 0.06));
+  box-shadow: 0 0 0 1px rgba(47, 228, 212, 0.18) inset, 0 0 28px rgba(47, 228, 212, 0.18);
+}
+
+#o4-premium-{{ section.id }} .cdm__row.is-sale {
+  color: rgba(199, 125, 255, 0.9);
+}
+
+#o4-premium-{{ section.id }} .cdm__row.is-sale .cdm__row-icon {
+  color: rgba(199, 125, 255, 0.9);
+}
+
+#o4-premium-{{ section.id }} .cdm__row.is-sale:hover,
+#o4-premium-{{ section.id }} .cdm__row.is-sale:focus-visible {
+  color: #e2b3ff;
+  border-color: rgba(106, 60, 240, 0.35);
+  background: linear-gradient(90deg, rgba(106, 60, 240, 0.18), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 24px rgba(106, 60, 240, 0.2);
+}
+
+#o4-premium-{{ section.id }} .cdm__empty {
+  padding: 16px;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+#o4-premium-{{ section.id }} .cdm__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  color: var(--menu-text);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .cdm__trigger svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+#o4-premium-{{ section.id }} .cdm__trigger:hover,
+#o4-premium-{{ section.id }} .cdm__trigger:focus-visible {
+  border-color: rgba(47, 228, 212, 0.35);
+  box-shadow: 0 0 16px rgba(47, 228, 212, 0.25);
+  transform: translateY(-1px);
+}
+
+#o4-premium-{{ section.id }} .o4-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  margin: 0 0 40px;
+  flex-wrap: wrap;
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle {
+  margin-left: auto;
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--menu-line);
+  background: var(--menu-glass);
+  color: var(--menu-text);
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__btn:hover,
+#o4-premium-{{ section.id }} .o4-min-toggle__btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(47, 228, 212, 0.4);
+  box-shadow: 0 0 16px rgba(47, 228, 212, 0.3);
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__btn[aria-pressed="true"] {
+  border-color: rgba(47, 228, 212, 0.55);
+  box-shadow: 0 0 18px rgba(47, 228, 212, 0.35);
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(8, 12, 24, 0.9);
+  box-shadow: inset 0 0 6px rgba(47, 228, 212, 0.25);
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__btn[aria-pressed="true"] .o4-min-toggle__dot {
+  background: var(--menu-teal);
+  border-color: var(--menu-teal);
+  box-shadow: 0 0 10px rgba(47, 228, 212, 0.6);
+}
+
+#o4-premium-{{ section.id }} .o4-min-toggle__help {
+  font-size: 0.72rem;
+  color: rgba(200, 230, 255, 0.7);
+}
+
+/* --- BOTTOM NAV --- */
+#o4-premium-{{ section.id }} .o4-bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: min(820px, calc(100% - 24px));
+  z-index: 9980;
+  pointer-events: none;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-nav::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, rgba(47, 228, 212, 0.4), transparent 70%);
+  filter: blur(16px);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-nav-inner {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(4, 10, 18, 0.92), rgba(6, 14, 26, 0.92));
+  border: 1px solid rgba(130, 220, 255, 0.35);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.55), 0 0 40px rgba(47, 228, 212, 0.25);
+  overflow: hidden;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-nav-inner::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(160, 240, 255, 0.22);
+  box-shadow: inset 0 0 18px rgba(47, 228, 212, 0.18);
+  pointer-events: none;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: rgba(200, 245, 255, 0.92);
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-link svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-link:hover {
+  transform: translateY(-1px);
+  color: #f4fcff;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-center {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 228, 212, 0.65);
+  background: radial-gradient(circle at 30% 30%, rgba(47, 228, 212, 0.55), rgba(5, 12, 20, 0.92));
+  color: #f2fdff;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 0 32px rgba(47, 228, 212, 0.45), inset 0 0 16px rgba(255, 255, 255, 0.18);
+  z-index: 1;
+}
+
+#o4-premium-{{ section.id }} .o4-bottom-center svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 640px) {
+  #o4-premium-{{ section.id }} {
+    padding-bottom: 160px;
+  }
+
+  #o4-premium-{{ section.id }} .o4-bottom-nav {
+    bottom: 10px;
+  }
+
+  #o4-premium-{{ section.id }} .o4-bottom-nav-inner {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+
+  #o4-premium-{{ section.id }} .o4-bottom-link {
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  #o4-premium-{{ section.id }} .o4-bottom-link span {
+    display: none;
+  }
+
+  #o4-premium-{{ section.id }} .o4-bottom-center {
+    padding: 10px 16px;
+    font-size: 0.92rem;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (max-width: 960px) {
+  #o4-premium-{{ section.id }} .cdm__drawer {
+    width: 60vw;
+  }
+}
+
+@media (max-width: 720px) {
+  #o4-premium-{{ section.id }} .cdm__drawer {
+    top: 12px;
+    left: 12px;
+    bottom: 12px;
+    width: 60vw;
+  }
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} {
+  --glass-bg: rgba(12, 16, 24, 0.96);
+  --glass-bg-2: rgba(12, 16, 24, 0.96);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-shadow: none;
+  --menu-bg: rgba(10, 14, 22, 0.96);
+  --menu-glass: rgba(12, 16, 24, 0.92);
+  --menu-glass-soft: rgba(12, 16, 24, 0.92);
+  --menu-line: rgba(255, 255, 255, 0.16);
+  --menu-text: rgba(240, 248, 255, 0.95);
+  --menu-muted: rgba(200, 220, 235, 0.8);
+  font-size: 1.1rem;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .o4-bg-radial {
+  opacity: 0.22;
+  filter: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .cdm__frame,
+body.mode-minimal #o4-premium-{{ section.id }} .cdm__panel-header {
+  background: rgba(12, 16, 24, 0.96);
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .cdm__title {
+  letter-spacing: 0.1em;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .o4-heading {
+  letter-spacing: 0.1em;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-grid {
+  gap: 2.4rem;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-card::before {
+  animation: none;
+  opacity: 0.18;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-card-content {
+  background: rgba(12, 16, 24, 0.96);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-image {
+  filter: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-card:hover .product-image {
+  transform: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-name {
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  text-shadow: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .product-price {
+  font-size: 1.2rem;
+  text-shadow: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .add-to-cart-btn {
+  animation: none;
+  box-shadow: none;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .o4-bottom-nav::before {
+  opacity: 0.2;
+}
+
+body.mode-minimal #o4-premium-{{ section.id }} .o4-bottom-center {
+  box-shadow: none;
+}
+
+/* --- PRODUCT GRID + GLOW CARDS --- */
+@keyframes rotate-glow {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 5px var(--primary-glow), 0 0 10px var(--primary-glow); }
+  50% { box-shadow: 0 0 10px var(--secondary-glow), 0 0 15px var(--secondary-glow); }
+}
+
+#o4-premium-{{ section.id }} .o4-content-area {
+  flex: 1;
+  width: 100%;
+}
+
+#o4-premium-{{ section.id }} .o4-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  text-align: left;
+}
+
+#o4-premium-{{ section.id }} .o4-grid,
+#o4-premium-{{ section.id }} .product-grid {
+  display: grid;
+  gap: 2rem;
+  padding: 0;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+#o4-premium-{{ section.id }} [data-theme="purple"] {
+  --primary-glow: #ff00a8;
+  --secondary-glow: #ffe6f7;
+}
+
+#o4-premium-{{ section.id }} [data-theme="orange"] {
+  --primary-glow: #ffc300;
+  --secondary-glow: #fff8e1;
+}
+
+#o4-premium-{{ section.id }} [data-theme="cyan"] {
+  --primary-glow: #00ffff;
+  --secondary-glow: #e0f7ff;
+}
+
+#o4-premium-{{ section.id }} .product-card {
+  --primary-glow: #00ffff;
+  --secondary-glow: #e0f7ff;
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  z-index: 1;
+  padding: 3px;
+  clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+}
+
+#o4-premium-{{ section.id }} .product-card:hover {
+  transform: translateY(-10px);
+}
+
+#o4-premium-{{ section.id }} .product-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  padding-bottom: 200%;
+  background: conic-gradient(from 0deg, transparent 50%, var(--primary-glow), var(--secondary-glow), var(--primary-glow), transparent 70%);
+  z-index: -1;
+  animation: rotate-glow 6s linear infinite;
+  opacity: 0.8;
+}
+
+#o4-premium-{{ section.id }} .product-card-content {
+  background: rgba(12, 10, 9, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+  position: relative;
+  z-index: 2;
+  padding: 1.25rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#o4-premium-{{ section.id }} .product-image-container {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+#o4-premium-{{ section.id }} .product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px var(--primary-glow));
+  transition: transform 0.3s ease;
+}
+
+#o4-premium-{{ section.id }} .product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+#o4-premium-{{ section.id }} .product-details {
+  text-align: center;
+}
+
+#o4-premium-{{ section.id }} .product-name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  color: #e6eef7;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.15);
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#o4-premium-{{ section.id }} .product-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#o4-premium-{{ section.id }} .product-price {
+  font-size: 1.1rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: var(--primary-glow);
+  text-shadow: 0 0 8px var(--primary-glow), 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+#o4-premium-{{ section.id }} .add-to-cart-btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: transparent;
+  border: 2px solid var(--primary-glow);
+  border-radius: 8px;
+  color: var(--primary-glow);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.1s ease;
+  text-transform: uppercase;
+  animation: pulse 3s infinite ease-in-out;
+  width: 100%;
+}
+
+#o4-premium-{{ section.id }} .add-to-cart-btn:hover {
+  background-color: var(--primary-glow);
+  color: #0c0a09;
+  animation-play-state: paused;
+  box-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow);
+}
+
+#o4-premium-{{ section.id }} .add-to-cart-btn:active {
+  transform: scale(0.95);
+}
+
+#o4-premium-{{ section.id }} .add-to-cart-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
+}
+
+@media (max-width: 768px) {
+  #o4-premium-{{ section.id }} .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  #o4-premium-{{ section.id }} .product-name {
+    font-size: 1rem;
+  }
+}
+
+#o4-premium-{{ section.id }} .o4-empty {
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  #o4-premium-{{ section.id }} {
+    padding: 48px 0 80px;
+  }
+  #o4-premium-{{ section.id }} .o4-heading-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  #o4-premium-{{ section.id }} .o4-heading {
+    text-align: center;
+    letter-spacing: 0.12em;
+  }
+  #o4-premium-{{ section.id }} .cdm__trigger {
+    width: 100%;
+    justify-content: center;
+  }
+  #o4-premium-{{ section.id }} .cdm__row {
+    padding: 16px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #o4-premium-{{ section.id }} .product-card::before,
+  #o4-premium-{{ section.id }} .add-to-cart-btn {
+    animation: none;
+  }
+  #o4-premium-{{ section.id }} .product-card,
+  #o4-premium-{{ section.id }} .product-image {
+    transition: none;
+  }
+}
+</style>
+
+{% assign menu_links = section.settings.menu.links %}
+{% if menu_links == blank and linklists['shop'] != blank %}
+  {% assign menu_links = linklists['shop'].links %}
+{% endif %}
+{% assign active_collection = section.settings.collection %}
+{% if active_collection == blank and collection %}
+  {% assign active_collection = collection %}
+{% endif %}
+{% if active_collection %}
+  {% assign heading_title = active_collection.title | default: section.settings.title %}
+{% else %}
+  {% assign heading_title = section.settings.title %}
+{% endif %}
+{% assign active_menu = nil %}
+{% if menu_links != blank %}
+  {% for link in menu_links %}
+    {% if link.active or link.child_active %}
+      {% assign active_menu = link %}
+    {% endif %}
+  {% endfor %}
+  {% if active_menu == nil %}
+    {% assign active_menu = menu_links[0] %}
+  {% endif %}
+{% endif %}
+{% assign active_menu_key = '' %}
+{% if active_menu %}
+  {% assign active_menu_key = active_menu.title | handleize %}
+{% endif %}
+
+{% assign shop_url = routes.collections_url %}
+{% assign category_title = blank %}
+{% assign category_url = blank %}
+{% assign subcat_title = blank %}
+{% assign subcat_url = blank %}
+
+{% if template.name == 'product' and product %}
+  {% assign primary_collection = product.collections.first %}
+  {% if primary_collection %}
+    {% assign category_title = primary_collection.title %}
+    {% assign category_url = primary_collection.url %}
+    {% if category_title contains ' - ' %}
+      {% assign parts = category_title | split: ' - ' %}
+      {% if parts.size >= 2 %}
+        {% assign category_title = parts[0] | strip %}
+        {% assign subcat_title = parts[1] | strip %}
+        {% assign subcat_url = primary_collection.url %}
+      {% endif %}
+    {% elsif category_title contains ' / ' %}
+      {% assign parts = category_title | split: ' / ' %}
+      {% if parts.size >= 2 %}
+        {% assign category_title = parts[0] | strip %}
+        {% assign subcat_title = parts[1] | strip %}
+        {% assign subcat_url = primary_collection.url %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% elsif template.name == 'collection' and collection %}
+  {% assign category_title = collection.title %}
+  {% assign category_url = collection.url %}
+  {% if category_title contains ' - ' %}
+    {% assign parts = category_title | split: ' - ' %}
+    {% if parts.size >= 2 %}
+      {% assign category_title = parts[0] | strip %}
+      {% assign subcat_title = parts[1] | strip %}
+      {% assign subcat_url = collection.url %}
+    {% endif %}
+  {% elsif category_title contains ' / ' %}
+    {% assign parts = category_title | split: ' / ' %}
+    {% if parts.size >= 2 %}
+      {% assign category_title = parts[0] | strip %}
+      {% assign subcat_title = parts[1] | strip %}
+      {% assign subcat_url = collection.url %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+<section id="o4-premium-{{ section.id }}">
+  <div class="o4-bg-radial"></div>
+
+  <div class="o4-shell">
+    <div class="cdm" data-cdm-root>
+      <div class="cdm__scrim" data-cdm-scrim hidden></div>
+
+      <aside class="cdm__drawer" data-cdm-drawer aria-hidden="true" role="dialog" aria-modal="true" id="cdm-drawer-{{ section.id }}">
+        <div class="cdm__frame">
+          <div class="cdm__header">
+            <div class="cdm__title">{{ section.settings.menu_title | default: "Shop" }}</div>
+            <div class="cdm__actions">
+              <a href="{{ routes.cart_url }}" class="cdm__icon-btn" aria-label="Cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="9" cy="20" r="1"></circle>
+                  <circle cx="17" cy="20" r="1"></circle>
+                  <path d="M5 5h2l2 10h9l2-7H8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </a>
+              {% if customer %}
+                <a href="{{ routes.account_url }}" class="cdm__icon-btn" aria-label="Account">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c2.5-4 13.5-4 16 0" stroke-linecap="round"></path>
+                  </svg>
+                </a>
+              {% else %}
+                <a href="{{ routes.account_login_url }}" class="cdm__icon-btn" aria-label="Sign in">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 20c2.5-4 13.5-4 16 0" stroke-linecap="round"></path>
+                  </svg>
+                </a>
+              {% endif %}
+              <button class="cdm__close" type="button" data-cdm-close aria-label="Close menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M6 6l12 12" stroke-linecap="round"></path>
+                  <path d="M18 6l-12 12" stroke-linecap="round"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <form class="cdm__search" action="{{ routes.search_url }}" method="get" role="search" data-voice-form>
+            <span class="cdm__search-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-3.5-3.5" stroke-linecap="round"></path>
+              </svg>
+            </span>
+            <input class="cdm__search-input"
+                   type="search"
+                   name="q"
+                   placeholder="Search product or brand"
+                   aria-label="Search products"
+                   data-voice-input>
+            <button class="cdm__voice-btn" type="button" data-voice-btn aria-label="Start voice search" aria-pressed="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <path d="M12 19v3"></path>
+                <path d="M8 22h8"></path>
+              </svg>
+            </button>
+            <span class="cdm__voice-status" data-voice-status aria-live="polite"></span>
+          </form>
+
+          {% if category_title != blank %}
+            <nav class="cdm__crumbs" aria-label="Breadcrumb">
+              <div class="cdm__crumbs-inner" role="list">
+                <a class="cdm__crumbs-link" href="{{ shop_url }}" role="listitem">shop</a>
+                <span class="cdm__crumbs-sep" aria-hidden="true">/</span>
+                <a class="cdm__crumbs-link" href="{{ category_url }}" role="listitem">{{ category_title }}</a>
+                <span class="cdm__crumbs-sep" aria-hidden="true">/</span>
+                {% if subcat_title != blank and subcat_url != blank %}
+                  <a class="cdm__crumbs-link" href="{{ subcat_url }}" role="listitem">{{ subcat_title }}</a>
+                  <span class="cdm__crumbs-sep" aria-hidden="true">/</span>
+                {% endif %}
+              </div>
+            </nav>
+          {% endif %}
+
+          <div class="cdm__panels" data-cdm-panels>
+            <section class="cdm__panel is-active" data-cdm-panel="root" aria-label="Shop categories" aria-hidden="false">
+              <ul class="cdm__list">
+                {% if menu_links != blank %}
+                  {% for link in menu_links %}
+                    {% assign menu_key = link.title | handleize %}
+                    {% assign panel_id = 'cdm-panel-' | append: section.id | append: '-' | append: menu_key %}
+                    {% assign link_title_lower = link.title | downcase %}
+                    {% assign icon_type = 'grid' %}
+                    {% if link_title_lower contains 'shirt' %}
+                      {% assign icon_type = 'shirt' %}
+                    {% elsif link_title_lower contains 'hood' %}
+                      {% assign icon_type = 'hoodie' %}
+                    {% elsif link_title_lower contains 'short' %}
+                      {% assign icon_type = 'shorts' %}
+                    {% elsif link_title_lower contains 'pant' or link_title_lower contains 'jean' or link_title_lower contains 'bottom' %}
+                      {% assign icon_type = 'pants' %}
+                    {% elsif link_title_lower contains 'shoe' or link_title_lower contains 'sneaker' %}
+                      {% assign icon_type = 'shoe' %}
+                    {% elsif link_title_lower contains 'hat' or link_title_lower contains 'cap' %}
+                      {% assign icon_type = 'hat' %}
+                    {% elsif link_title_lower contains 'bag' %}
+                      {% assign icon_type = 'bag' %}
+                    {% elsif link_title_lower contains 'accessor' or link_title_lower contains 'jewel' %}
+                      {% assign icon_type = 'spark' %}
+                    {% elsif link_title_lower contains 'care' or link_title_lower contains 'beauty' %}
+                      {% assign icon_type = 'drop' %}
+                    {% elsif link_title_lower contains 'electronic' or link_title_lower contains 'tech' %}
+                      {% assign icon_type = 'bolt' %}
+                    {% elsif link_title_lower contains 'sale' or link_title_lower contains 'clear' %}
+                      {% assign icon_type = 'tag' %}
+                    {% elsif link_title_lower contains 'cloth' %}
+                      {% assign icon_type = 'shirt' %}
+                    {% endif %}
+                    <li class="cdm__item">
+                      {% if link.links != blank %}
+                        <button type="button"
+                                class="cdm__row{% if menu_key == active_menu_key %} is-active{% endif %}{% if link_title_lower contains 'sale' %} is-sale{% endif %}"
+                                data-cdm-next
+                                data-cdm-target="{{ menu_key }}"
+                                aria-controls="{{ panel_id }}"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                          <span class="cdm__row-icon" aria-hidden="true">
+                            {% case icon_type %}
+                              {% when 'shirt' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M8 5l4-2 4 2 3 2-2 4-2-1v11H9V10l-2 1-2-4 3-2z"></path>
+                                </svg>
+                              {% when 'hoodie' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                                  <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                                  <path d="M10 12h4"></path>
+                                </svg>
+                              {% when 'shorts' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M7 4h10l-1 8-4-2-4 2-1-8z"></path>
+                                  <path d="M6 20h5l1-8"></path>
+                                  <path d="M18 20h-5l-1-8"></path>
+                                </svg>
+                              {% when 'pants' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M8 3h8l-1 18h-4l-1-9-1 9H5L8 3z"></path>
+                                </svg>
+                              {% when 'shoe' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M3 14c4 0 6-2 8-4l3 3c2 2 5 3 7 3v3H3v-2z"></path>
+                                  <path d="M11 10l2-2"></path>
+                                </svg>
+                              {% when 'hat' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M4 13c2-4 14-4 16 0"></path>
+                                  <path d="M6 13v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path>
+                                  <path d="M8 8a4 4 0 0 1 8 0"></path>
+                                </svg>
+                              {% when 'bag' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M6 8h12l-1 12H7L6 8z"></path>
+                                  <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                                </svg>
+                              {% when 'spark' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"></path>
+                                </svg>
+                              {% when 'drop' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M12 3s4 5 4 8a4 4 0 1 1-8 0c0-3 4-8 4-8z"></path>
+                                </svg>
+                              {% when 'bolt' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"></path>
+                                </svg>
+                              {% when 'tag' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M20 12l-8 8-10-10V2h8l10 10z"></path>
+                                  <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                                </svg>
+                              {% else %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                </svg>
+                            {% endcase %}
+                          </span>
+                          <span class="cdm__label">{{ link.title }}</span>
+                          <span class="cdm__row-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </span>
+                        </button>
+                      {% else %}
+                        <a href="{{ link.url }}"
+                           class="cdm__row{% if menu_key == active_menu_key %} is-active{% endif %}{% if link_title_lower contains 'sale' %} is-sale{% endif %}">
+                          <span class="cdm__row-icon" aria-hidden="true">
+                            {% case icon_type %}
+                              {% when 'shirt' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M8 5l4-2 4 2 3 2-2 4-2-1v11H9V10l-2 1-2-4 3-2z"></path>
+                                </svg>
+                              {% when 'hoodie' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                                  <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                                  <path d="M10 12h4"></path>
+                                </svg>
+                              {% when 'shorts' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M7 4h10l-1 8-4-2-4 2-1-8z"></path>
+                                  <path d="M6 20h5l1-8"></path>
+                                  <path d="M18 20h-5l-1-8"></path>
+                                </svg>
+                              {% when 'pants' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M8 3h8l-1 18h-4l-1-9-1 9H5L8 3z"></path>
+                                </svg>
+                              {% when 'shoe' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M3 14c4 0 6-2 8-4l3 3c2 2 5 3 7 3v3H3v-2z"></path>
+                                  <path d="M11 10l2-2"></path>
+                                </svg>
+                              {% when 'hat' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M4 13c2-4 14-4 16 0"></path>
+                                  <path d="M6 13v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path>
+                                  <path d="M8 8a4 4 0 0 1 8 0"></path>
+                                </svg>
+                              {% when 'bag' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M6 8h12l-1 12H7L6 8z"></path>
+                                  <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                                </svg>
+                              {% when 'spark' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"></path>
+                                </svg>
+                              {% when 'drop' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M12 3s4 5 4 8a4 4 0 1 1-8 0c0-3 4-8 4-8z"></path>
+                                </svg>
+                              {% when 'bolt' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"></path>
+                                </svg>
+                              {% when 'tag' %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <path d="M20 12l-8 8-10-10V2h8l10 10z"></path>
+                                  <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                                </svg>
+                              {% else %}
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                </svg>
+                            {% endcase %}
+                          </span>
+                          <span class="cdm__label">{{ link.title }}</span>
+                          <span class="cdm__row-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </span>
+                        </a>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                {% elsif request.design_mode %}
+                  <li class="cdm__item">
+                    <button type="button"
+                            class="cdm__row is-active"
+                            data-cdm-next
+                            data-cdm-target="hoodies"
+                            aria-controls="cdm-panel-{{ section.id }}-hoodies"
+                            aria-haspopup="true"
+                            aria-expanded="false">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                          <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                          <path d="M10 12h4"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </button>
+                  </li>
+                  <li class="cdm__item">
+                    <a href="#" class="cdm__row">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M8 5l4-2 4 2 3 2-2 4-2-1v11H9V10l-2 1-2-4 3-2z"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Shirts</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a href="#" class="cdm__row">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 4h10l-1 8-4-2-4 2-1-8z"></path>
+                          <path d="M6 20h5l1-8"></path>
+                          <path d="M18 20h-5l-1-8"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Shorts</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a href="#" class="cdm__row">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M4 13c2-4 14-4 16 0"></path>
+                          <path d="M6 13v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path>
+                          <path d="M8 8a4 4 0 0 1 8 0"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Hats</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a href="#" class="cdm__row">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M6 8h12l-1 12H7L6 8z"></path>
+                          <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Bags</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a href="#" class="cdm__row is-sale">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M20 12l-8 8-10-10V2h8l10 10z"></path>
+                          <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Sale</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+              {% if menu_links == blank and request.design_mode == false %}
+                <div class="cdm__empty">Select a menu to show categories.</div>
+              {% endif %}
+            </section>
+
+            {% if menu_links != blank %}
+              {% for link in menu_links %}
+                {% if link.links != blank %}
+                  {% assign menu_key = link.title | handleize %}
+                  {% assign panel_id = 'cdm-panel-' | append: section.id | append: '-' | append: menu_key %}
+                  <section class="cdm__panel" data-cdm-panel="{{ menu_key }}" id="{{ panel_id }}" aria-label="{{ link.title }}" aria-hidden="true">
+                    <div class="cdm__panel-header">
+                      <span class="cdm__panel-title">{{ link.title }}</span>
+                      <button type="button" class="cdm__back" data-cdm-back aria-label="Back to categories">Back</button>
+                    </div>
+                    <ul class="cdm__list">
+                      {% for sub_link in link.links %}
+                        {% assign sub_title_lower = sub_link.title | downcase %}
+                        {% assign icon_type = 'grid' %}
+                        {% if sub_title_lower contains 'shirt' %}
+                          {% assign icon_type = 'shirt' %}
+                        {% elsif sub_title_lower contains 'hood' %}
+                          {% assign icon_type = 'hoodie' %}
+                        {% elsif sub_title_lower contains 'short' %}
+                          {% assign icon_type = 'shorts' %}
+                        {% elsif sub_title_lower contains 'pant' or sub_title_lower contains 'jean' or sub_title_lower contains 'bottom' %}
+                          {% assign icon_type = 'pants' %}
+                        {% elsif sub_title_lower contains 'shoe' or sub_title_lower contains 'sneaker' %}
+                          {% assign icon_type = 'shoe' %}
+                        {% elsif sub_title_lower contains 'hat' or sub_title_lower contains 'cap' %}
+                          {% assign icon_type = 'hat' %}
+                        {% elsif sub_title_lower contains 'bag' %}
+                          {% assign icon_type = 'bag' %}
+                        {% elsif sub_title_lower contains 'accessor' or sub_title_lower contains 'jewel' %}
+                          {% assign icon_type = 'spark' %}
+                        {% elsif sub_title_lower contains 'care' or sub_title_lower contains 'beauty' %}
+                          {% assign icon_type = 'drop' %}
+                        {% elsif sub_title_lower contains 'electronic' or sub_title_lower contains 'tech' %}
+                          {% assign icon_type = 'bolt' %}
+                        {% elsif sub_title_lower contains 'sale' or sub_title_lower contains 'clear' %}
+                          {% assign icon_type = 'tag' %}
+                        {% elsif sub_title_lower contains 'cloth' %}
+                          {% assign icon_type = 'shirt' %}
+                        {% endif %}
+                        <li class="cdm__item">
+                          <a class="cdm__row" href="{{ sub_link.url }}">
+                            <span class="cdm__row-icon" aria-hidden="true">
+                              {% case icon_type %}
+                                {% when 'shirt' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M8 5l4-2 4 2 3 2-2 4-2-1v11H9V10l-2 1-2-4 3-2z"></path>
+                                  </svg>
+                                {% when 'hoodie' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                                    <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                                    <path d="M10 12h4"></path>
+                                  </svg>
+                                {% when 'shorts' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M7 4h10l-1 8-4-2-4 2-1-8z"></path>
+                                    <path d="M6 20h5l1-8"></path>
+                                    <path d="M18 20h-5l-1-8"></path>
+                                  </svg>
+                                {% when 'pants' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M8 3h8l-1 18h-4l-1-9-1 9H5L8 3z"></path>
+                                  </svg>
+                                {% when 'shoe' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M3 14c4 0 6-2 8-4l3 3c2 2 5 3 7 3v3H3v-2z"></path>
+                                    <path d="M11 10l2-2"></path>
+                                  </svg>
+                                {% when 'hat' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M4 13c2-4 14-4 16 0"></path>
+                                    <path d="M6 13v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4"></path>
+                                    <path d="M8 8a4 4 0 0 1 8 0"></path>
+                                  </svg>
+                                {% when 'bag' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M6 8h12l-1 12H7L6 8z"></path>
+                                    <path d="M9 8V6a3 3 0 0 1 6 0v2"></path>
+                                  </svg>
+                                {% when 'spark' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5L12 2z"></path>
+                                  </svg>
+                                {% when 'drop' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M12 3s4 5 4 8a4 4 0 1 1-8 0c0-3 4-8 4-8z"></path>
+                                  </svg>
+                                {% when 'bolt' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"></path>
+                                  </svg>
+                                {% when 'tag' %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path d="M20 12l-8 8-10-10V2h8l10 10z"></path>
+                                    <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                                  </svg>
+                                {% else %}
+                                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                                  </svg>
+                              {% endcase %}
+                            </span>
+                            <span class="cdm__label">{{ sub_link.title }}</span>
+                            <span class="cdm__row-chevron" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </span>
+                          </a>
+                        </li>
+                      {% endfor %}
+                      <li class="cdm__item">
+                        <a class="cdm__row" href="{{ link.url }}">
+                          <span class="cdm__row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                            </svg>
+                          </span>
+                          <span class="cdm__label">View All {{ link.title }}</span>
+                          <span class="cdm__row-chevron" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                              <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </section>
+                {% endif %}
+              {% endfor %}
+            {% elsif request.design_mode %}
+              <section class="cdm__panel" data-cdm-panel="hoodies" id="cdm-panel-{{ section.id }}-hoodies" aria-label="Hoodies" aria-hidden="true">
+                <div class="cdm__panel-header">
+                  <span class="cdm__panel-title">Hoodies</span>
+                  <button type="button" class="cdm__back" data-cdm-back aria-label="Back to categories">Back</button>
+                </div>
+                <ul class="cdm__list">
+                  <li class="cdm__item">
+                    <a class="cdm__row" href="#">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                          <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                          <path d="M10 12h4"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Unisex Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a class="cdm__row" href="#">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                          <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                          <path d="M10 12h4"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Crop Top Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a class="cdm__row" href="#">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                          <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                          <path d="M10 12h4"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Zipper Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a class="cdm__row" href="#">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M7 9a5 5 0 0 1 10 0v3l-2 2v7H9v-7l-2-2V9z"></path>
+                          <path d="M9 21v-7a3 3 0 0 1 6 0v7"></path>
+                          <path d="M10 12h4"></path>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">Oversized Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                  <li class="cdm__item">
+                    <a class="cdm__row" href="#">
+                      <span class="cdm__row-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                          <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                          <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                          <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        </svg>
+                      </span>
+                      <span class="cdm__label">View All Hoodies</span>
+                      <span class="cdm__row-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </section>
+            {% endif %}
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="o4-main-layout">
+      <div class="o4-content-area">
+        <div class="o4-heading-row">
+          <button class="cdm__trigger" type="button" data-cdm-open aria-controls="cdm-drawer-{{ section.id }}" aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path d="M4 6h16" stroke-linecap="round"></path>
+              <path d="M4 12h16" stroke-linecap="round"></path>
+              <path d="M4 18h16" stroke-linecap="round"></path>
+            </svg>
+            <span>Menu</span>
+          </button>
+          <h1 class="o4-heading">{{ heading_title | default: "Shop" }}</h1>
+          <div class="o4-min-toggle">
+            <button class="o4-min-toggle__btn" type="button" data-minimal-toggle aria-pressed="false" aria-describedby="o4-min-help-{{ section.id }}">
+              <span class="o4-min-toggle__dot" aria-hidden="true"></span>
+              <span class="o4-min-toggle__label">Minimal Mode</span>
+            </button>
+            <span class="o4-min-toggle__help" id="o4-min-help-{{ section.id }}">Simplified layout for focus</span>
+          </div>
+        </div>
+
+        {% if active_collection %}
+          <div class="o4-grid product-grid">
+            {% for product in active_collection.products limit: section.settings.limit %}
+              {% assign theme_cycle = forloop.index | modulo: 3 %}
+              {% if theme_cycle == 1 %}
+                {% assign data_theme = 'purple' %}
+              {% elsif theme_cycle == 2 %}
+                {% assign data_theme = 'cyan' %}
+              {% else %}
+                {% assign data_theme = 'orange' %}
+              {% endif %}
+
+              <div class="product-card" data-theme="{{ data_theme }}">
+                <div class="product-card-content">
+                  <a href="{{ product.url | within: active_collection }}" class="product-image-container">
+                    {% if product.featured_image != blank %}
+                      <img src="{{ product.featured_image | image_url: width: 400 }}"
+                           alt="{{ product.featured_image.alt | escape }}"
+                           loading="lazy"
+                           width="400"
+                           height="400"
+                           class="product-image">
+                    {% else %}
+                      {{ 'product-1' | placeholder_svg_tag: 'product-image' }}
+                    {% endif %}
+                  </a>
+                  <div class="product-details">
+                    <h3 class="product-name">
+                      <a href="{{ product.url | within: active_collection }}">{{ product.title }}</a>
+                    </h3>
+                    <p class="product-price">{{ product.price | money }}</p>
+                    {% form 'product', product %}
+                      <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                      <button type="submit" class="add-to-cart-btn" {% unless product.available %}disabled{% endunless %}>
+                        {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+                      </button>
+                    {% endform %}
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="o4-empty">No products found in this collection.</div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="o4-empty">Select a collection to show products.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if template.name != 'product' %}
+      <div class="o4-bottom-nav" aria-label="Quick navigation">
+        <nav class="o4-bottom-nav-inner">
+          <a class="o4-bottom-link" href="{{ routes.root_url }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <path d="M9 22V12h6v10"></path>
+            </svg>
+            <span>Home</span>
+          </a>
+          <a class="o4-bottom-center" href="{{ routes.all_products_collection_url }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 2h12l-1 6H7L6 2z"></path>
+              <path d="M4 8h16l-1 12H5L4 8z"></path>
+            </svg>
+            <span>ONES4</span>
+          </a>
+          <a class="o4-bottom-link" href="{{ routes.cart_url }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="17" cy="20" r="1"></circle>
+              <path d="M5 5h2l2 10h9l2-7H8"></path>
+            </svg>
+            <span>Cart</span>
+          </a>
+        </nav>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+(() => {
+  const root = document.getElementById('o4-premium-{{ section.id }}');
+  if (!root) return;
+  document.body.classList.add('o4-hide-theme-header');
+  const MINIMAL_KEY = 'o4MinimalMode';
+  const minimalToggles = Array.from(root.querySelectorAll('[data-minimal-toggle]'));
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const applyMinimal = (enabled, persist) => {
+    document.body.classList.toggle('mode-minimal', enabled);
+    minimalToggles.forEach((btn) => {
+      btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    });
+    if (persist) {
+      localStorage.setItem(MINIMAL_KEY, String(enabled));
+    }
+  };
+  const storedMinimal = localStorage.getItem(MINIMAL_KEY);
+  const initialMinimal = storedMinimal === null ? prefersReduced.matches : storedMinimal === 'true';
+  applyMinimal(initialMinimal, false);
+  minimalToggles.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      applyMinimal(!document.body.classList.contains('mode-minimal'), true);
+    });
+  });
+  if (storedMinimal === null) {
+    prefersReduced.addEventListener('change', (event) => {
+      applyMinimal(event.matches, false);
+    });
+  }
+
+  const drawer = root.querySelector('[data-cdm-drawer]');
+  const scrim = root.querySelector('[data-cdm-scrim]');
+  const openButtons = Array.from(root.querySelectorAll('[data-cdm-open]'));
+  const closeButtons = Array.from(root.querySelectorAll('[data-cdm-close]'));
+  const nextButtons = Array.from(root.querySelectorAll('[data-cdm-next]'));
+  const backButtons = Array.from(root.querySelectorAll('[data-cdm-back]'));
+  const panels = Array.from(root.querySelectorAll('[data-cdm-panel]'));
+  const desktopMq = window.matchMedia('(min-width: 960px)');
+  const voiceForm = root.querySelector('[data-voice-form]');
+  const voiceInput = root.querySelector('[data-voice-input]');
+  const voiceButton = root.querySelector('[data-voice-btn]');
+  const voiceStatus = root.querySelector('[data-voice-status]');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let voiceActive = false;
+  let recognition = null;
+  let touchStartX = 0;
+  let touchStartTime = 0;
+  let isSwiping = false;
+  const minSwipeDistance = 80;
+  const minFastSwipeDistance = 30;
+  const maxSwipeDuration = 250;
+
+  const setVoiceState = (active, message) => {
+    voiceActive = active;
+    if (voiceButton) {
+      voiceButton.classList.toggle('is-listening', active);
+      voiceButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+    if (voiceStatus) {
+      voiceStatus.textContent = message || '';
+    }
+  };
+
+  const initVoiceSearch = () => {
+    if (!voiceButton || !voiceInput || !voiceForm) return;
+    if (!SpeechRecognition) {
+      voiceButton.disabled = true;
+      voiceButton.setAttribute('aria-disabled', 'true');
+      voiceButton.title = 'Voice search not supported';
+      return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.lang = document.documentElement.lang || 'en-US';
+
+    recognition.onstart = () => setVoiceState(true, 'Listening');
+    recognition.onend = () => setVoiceState(false, '');
+    recognition.onerror = (event) => {
+      const msg = event && event.error ? `Voice search error: ${event.error}` : 'Voice search error';
+      setVoiceState(false, msg);
+    };
+    recognition.onresult = (event) => {
+      const result = event && event.results && event.results[0] && event.results[0][0];
+      const transcript = result && result.transcript ? result.transcript.trim() : '';
+      if (transcript) {
+        voiceInput.value = transcript;
+        if (typeof voiceForm.requestSubmit === 'function') {
+          voiceForm.requestSubmit();
+        } else {
+          voiceForm.submit();
+        }
+      }
+    };
+
+    voiceButton.addEventListener('click', () => {
+      if (!recognition) return;
+      if (voiceActive) {
+        recognition.stop();
+        return;
+      }
+      try {
+        recognition.start();
+      } catch (error) {
+        setVoiceState(false, 'Voice search unavailable');
+      }
+    });
+  };
+
+  const getInitialPanel = () => {
+    const activeButton = nextButtons.find((btn) => btn.classList.contains('is-active')) || nextButtons[0];
+    return activeButton ? activeButton.dataset.cdmTarget : 'root';
+  };
+
+  const setPanel = (key) => {
+    const targetKey = key || 'root';
+    panels.forEach((panel) => {
+      const panelKey = panel.dataset.cdmPanel;
+      const isRoot = panelKey === 'root';
+      const isActive = isRoot ? (desktopMq.matches ? true : targetKey === 'root') : panelKey === targetKey;
+      panel.classList.toggle('is-active', isActive);
+      panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+    });
+    nextButtons.forEach((btn) => {
+      if (!btn.hasAttribute('aria-expanded')) return;
+      const isTarget = btn.dataset.cdmTarget === targetKey;
+      btn.setAttribute('aria-expanded', isTarget ? 'true' : 'false');
+      if (targetKey !== 'root') {
+        btn.classList.toggle('is-active', isTarget);
+      }
+    });
+  };
+
+  const setDrawerOpen = (open) => {
+    root.classList.toggle('cdm-open', open);
+    if (drawer) drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    if (scrim) {
+      if (open) {
+        scrim.removeAttribute('hidden');
+      } else {
+        scrim.setAttribute('hidden', '');
+      }
+    }
+    openButtons.forEach((btn) => btn.setAttribute('aria-expanded', open ? 'true' : 'false'));
+    document.body.classList.toggle('cdm-open', open);
+    if (!open) {
+      setPanel(desktopMq.matches ? getInitialPanel() : 'root');
+      if (drawer) {
+        drawer.style.transition = '';
+        drawer.style.transform = '';
+      }
+    }
+  };
+
+  setPanel(desktopMq.matches ? getInitialPanel() : 'root');
+  initVoiceSearch();
+
+  openButtons.forEach((btn) => {
+    btn.addEventListener('click', () => setDrawerOpen(true));
+  });
+
+  closeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => setDrawerOpen(false));
+  });
+
+  if (scrim) {
+    scrim.addEventListener('click', () => setDrawerOpen(false));
+  }
+
+  nextButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.cdmTarget;
+      if (target) setPanel(target);
+    });
+  });
+
+  backButtons.forEach((btn) => {
+    btn.addEventListener('click', () => setPanel('root'));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (!root.classList.contains('cdm-open')) return;
+    setDrawerOpen(false);
+  });
+
+  desktopMq.addEventListener('change', () => {
+    setPanel(desktopMq.matches ? getInitialPanel() : 'root');
+  });
+
+  if (drawer) {
+    drawer.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+      touchStartTime = Date.now();
+      isSwiping = true;
+    }, { passive: true });
+
+    drawer.addEventListener('touchmove', (event) => {
+      if (!isSwiping) return;
+      const currentX = event.changedTouches[0].screenX;
+      const diff = currentX - touchStartX;
+      if (diff > 0) {
+        drawer.style.transition = 'none';
+        drawer.style.transform = `translateX(${diff}px)`;
+      }
+    }, { passive: false });
+
+    drawer.addEventListener('touchend', (event) => {
+      if (!isSwiping) return;
+      const touchEndX = event.changedTouches[0].screenX;
+      const diff = touchEndX - touchStartX;
+      const duration = Date.now() - touchStartTime;
+      const shouldClose = diff > minSwipeDistance || (diff > minFastSwipeDistance && duration < maxSwipeDuration);
+
+      drawer.style.transition = 'transform 0.3s ease';
+
+      if (shouldClose) {
+        setDrawerOpen(false);
+      } else {
+        drawer.style.transform = 'translateX(0)';
+      }
+
+      isSwiping = false;
+    }, { passive: true });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "O4 Premium True Neon",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Section Heading", "default": "Shop" },
+    { "type": "text", "id": "menu_title", "label": "Menu Title", "default": "Shop" },
+    { "type": "link_list", "id": "menu", "label": "Sidebar Menu" },
+    { "type": "collection", "id": "collection", "label": "Product Collection" },
+    { "type": "range", "id": "limit", "min": 2, "max": 12, "step": 1, "label": "Products per page", "default": 6 }
+  ],
+  "presets": [{ "name": "O4 Premium True Neon" }]
+}
+{% endschema %}

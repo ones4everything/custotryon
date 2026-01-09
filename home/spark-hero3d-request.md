@@ -1,7 +1,7 @@
-# ONES4 Hero3D Homepage - Spark Request
+# ONES4 Hero3D Homepage - Lovable Update Request
 
 ## Project Overview
-Design and implement a full homepage for ONES4, centered around an immersive Hero3D experience with a premium dark UI aesthetic. The hero features a 3D planet sphere with a looping video texture (season/lighting morph) and scroll-driven orbiting product callouts.
+Update the existing ONES4 homepage to feature a **4-chapter seasonal scroll experience** with the Hero3D sphere as the central "Management Hub." Each chapter represents a season and contains different product content. The sphere remains sticky throughout, transitioning its video texture to match each season as the user scrolls.
 
 ---
 
@@ -10,7 +10,25 @@ Design and implement a full homepage for ONES4, centered around an immersive Her
 - **3D Engine:** Three.js / React Three Fiber
 - **Animation:** Framer Motion
 - **Styling:** Tailwind CSS
+- **Scroll Behavior:** CSS Scroll-Snap + IntersectionObserver
 - **Performance:** Web-optimized, lazy-loaded assets
+
+---
+
+## Core Concept: 4 Seasonal Chapters
+
+The page is divided into **4 full-screen chapters**, each with:
+- Unique seasonal background (matching attached reference images)
+- Different product content orbiting the sphere
+- Scroll-snap behavior for natural chapter locking
+- Mobile-friendly chapter markers
+
+| Chapter | Season | Content | Background |
+|---------|--------|---------|------------|
+| 1 | 🌸 Spring | **Menu/Categories** | Cherry blossoms, fresh greens |
+| 2 | ☀️ Summer | **Seasonal Products** | Bright sun, warm golden tones |
+| 3 | 🍂 Autumn | **Best Selling Products** | Orange/red leaves, harvest mood |
+| 4 | ❄️ Winter | **Sale Items** | Snow, cool blue/white tones |
 
 ---
 
@@ -37,14 +55,115 @@ Design and implement a full homepage for ONES4, centered around an immersive Her
 
 ---
 
-### 2. Hero3D Section (Primary Focus)
+### 2. Chapter Markers (Mobile-Friendly Navigation)
 
-#### Central Element: Video-Textured Planet Sphere
-**PlanetCore Component:**
-- `SphereGeometry` with 64x64 segments (32x32 on mobile for performance)
-- Video texture using `useVideoTexture()` from @react-three/drei
-- Video: Looping season morph (Moon → Sun → Moon) - `/public/video/planet-seasons.mp4`
-- Video settings: `loop: true, muted: true, start: true, playsInline: true`
+**Fixed sidebar/dots navigation:**
+```
+○ Menu (Spring)
+○ Seasonal (Summer)  
+○ Best Sellers (Autumn)
+○ Sale (Winter)
+```
+
+**Desktop:**
+- Vertical dots on right side
+- Labels appear on hover
+- Active chapter highlighted with glow
+
+**Mobile:**
+- Horizontal dots at bottom of screen
+- Tap to jump to chapter
+- Swipe-friendly
+- Current chapter indicator with season icon
+
+**Implementation:**
+```css
+.chapter-nav {
+  position: fixed;
+  z-index: 100;
+}
+
+/* Desktop: right side */
+@media (min-width: 768px) {
+  .chapter-nav {
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+  }
+}
+
+/* Mobile: bottom */
+@media (max-width: 767px) {
+  .chapter-nav {
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+  }
+}
+```
+
+---
+
+### 3. Scroll-Snap Container
+
+**Critical:** Enable snap-to-chapter scrolling so each chapter locks naturally.
+
+```css
+.chapters-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.chapter {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  position: relative;
+}
+```
+
+**Behavior:**
+- Scrolling naturally locks onto Menu → Seasonal → Best Sellers → Sale
+- Smooth scroll animation between chapters
+- Works with mouse wheel, touch swipe, and keyboard
+
+---
+
+### 4. Hero3D Sphere (Sticky Management Center)
+
+#### The Sphere Stays Fixed Throughout All 4 Chapters
+
+**Position:**
+- Centered on screen
+- `position: sticky` or fixed overlay
+- Remains visible as background chapters scroll behind it
+
+**Video Texture Transitions:**
+The sphere's video texture (season morph) syncs with the current chapter:
+
+| Scroll Position | Sphere State |
+|-----------------|--------------|
+| Chapter 1 (0-25%) | 🌸 Spring phase of video |
+| Chapter 2 (25-50%) | ☀️ Summer phase of video |
+| Chapter 3 (50-75%) | 🍂 Autumn phase of video |
+| Chapter 4 (75-100%) | ❄️ Winter phase of video |
+
+**Implementation:**
+```javascript
+// Sync video playback position with scroll
+const videoRef = useRef();
+const { scrollYProgress } = useScroll();
+
+useMotionValueEvent(scrollYProgress, "change", (progress) => {
+  if (videoRef.current) {
+    // Map scroll to video time (0-100% scroll = 0-100% video)
+    videoRef.current.currentTime = progress * videoRef.current.duration;
+  }
+});
+```
 
 **Material Properties:**
 ```javascript
@@ -58,51 +177,80 @@ meshStandardMaterial({
 })
 ```
 
-**Rotation Logic (Critical):**
-- Video content loops continuously (ambient season morph)
-- Sphere mesh rotation driven **ONLY** by scroll progress
-- Static when user stops scrolling (no auto-rotation)
-- On hover: moderate rotation speed, smooth return to scroll-driven on hover end
-- Formula: `rotation.y = scrollProgress * Math.PI * 2`
-
-**Fallback:**
-- React.Suspense wrapper
-- Wireframe sphere (cyan #00ffff, low opacity) while video loads
-
 ---
 
-#### Initial State: 4 Static Categories
-At scroll position 0, display 4 category cards around the center:
-- **Wearables**
+### 5. Chapter 1: Menu/Categories (🌸 Spring)
+
+**Background:** Spring imagery - cherry blossoms, fresh greens, new growth
+
+**Content:** 4 Category cards orbiting the sphere:
+- **Wearables** 
 - **Computing**
 - **Displays**
 - **Components**
 
-**Style:**
-- Connected to center with subtle 3D lines
+**Behavior:**
+- Categories connected to sphere with subtle 3D lines
 - Glowing node points at connections
-- Tight positioning (x: ±1.8, y: ±0.8)
+- On scroll down: categories fade out, transition to Chapter 2
 
 ---
 
-#### Scroll Transition Sequence
-As user scrolls:
-1. Categories fade out **one by one** (staggered)
-2. Center sphere activates (tilts and spins based on scroll)
-3. Neon orbit rings fade in and expand
-4. 4 Products appear **one by one** (as each category fades)
+### 6. Chapter 2: Seasonal Products (☀️ Summer)
 
-**Products:**
-- Neural Link
-- Quantum Core
-- Holo Lens
-- Cyber Deck
+**Background:** Summer imagery - bright sun, golden warmth, beach vibes
+
+**Content:** 4 Featured seasonal products orbiting:
+- Summer Collection Item 1
+- Summer Collection Item 2
+- Summer Collection Item 3
+- Summer Collection Item 4
+
+**Behavior:**
+- Products fade in as summer phase begins
+- Orbit rings visible with neon glow
+- Mini-cards with hover expansion
 
 ---
 
-#### Orbiting Product Callouts
+### 7. Chapter 3: Best Selling Products (🍂 Autumn)
+
+**Background:** Autumn imagery - orange/red leaves, harvest, warm earth tones
+
+**Content:** 4 Best sellers orbiting:
+- Best Seller #1
+- Best Seller #2
+- Best Seller #3
+- Best Seller #4
+
+**Behavior:**
+- "🔥 Best Seller" badges on cards
+- Sales count or rating visible
+- Prominent CTA buttons
+
+---
+
+### 8. Chapter 4: Sale Items (❄️ Winter)
+
+**Background:** Winter imagery - snow, cool blue/white, holiday vibes
+
+**Content:** 4 Sale items orbiting:
+- Sale Item 1 (% off badge)
+- Sale Item 2 (% off badge)
+- Sale Item 3 (% off badge)
+- Sale Item 4 (% off badge)
+
+**Behavior:**
+- "❄️ SALE" badges with discount percentage
+- Original price crossed out
+- Urgency indicators (limited time)
+
+---
+
+### 9. Orbiting Product Callouts (All Chapters)
+
 **Style:**
-- 3-4 items per ring maximum
+- 4 items per chapter maximum
 - Mini-cards: icon + short label (NOT full product cards)
 - Uniform size: `min-w-[200px]`
 - Evenly spaced on orbit rings
@@ -121,41 +269,40 @@ As user scrolls:
 
 ---
 
-#### Floating Text Callouts (Parallax)
-Short phrases that glide across screen on parallax paths:
-- "Immersive commerce hardware"
-- "AI-driven shopping"
-- "Classical meets quantum"
+### 10. Seasonal Backgrounds
 
-**Behavior:**
-- Fade in/out at different scroll positions
-- Never obscure center device or orbiting items
-- Horizontal parallax movement
-- Lightweight CSS/JS (IntersectionObserver + transform/opacity)
+Each chapter has a full-screen background that matches the season:
+
+```css
+.chapter-spring {
+  background: url('/backgrounds/spring.jpg') center/cover;
+  /* Overlay for readability */
+  background-color: rgba(0, 0, 0, 0.6);
+  background-blend-mode: overlay;
+}
+
+.chapter-summer {
+  background: url('/backgrounds/summer.jpg') center/cover;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: overlay;
+}
+
+.chapter-autumn {
+  background: url('/backgrounds/autumn.jpg') center/cover;
+  background-color: rgba(0, 0, 0, 0.6);
+  background-blend-mode: overlay;
+}
+
+.chapter-winter {
+  background: url('/backgrounds/winter.jpg') center/cover;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: overlay;
+}
+```
 
 ---
 
-#### Extended Scroll Area
-- Container height: 450vh
-- Sticky positioning keeps 3D scene pinned during scroll
-- Long "runway" for storytelling elements
-
----
-
-#### Environment
-- Stars background (`<Stars />` from @react-three/drei)
-- Directional light (intensity 2.0) as "Sun" key light
-- Cyan/Magenta spotlights as rim/fill lights
-- Shadows enabled (castShadow, receiveShadow)
-
----
-
-### 3. NO Bottom Product Grid
-**Important:** Remove ALL product grids, carousels, or lists below the hero. Products appear ONLY on orbit rings.
-
----
-
-### 4. Footer
+### 11. Footer (After Chapter 4)
 - Minimal links
 - Muted text (rgba(255,255,255,0.5))
 - Dark background (#000000)
@@ -264,15 +411,16 @@ hero3d/
 ---
 
 ## Acceptance Checklist
-- [ ] Center object is a sphere with looping mp4 texture (season morph)
-- [ ] Sphere rotation changes only when scroll changes; stops when user stops
-- [ ] Video continues looping even when scroll is not moving
-- [ ] Suspense fallback displays quickly (wireframe sphere)
-- [ ] 4 categories visible initially, transition to 4 products on scroll
-- [ ] Orbits/callouts remain clean (3-4 per ring, mini-cards only)
-- [ ] NO product grid appears below the hero
-- [ ] Mobile works (muted autoplay, playsInline)
-- [ ] Reduced-motion is respected
-- [ ] Search bar has microphone icon
-- [ ] Floating text callouts appear on parallax paths
-- [ ] All interactive elements are keyboard accessible with ARIA labels
+- [ ] **Scroll-Snap:** Page snaps naturally to each of the 4 chapters (Menu → Seasonal → Best Sellers → Sale)
+- [ ] **Chapter Markers:** Mobile-friendly navigation dots (vertical on desktop, horizontal on mobile)
+- [ ] **Sticky Sphere:** Hero3D sphere remains fixed/sticky throughout all 4 chapters
+- [ ] **Season Sync:** Sphere video texture transitions match current chapter (Spring → Summer → Autumn → Winter)
+- [ ] **Chapter 1 (Spring):** Shows 4 Categories orbiting (Wearables, Computing, Displays, Components)
+- [ ] **Chapter 2 (Summer):** Shows 4 Seasonal Products orbiting
+- [ ] **Chapter 3 (Autumn):** Shows 4 Best Selling Products with badges
+- [ ] **Chapter 4 (Winter):** Shows 4 Sale Items with discount badges
+- [ ] **Seasonal Backgrounds:** Each chapter has matching season background imagery
+- [ ] **Mobile Works:** Touch swipe, muted autoplay, playsInline
+- [ ] **Reduced-motion:** Respected for accessibility
+- [ ] **Search Bar:** Has microphone icon
+- [ ] **Keyboard Navigation:** All interactive elements accessible with ARIA labels
